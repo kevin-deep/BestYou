@@ -24,28 +24,37 @@ public class Summary extends AppCompatActivity implements View.OnClickListener{
         add = (Button)findViewById(R.id.test);
         //mDbHelper =  new SummaryHelper(this);
 
+
+
+        add.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+               /* mDbHelper.insert("positive", 123);
+                x =mDbHelper.getCountAll();
+                Toast.makeText(getBaseContext(), "data"+x, Toast.LENGTH_SHORT).show();*/
+
+                insertRubric("Sports",2 );
+                insertRubric("Reading",4 );
+                insertRubric("Coding",2 );
+                insertRubric("Networking",4 );
+                insertRubric("Family Time",4 );
+                insertRubric("Early Sleeping",4 );
+
+            }
+        });
+    }
+
+    public long insertRubric(String description,float weight ){
+
         ContentValues rubric = new ContentValues();
-        rubric.put(SummaryContract.Rubric.NAME, "software dev");
-        rubric.put(SummaryContract.Rubric.WEIGHT, 12);
+        rubric.put(SummaryContract.Rubric.NAME, description);
+        rubric.put(SummaryContract.Rubric.WEIGHT, weight);
 
         Uri insertedUri =  this.getContentResolver().insert(
                 SummaryContract.Rubric.CONTENT_URI,
                 rubric
         );
         long locationId = ContentUris.parseId(insertedUri);
-
-        add.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-
-
-
-
-
-                mDbHelper.insert("positive", 123);
-                x =mDbHelper.getCountAll();
-                Toast.makeText(getBaseContext(), "data"+x, Toast.LENGTH_SHORT).show();
-            }
-        });
+        return locationId;
     }
 
 
