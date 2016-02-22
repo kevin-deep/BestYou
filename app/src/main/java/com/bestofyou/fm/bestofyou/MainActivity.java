@@ -12,12 +12,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewTreeObserver;
 
 import com.bestofyou.fm.bestofyou.data.SummaryContract;
+import com.bestofyou.fm.bestofyou.helper.SimpleItemTouchHelperCallback;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
     RecyclerListAdapter mRecyclerAdapter;
@@ -34,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             SummaryContract.Rubric.WEIGHT
     };
 
-
+    private ItemTouchHelper mItemTouchHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,9 +55,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         // The ForecastAdapter will take data from a source and use it to populate the RecyclerView  it's attached to.
         mRecyclerAdapter = new RecyclerListAdapter(this);
         mRecyclerView.setAdapter(mRecyclerAdapter);
+
         getSupportLoaderManager().initLoader(BEST_LOADER, null, this);
 
-
+        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mRecyclerAdapter);
+        mItemTouchHelper = new ItemTouchHelper(callback);
+        mItemTouchHelper.attachToRecyclerView(mRecyclerView);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

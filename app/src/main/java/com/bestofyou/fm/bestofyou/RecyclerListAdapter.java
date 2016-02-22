@@ -5,20 +5,35 @@ package com.bestofyou.fm.bestofyou;
  */
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bestofyou.fm.bestofyou.data.SummaryContract;
+import com.bestofyou.fm.bestofyou.helper.ItemTouchHelperAdapter;
+import com.bestofyou.fm.bestofyou.helper.ItemTouchHelperViewHolder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
-public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapter.ItemViewHolder> {
+/**
+ * Simple RecyclerView.Adapter that implements {@link ItemTouchHelperAdapter} to respond to move and
+ * dismiss events from a {@link android.support.v7.widget.helper.ItemTouchHelper}.
+ *
+ * @author
+ */
+
+public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapter.ItemViewHolder>
+        implements ItemTouchHelperAdapter
+
+{
     private Cursor mCursor;
     //final private ItemChoiceManager mICM;
     final private Context mContext;
@@ -70,9 +85,13 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
 
         // Read name from cursor
         String name = mCursor.getString(MainActivity.COL_RUBRIC_NAME);
+        holder.name.setText(name);
+        // Read weight from cursor
+        Long weight = mCursor.getLong(MainActivity.COL_RUBRIC_WEIGHT);
+        holder.weight.setText(weight.toString());
 
         //holder.textView.setText(mItems.get(position));
-        holder.textView.setText(name);
+
     }
 
     @Override
@@ -86,6 +105,12 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         mCursor = newCursor;
         notifyDataSetChanged();
        // mEmptyView.setVisibility(getItemCount() == 0 ? View.VISIBLE : View.GONE);
+    }
+    @Override
+    public boolean onItemMove(int fromPosition, int toPosition) {
+        Collections.swap(mItems, fromPosition, toPosition);
+        notifyItemMoved(fromPosition, toPosition);
+        return true;
     }
 
 
@@ -101,17 +126,37 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         }
     }
 
-    public class ItemViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public void onItemDismiss(int position) {
+        mItems.remove(position);
+        Toast.makeText(this.mContext, "Removed" , Toast.LENGTH_SHORT).show();
+        notifyItemRemoved(position);
+    }
 
-        public final TextView textView;
+
+    public class ItemViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {
+
+        public final TextView name;
+        public final TextView weight;
         public CardView cardV;
 
 
         public ItemViewHolder(View itemView) {
             super(itemView);
             cardV  = (CardView) itemView.findViewById(R.id.card_view);
-            textView = (TextView) itemView.findViewById(R.id.text);
+            name = (TextView) itemView.findViewById(R.id.name);
+            weight = (TextView) itemView.findViewById(R.id.weight);
         }
+        @Override
+        public void onItemSelected() {
+            itemView.setBackgroundColor(Color.LTGRAY);
+        }
+
+        @Override
+        public void onItemClear() {
+            itemView.setBackgroundColor(0);
+        }
+
 
        /* @Override
         public void onClick(View v) {
