@@ -6,11 +6,13 @@ package com.bestofyou.fm.bestofyou;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.drawable.AnimatedVectorDrawable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -77,21 +79,27 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         *the Object stored in this view as a tag, or null if not set
         */
     @Override
-    public void onBindViewHolder(ItemViewHolder holder, int position) {
+    public void onBindViewHolder(final ItemViewHolder holder, int position) {
         mCursor.moveToPosition(position);
        /* int dateColumnIndex = mCursor.getColumnIndex(SummaryContract.Rubric.WEIGHT);
         //!!!!!Important This going to send the date into mClickHandler then it will be deliver to constructor
         mClickHandler.onClick(mCursor.getLong(dateColumnIndex), this);*/
-
         // Read name from cursor
         String name = mCursor.getString(MainActivity.COL_RUBRIC_NAME);
         holder.name.setText(name);
         // Read weight from cursor
         Long weight = mCursor.getLong(MainActivity.COL_RUBRIC_WEIGHT);
         holder.weight.setText(weight.toString());
-
         //holder.textView.setText(mItems.get(position));
-
+        holder.tickCross.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AnimatedVectorDrawable drawable = holder.tick ? holder.tickToCross : holder.crossToTick;
+                holder.tickCross.setImageDrawable(drawable);
+                drawable.start();
+                holder.tick = !holder.tick;
+            }
+        });
     }
 
     @Override
@@ -128,9 +136,21 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
 
     @Override
     public void onItemDismiss(int position) {
+        mCursor.moveToPosition(position);
+
+        String name = mCursor.getString(MainActivity.COL_RUBRIC_NAME);
+
+        // Read weight from cursor
+        Long weight = mCursor.getLong(MainActivity.COL_RUBRIC_WEIGHT);
+
         mItems.remove(position);
-        Toast.makeText(this.mContext, "Removed" , Toast.LENGTH_SHORT).show();
+        Toast.makeText(this.mContext, name+ "   "+weight , Toast.LENGTH_SHORT).show();
         notifyItemRemoved(position);
+        int lastIndex = getItemCount();
+        //notifyItemMoved(position, lastIndex-1);
+
+
+
     }
 
 
@@ -139,17 +159,25 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         public final TextView name;
         public final TextView weight;
         public CardView cardV;
-
+        private ImageView tickCross;
+        private AnimatedVectorDrawable tickToCross;
+        private AnimatedVectorDrawable crossToTick;
+        private boolean tick = true;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
             cardV  = (CardView) itemView.findViewById(R.id.card_view);
             name = (TextView) itemView.findViewById(R.id.name);
             weight = (TextView) itemView.findViewById(R.id.weight);
+            tickCross = (ImageView) itemView.findViewById(R.id.tick_cross);
+            tickToCross = (AnimatedVectorDrawable)itemView.getContext() .getDrawable(R.drawable.avd_tick_to_cross);
+            crossToTick = (AnimatedVectorDrawable) itemView.getContext().getDrawable(R.drawable.avd_cross_to_tick);
+
         }
         @Override
         public void onItemSelected() {
-            itemView.setBackgroundColor(Color.LTGRAY);
+            itemView.setBackgroundColor(Color.GRAY);
+            //cardV.setCardBackgroundColor(Color.GREEN);
         }
 
         @Override
