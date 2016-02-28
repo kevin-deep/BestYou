@@ -16,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bestofyou.fm.bestofyou.data.SummaryContract;
 import com.bestofyou.fm.bestofyou.helper.ItemTouchHelperAdapter;
 import com.bestofyou.fm.bestofyou.helper.ItemTouchHelperViewHolder;
 
@@ -94,6 +93,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         holder.tickCross.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //AnimatedVectorDrawable drawable = holder.tick ? holder.tickToCross : holder.crossToTick;
                 AnimatedVectorDrawable drawable = holder.tick ? holder.tickToCross : holder.crossToTick;
                 holder.tickCross.setImageDrawable(drawable);
                 drawable.start();
@@ -169,9 +169,11 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
             cardV  = (CardView) itemView.findViewById(R.id.card_view);
             name = (TextView) itemView.findViewById(R.id.name);
             weight = (TextView) itemView.findViewById(R.id.weight);
+            //tickCross = (ImageView) itemView.findViewById(R.id.tick_cross);
             tickCross = (ImageView) itemView.findViewById(R.id.tick_cross);
-            tickToCross = (AnimatedVectorDrawable)itemView.getContext() .getDrawable(R.drawable.avd_tick_to_cross);
-            crossToTick = (AnimatedVectorDrawable) itemView.getContext().getDrawable(R.drawable.avd_cross_to_tick);
+            //tickToCross = (AnimatedVectorDrawable)itemView.getContext() .getDrawable(R.drawable.avd_tick_to_cross);
+            tickToCross = (AnimatedVectorDrawable)itemView.getContext() .getDrawable(R.drawable.avd_click_to_show_red);
+            crossToTick = (AnimatedVectorDrawable) itemView.getContext().getDrawable(R.drawable.avd_click_to_show_black);
 
         }
         @Override
