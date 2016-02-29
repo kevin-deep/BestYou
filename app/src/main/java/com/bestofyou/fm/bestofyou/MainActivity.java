@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewTreeObserver;
+import android.widget.TextView;
 
 import com.bestofyou.fm.bestofyou.data.SummaryContract;
 import com.bestofyou.fm.bestofyou.helper.SimpleItemTouchHelperCallback;
@@ -24,6 +25,7 @@ import com.bestofyou.fm.bestofyou.helper.SimpleItemTouchHelperCallback;
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
     RecyclerListAdapter mRecyclerAdapter;
     RecyclerView mRecyclerView;
+    View rateView;
     private static final int BEST_LOADER = 0; // have to be unique for every loader using in activity
     private int mPosition = RecyclerView.NO_POSITION;
 
@@ -46,14 +48,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
+        rateView = findViewById(R.id.rates_in_hour);
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this.getBaseContext()));
         //RecyclerListAdapter adapter = new RecyclerListAdapter();
 
         // The ForecastAdapter will take data from a source and use it to populate the RecyclerView  it's attached to.
-        mRecyclerAdapter = new RecyclerListAdapter(this);
+        mRecyclerAdapter = new RecyclerListAdapter(this,rateView);
         mRecyclerView.setAdapter(mRecyclerAdapter);
 
         getSupportLoaderManager().initLoader(BEST_LOADER, null, this);
@@ -161,4 +163,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public void onLoaderReset(Loader<Cursor> Loader) {
         mRecyclerAdapter.swapCursor(null);
     }
+
+    /*
+      Updates the empty hours rate view
+   */
+    private void updateEmptyView() {
+
+    }
+
 }

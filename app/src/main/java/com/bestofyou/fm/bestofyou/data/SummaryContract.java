@@ -14,6 +14,7 @@ public class SummaryContract {
 
     public static final String PATH_HISTORY= "history";
     public static final String PATH_RUBRIC= "rubric";
+    public static final String PATH_TOTAL= "total";
 
     public static final class UsrHistory implements BaseColumns {
         //table location
@@ -67,7 +68,35 @@ public class SummaryContract {
         // weight
         public static final String WEIGHT = "weight";
 
+        public static final String POPULARITY = "popularity";
+
+
         public static Uri buildRubricUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+    }
+    public static final class Total implements BaseColumns {
+        //table location
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_TOTAL).build();
+
+        public static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_TOTAL;
+        public static final String CONTENT__ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_TOTAL;
+        // Table name
+        public static final String TABLE_NAME = "total";
+        // User name
+        public static final String NAME = "name";
+        // timeStamp
+        public static final String CREATED_AT = "created_at";
+        // positive summary
+        public static final String P_IN_Total = "p_in_total";
+        // negative summary
+        public static final String N_IN_Total = "n_in_total";
+
+
+        public static Uri buildTotalUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
     }

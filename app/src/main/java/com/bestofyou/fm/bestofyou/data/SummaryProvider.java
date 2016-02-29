@@ -14,7 +14,7 @@ import com.bestofyou.fm.bestofyou.Summary;
  */
 public class SummaryProvider extends ContentProvider {
 
-    static final int SUMMARY = 1;
+    static final int TOTAL = 1;
     static final int RUBRIC = 2;
     static final int HISTORY = 3;
     private SummaryHelper mOpenHelper;
@@ -38,6 +38,7 @@ public class SummaryProvider extends ContentProvider {
         // For each type of URI you want to add, create a corresponding code.
         matcher.addURI(authority, SummaryContract.PATH_HISTORY, HISTORY);
         matcher.addURI(authority, SummaryContract.PATH_RUBRIC, RUBRIC);
+        matcher.addURI(authority, SummaryContract.PATH_TOTAL, TOTAL);
         //matcher.addURI(authority, SummaryContract.PATH_RUBRIC + "/*/#", SUMMARY);
         //"PATH" - matches "PATH" exactly
         //"PATH/#" matches "PATH" Followed by a number
@@ -57,6 +58,8 @@ public class SummaryProvider extends ContentProvider {
                 return SummaryContract.UsrHistory.CONTENT_TYPE;
             case RUBRIC:
                 return SummaryContract.Rubric.CONTENT_TYPE;
+            case TOTAL:
+                return SummaryContract.Total.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -89,6 +92,10 @@ public class SummaryProvider extends ContentProvider {
                 break;
             case RUBRIC:
                 rowsUpdated = db.update(SummaryContract.Rubric.TABLE_NAME, values, selection,
+                        selectionArgs);
+                break;
+            case TOTAL:
+                rowsUpdated = db.update(SummaryContract.Total.TABLE_NAME, values, selection,
                         selectionArgs);
                 break;
             default:
@@ -129,6 +136,14 @@ public class SummaryProvider extends ContentProvider {
                 long _id=db.insert(SummaryContract.Rubric.TABLE_NAME,null,values);
                 if(_id>0)
                     returnUri=SummaryContract.Rubric.buildRubricUri(_id);//build the content Uri follow by ID
+                else
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                break;
+            }
+            case TOTAL:{
+                long _id=db.insert(SummaryContract.Total.TABLE_NAME,null,values);
+                if(_id>0)
+                    returnUri=SummaryContract.Total.buildTotalUri(_id);//build the content Uri follow by ID
                 else
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 break;
@@ -224,6 +239,18 @@ public class SummaryProvider extends ContentProvider {
                 );
                 break;
             }
+            case TOTAL: {
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        SummaryContract.Rubric.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            }
 
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -231,6 +258,8 @@ public class SummaryProvider extends ContentProvider {
         retCursor.setNotificationUri(getContext().getContentResolver(), uri);
         return retCursor;
     }
+
+
 
 
 

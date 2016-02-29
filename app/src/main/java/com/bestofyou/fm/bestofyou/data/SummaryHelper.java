@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.net.Uri;
 import android.util.Log;
 
 import java.text.SimpleDateFormat;
@@ -16,7 +17,7 @@ import java.util.logging.Logger;
  * Created by FM on 12/7/2015.
  */
 public class SummaryHelper extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
     public static final String DATABASE_NAME = "best.db";
     public SummaryHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -39,11 +40,26 @@ public class SummaryHelper extends SQLiteOpenHelper {
                 SummaryContract.Rubric._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 SummaryContract.Rubric.NAME + " TEXT, " +
                 SummaryContract.Rubric.WEIGHT + " REAL NOT NULL, " +
+                SummaryContract.Rubric.POPULARITY + " REAL NOT NULL, " +
                 SummaryContract.Rubric.CREATED_AT +" DATETIME DEFAULT CURRENT_TIMESTAMP "+
                 " );";
 
+        final String SQL_CREATE_TOTAL_TABLE = "CREATE TABLE " + SummaryContract.Total.TABLE_NAME + " (" +
+                SummaryContract.Total._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                SummaryContract.Total.NAME + " TEXT, " +
+                SummaryContract.Total.P_IN_Total + " REAL NOT NULL, " +
+                SummaryContract.Total.N_IN_Total + " REAL NOT NULL, " +
+                SummaryContract.Total.CREATED_AT +" DATETIME DEFAULT CURRENT_TIMESTAMP "+
+                " );";
+
+        ContentValues values = new ContentValues();
+
+
+
+
         sqLiteDatabase.execSQL(SQL_CREATE_SUMMARY_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_RUBRIC_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_TOTAL_TABLE);
 
     }
     @Override
@@ -111,11 +127,12 @@ public class SummaryHelper extends SQLiteOpenHelper {
         return  total;
     }
     public int getCountAll(){
-        String countQuery = "SELECT * FROM " + SummaryContract.UsrHistory.TABLE_NAME;
+        //String countQuery = "SELECT * FROM " + SummaryContract.UsrHistory.TABLE_NAME;
+        String countQuery = "SELECT * FROM " + SummaryContract.Total.TABLE_NAME;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
         //cursor.close();
-        return cursor.getCount();
+            return cursor.getCount();
     }
 
     private String getDateTime() {

@@ -48,6 +48,7 @@ public class Summary extends AppCompatActivity implements View.OnClickListener{
         ContentValues rubric = new ContentValues();
         rubric.put(SummaryContract.Rubric.NAME, description);
         rubric.put(SummaryContract.Rubric.WEIGHT, weight);
+        rubric.put(SummaryContract.Rubric.POPULARITY, 0F);
 
         Uri insertedUri =  this.getContentResolver().insert(
                 SummaryContract.Rubric.CONTENT_URI,
