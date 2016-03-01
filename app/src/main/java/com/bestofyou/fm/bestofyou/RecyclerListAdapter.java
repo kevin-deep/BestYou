@@ -41,6 +41,16 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         implements ItemTouchHelperAdapter
 
 {
+    static final int COL_TOTAL_NAME = 1;
+    static final int COL_TOTAL_P_TOTAL = 2;
+    static final int COL_TOTAL_N_TOTAL = 3;
+    private static final String[] TOTAL_COLUMNS = {
+            SummaryContract.Total.TABLE_NAME + "." + SummaryContract.Total._ID,
+            SummaryContract.Total.NAME,
+            SummaryContract.Total.P_IN_Total,
+            SummaryContract.Total.N_IN_Total
+    };
+
     private Cursor mCursor;
     //final private ItemChoiceManager mICM;
     private Context mContext;
@@ -97,7 +107,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         String name = mCursor.getString(MainActivity.COL_RUBRIC_NAME);
         holder.name.setText(name);
         // Read weight from cursor
-        Long weight = mCursor.getLong(MainActivity.COL_RUBRIC_WEIGHT);
+        final Long weight = mCursor.getLong(MainActivity.COL_RUBRIC_WEIGHT);
         holder.weight.setText(weight.toString());
 
         holder.rateHour.setVisibility(holder.tick ? View.GONE : View.VISIBLE);
@@ -120,7 +130,8 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
             public void onClick(View v) {
                 Toast.makeText(mContext, "data", Toast.LENGTH_SHORT).show();
                 holder.tick=!holder.tick;
-                insertTotal(1);
+
+                insertTotal(1*weight);
             }
         });
 
@@ -129,13 +140,17 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
             public void onClick(View v) {
                 Log.v("add two hour", "onClick");
                 holder.tick=!holder.tick;
+                insertTotal(2*weight);
             }
         });
     }
 
-    public long insertTotal(float weight ){
+    public void insertTotal(float weight ){
         dbhlper = new SummaryHelper(mContext);
+
+
         if (dbhlper.getCountAll() ==0){
+            //initial the table
             ContentValues values = new ContentValues();
             values.put(SummaryContract.Total.NAME, "Kevin");
             values.put(SummaryContract.Total.P_IN_Total, 0F);
@@ -143,26 +158,35 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
             mContext.getContentResolver().insert(SummaryContract.Total.CONTENT_URI,values);
         }
 
-        //// TODO: 2/28/2016 If weight > 0 then get the pTotal and add the weight on it if < 0 add to nTotal
-       /* if (weight>0){
+        // TODO: 2/28/2016 If weight > 0 then get the pTotal and add the weight on it if < 0 add to nTotal
+        //get the total table
+        Cursor c = mContext.getContentResolver().query(SummaryContract.Total.CONTENT_URI, TOTAL_COLUMNS, null, null, null);
 
-            mContext.getContentResolver().query(
-                    SummaryContract.Total.CONTENT_URI, SummaryContract.Total.P_IN_Total,
-                    rubric
-            );
+        c.moveToPosition(0);
+
+        String name =   c.getString(RecyclerListAdapter.COL_TOTAL_NAME);
+        Float pPoint =   c.getFloat(RecyclerListAdapter.COL_TOTAL_P_TOTAL);
+        Float nPoint =   c.getFloat(RecyclerListAdapter.COL_TOTAL_N_TOTAL);
+
+        Toast.makeText(mContext,name + " " + pPoint.toString()+ "  " + nPoint.toString(),Toast.LENGTH_LONG).show();
+        ContentValues historyValue = new ContentValues();
+        if (weight>=0) {
+            pPoint +=weight;
+            historyValue.put(SummaryContract.UsrHistory.P_History, weight);
 
         }
-
-        rubric.put(SummaryContract.Rubric.NAME, description);
-        rubric.put(SummaryContract.Rubric.WEIGHT, weight);
-
-        Uri insertedUri =  mContext.getContentResolver().insert(
-                SummaryContract.Rubric.CONTENT_URI,
-                rubric
-        );*/
-        //ong locationId = ContentUris.parseId(insertedUri);
-        //return locationId;
-        return 0;
+        else {
+            nPoint +=weight;
+            historyValue.put(SummaryContract.UsrHistory.N_History,weight);
+        }
+        //upgrade the history table
+        mContext.getContentResolver().insert(SummaryContract.UsrHistory.CONTENT_URI,historyValue);
+        //update the total table
+        ContentValues v = new ContentValues();
+        v.put(SummaryContract.Total.NAME,name);
+        v.put(SummaryContract.Total.P_IN_Total,pPoint);
+        v.put(SummaryContract.Total.N_IN_Total, nPoint);
+        mContext.getContentResolver().update(SummaryContract.Total.CONTENT_URI,v,null,null);
     }
 
     @Override

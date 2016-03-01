@@ -202,18 +202,6 @@ public class SummaryProvider extends ContentProvider {
         // and query the database accordingly.
         Cursor retCursor;
         switch (sUriMatcher.match(uri)) {
-            // "weather/*/*"
-           /* case WEATHER_WITH_LOCATION_AND_DATE:
-            {
-                retCursor = getWeatherByLocationSettingAndDate(uri, projection, sortOrder);
-                break;
-            }*/
-            // "weather/*"
-            /*case WEATHER_WITH_LOCATION: {
-                retCursor = getWeatherByLocationSetting(uri, projection, sortOrder);
-                break;
-            }*/
-            // "weather"
             case HISTORY: {
                 retCursor = mOpenHelper.getReadableDatabase().query(
                         SummaryContract.UsrHistory.TABLE_NAME,
@@ -226,7 +214,6 @@ public class SummaryProvider extends ContentProvider {
                 );
                 break;
             }
-            // "location"
             case RUBRIC: {
                 retCursor = mOpenHelper.getReadableDatabase().query(
                         SummaryContract.Rubric.TABLE_NAME,
@@ -241,13 +228,13 @@ public class SummaryProvider extends ContentProvider {
             }
             case TOTAL: {
                 retCursor = mOpenHelper.getReadableDatabase().query(
-                        SummaryContract.Rubric.TABLE_NAME,
-                        projection,
-                        selection,
-                        selectionArgs,
-                        null,
-                        null,
-                        sortOrder
+                        SummaryContract.Total.TABLE_NAME, // a. table
+                        projection,// b. column names
+                        selection,// c. selections
+                        selectionArgs,// d. selections args
+                        null,// e. group by
+                        null,// f. having
+                        sortOrder// g. order by
                 );
                 break;
             }
