@@ -103,12 +103,13 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         //!!!!!Important This going to send the date into mClickHandler then it will be deliver to constructor
         mClickHandler.onClick(mCursor.getLong(dateColumnIndex), this);*/
         // Read name from cursor
-
+        hiddenBars(holder);
         String name = mCursor.getString(MainActivity.COL_RUBRIC_NAME);
         holder.name.setText(name);
         // Read weight from cursor
-        final Long weight = mCursor.getLong(MainActivity.COL_RUBRIC_WEIGHT);
-        holder.weight.setText(weight.toString());
+        final float weight = mCursor.getFloat(MainActivity.COL_RUBRIC_WEIGHT);
+        barsVisibility(weight,holder);
+        //holder.weight.setText(weight.toString());
 
         holder.rateHour.setVisibility(holder.tick ? View.GONE : View.VISIBLE);
         //holder.textView.setText(mItems.get(position));
@@ -120,7 +121,6 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
                 holder.tickCross.setImageDrawable(drawable);
                 drawable.start();
                 holder.tick=!holder.tick;
-
                 holder.rateHour.setVisibility(holder.tick ?  View.GONE:View.VISIBLE);
             }
         });
@@ -129,9 +129,8 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
             @Override
             public void onClick(View v) {
                 Toast.makeText(mContext, "data", Toast.LENGTH_SHORT).show();
-                holder.tick=!holder.tick;
-
                 insertTotal(1*weight);
+                holder.tickCross.callOnClick();
             }
         });
 
@@ -139,10 +138,43 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
             @Override
             public void onClick(View v) {
                 Log.v("add two hour", "onClick");
-                holder.tick=!holder.tick;
                 insertTotal(2*weight);
+                holder.tickCross.callOnClick();
             }
         });
+    }
+
+    public void barsVisibility(float weight ,ItemViewHolder holder){
+
+        if (weight==1){
+            holder.bar1.setVisibility(View.VISIBLE);
+        }
+        else if(weight==2){
+            holder.bar1.setVisibility(View.VISIBLE);
+            holder.bar2.setVisibility(View.VISIBLE);
+        }else if (weight==3){
+            holder.bar1.setVisibility(View.VISIBLE);
+            holder.bar2.setVisibility(View.VISIBLE);
+            holder.bar3.setVisibility(View.VISIBLE);
+        }else if (weight==4){
+            holder.bar1.setVisibility(View.VISIBLE);
+            holder.bar2.setVisibility(View.VISIBLE);
+            holder.bar3.setVisibility(View.VISIBLE);
+            holder.bar4.setVisibility(View.VISIBLE);
+        }else if (weight==5){
+            holder.bar1.setVisibility(View.VISIBLE);
+            holder.bar2.setVisibility(View.VISIBLE);
+            holder.bar3.setVisibility(View.VISIBLE);
+            holder.bar4.setVisibility(View.VISIBLE);
+            holder.bar5.setVisibility(View.VISIBLE);
+        }
+    }
+    private void hiddenBars(ItemViewHolder holder){
+        holder.bar1.setVisibility(View.GONE);
+        holder.bar2.setVisibility(View.GONE);
+        holder.bar3.setVisibility(View.GONE);
+        holder.bar4.setVisibility(View.GONE);
+        holder.bar5.setVisibility(View.GONE);
     }
 
     public void insertTotal(float weight ){
@@ -161,7 +193,6 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         // TODO: 2/28/2016 If weight > 0 then get the pTotal and add the weight on it if < 0 add to nTotal
         //get the total table
         Cursor c = mContext.getContentResolver().query(SummaryContract.Total.CONTENT_URI, TOTAL_COLUMNS, null, null, null);
-
         c.moveToPosition(0);
 
         String name =   c.getString(RecyclerListAdapter.COL_TOTAL_NAME);
@@ -173,7 +204,6 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         if (weight>=0) {
             pPoint +=weight;
             historyValue.put(SummaryContract.UsrHistory.P_History, weight);
-
         }
         else {
             nPoint +=weight;
@@ -244,7 +274,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
     public class ItemViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {
 
         public final TextView name;
-        public final TextView weight;
+        //public final TextView weight;
         public CardView cardV;
         private ImageView tickCross;
         private AnimatedVectorDrawable tickToCross;
@@ -252,13 +282,18 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         private View rateHour;
         private ImageView oneHour;
         private ImageView twoHour;
+        private  ImageView bar1;
+        private  ImageView bar2;
+        private  ImageView bar3;
+        private  ImageView bar4;
+        private  ImageView bar5;
         private boolean tick = true;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
             cardV  = (CardView) itemView.findViewById(R.id.card_view);
             name = (TextView) itemView.findViewById(R.id.name);
-            weight = (TextView) itemView.findViewById(R.id.weight);
+            //weight = (TextView) itemView.findViewById(R.id.weight);
             rateHour = (View) itemView.findViewById(R.id.rates_in_hour);
             oneHour = (ImageView)itemView.findViewById(R.id.ic_add_one_hour);
             twoHour = (ImageView)itemView.findViewById(R.id.ic_add_two_hour);
@@ -267,6 +302,12 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
             //tickToCross = (AnimatedVectorDrawable)itemView.getContext() .getDrawable(R.drawable.avd_tick_to_cross);
             tickToCross = (AnimatedVectorDrawable)itemView.getContext() .getDrawable(R.drawable.avd_click_to_show_red);
             crossToTick = (AnimatedVectorDrawable) itemView.getContext().getDrawable(R.drawable.avd_click_to_show_black);
+
+            bar1 = (ImageView)itemView.findViewById(R.id.bar1);
+            bar2 = (ImageView)itemView.findViewById(R.id.bar2);
+            bar3 = (ImageView)itemView.findViewById(R.id.bar3);
+            bar4 = (ImageView)itemView.findViewById(R.id.bar4);
+            bar5 = (ImageView)itemView.findViewById(R.id.bar5);
 
 
         }
