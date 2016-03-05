@@ -39,7 +39,6 @@ import java.util.List;
 
 public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapter.ItemViewHolder>
         implements ItemTouchHelperAdapter
-
 {
     static final int COL_TOTAL_NAME = 1;
     static final int COL_TOTAL_P_TOTAL = 2;
@@ -60,9 +59,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
 
     public static interface ForecastAdapterOnClickHandler {
         void onClick(Long date, ItemViewHolder vh);}
-    private static final String[] STRINGS = new String[]{
-            "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten"
-    };
+
 
     private final List<String> mItems = new ArrayList<>();
 
@@ -80,7 +77,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
     }
 */
     public RecyclerListAdapter(Context context, View rateView) {
-        mItems.addAll(Arrays.asList(STRINGS));
+
         mContext = context;
         this.rateView = rateView;
     }
@@ -103,11 +100,13 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         //!!!!!Important This going to send the date into mClickHandler then it will be deliver to constructor
         mClickHandler.onClick(mCursor.getLong(dateColumnIndex), this);*/
         // Read name from cursor
+
+        int x = mCursor.getCount();
         hiddenBars(holder);
-        String name = mCursor.getString(MainActivity.COL_RUBRIC_NAME);
+        String name = mCursor.getString(PositiveFragment.COL_RUBRIC_NAME);
         holder.name.setText(name);
         // Read weight from cursor
-        final float weight = mCursor.getFloat(MainActivity.COL_RUBRIC_WEIGHT);
+        final float weight = mCursor.getFloat(PositiveFragment.COL_RUBRIC_WEIGHT);
         barsVisibility(weight,holder);
         //holder.weight.setText(weight.toString());
 
@@ -222,7 +221,8 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
     @Override
     public int getItemCount() {
         if ( null == mCursor ) return 0;
-        return mCursor.getCount();
+        int r = mCursor.getCount();
+        return r;
         //return mItems.size();
     }
 
@@ -255,10 +255,10 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
     public void onItemDismiss(int position) {
         mCursor.moveToPosition(position);
 
-        String name = mCursor.getString(MainActivity.COL_RUBRIC_NAME);
+        String name = mCursor.getString(PositiveFragment.COL_RUBRIC_NAME);
 
         // Read weight from cursor
-        Long weight = mCursor.getLong(MainActivity.COL_RUBRIC_WEIGHT);
+        Long weight = mCursor.getLong(PositiveFragment.COL_RUBRIC_WEIGHT);
 
         mItems.remove(position);
         Toast.makeText(this.mContext, name+ "   "+weight , Toast.LENGTH_SHORT).show();
