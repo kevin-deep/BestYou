@@ -4,6 +4,7 @@ package com.bestofyou.fm.bestofyou;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -67,14 +68,14 @@ public class PositiveFragment extends Fragment implements LoaderManager.LoaderCa
         //RecyclerListAdapter adapter = new RecyclerListAdapter();
 
         // The mRecyclerAdapter will take data from a source and use it to populate the RecyclerView  it's attached to.
-        mRecyclerAdapter = new RecyclerListAdapter(this.getContext(),rateView);
+        mRecyclerAdapter = new RecyclerListAdapter(this.getContext(),RecyclerListAdapter.PAGE_TYPE_POSITIVE);
         mRecyclerView.setAdapter(mRecyclerAdapter);
 
 
 
-        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mRecyclerAdapter);
+     /*   ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mRecyclerAdapter);
         mItemTouchHelper = new ItemTouchHelper(callback);
-        mItemTouchHelper.attachToRecyclerView(mRecyclerView);
+        mItemTouchHelper.attachToRecyclerView(mRecyclerView);*/
         return root;
     }
 
@@ -99,12 +100,13 @@ public class PositiveFragment extends Fragment implements LoaderManager.LoaderCa
         //initial the loader cursor
         Uri rubricUri = SummaryContract.Rubric.CONTENT_URI;
 
+        String select = "((" + SummaryContract.Rubric.NAME + " NOTNULL) AND ("
+                + SummaryContract.Rubric.WEIGHT + " >0 ))";
 
         return new CursorLoader(this.getContext(),
                 rubricUri,
-                // null,
                 RUBRIC_COLUMNS,
-                null,
+                select,
                 null,
                 null);
     }

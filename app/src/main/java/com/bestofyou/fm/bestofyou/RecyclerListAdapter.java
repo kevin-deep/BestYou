@@ -30,6 +30,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+
 /**
  * Simple RecyclerView.Adapter that implements {@link ItemTouchHelperAdapter} to respond to move and
  * dismiss events from a {@link android.support.v7.widget.helper.ItemTouchHelper}.
@@ -38,7 +39,7 @@ import java.util.List;
  */
 
 public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapter.ItemViewHolder>
-        implements ItemTouchHelperAdapter
+        //implements ItemTouchHelperAdapter
 {
     static final int COL_TOTAL_NAME = 1;
     static final int COL_TOTAL_P_TOTAL = 2;
@@ -50,13 +51,17 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
             SummaryContract.Total.N_IN_Total
     };
 
+    public static final int PAGE_TYPE_POSITIVE = 1;
+    public static final int PAGE_TYPE_NEGATIVE = 2;
+
+
     private Cursor mCursor;
     //final private ItemChoiceManager mICM;
     private Context mContext;
     SummaryHelper dbhlper;
    // final private ForecastAdapterOnClickHandler mClickHandler;
     private View rateView;
-
+    private int pageType;
     public static interface ForecastAdapterOnClickHandler {
         void onClick(Long date, ItemViewHolder vh);}
 
@@ -76,23 +81,30 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         mICM.setChoiceMode(choiceMode);
     }
 */
-    public RecyclerListAdapter(Context context, View rateView) {
-
+    public RecyclerListAdapter(Context context, int pageType) {
+        this.pageType = pageType;
         mContext = context;
         this.rateView = rateView;
     }
 
+
+    /**
+     * create a new RecyclerView.ViewHolder and initializes some private fields to be used by RecyclerView.
+     * @param viewGroup parent The ViewGroup into which the new View will be added after it is bound to an adapter position.
+     * @param viewType viewType The view type of the new View.
+     * @return A new ViewHolder that holds a View of the given view type.
+     *
+     * The new ViewHolder will be used to display items of the adapter using onBindViewHolder(ViewHolder, int, List).
+     * Since it will be re-used to display different items in the data set,
+     * it is a good idea to cache references to sub views of the View to avoid unnecessary findViewById(int) calls.
+     */
     @Override
-    public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_main, parent, false);
+    public ItemViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_main, viewGroup, false);
         return new ItemViewHolder(view);
     }
 
-    /*
-        * Returns this view's tag.
-        *Returns
-        *the Object stored in this view as a tag, or null if not set
-        */
+
     @Override
     public void onBindViewHolder(final ItemViewHolder holder, int position) {
         mCursor.moveToPosition(position);
@@ -101,7 +113,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         mClickHandler.onClick(mCursor.getLong(dateColumnIndex), this);*/
         // Read name from cursor
 
-        int x = mCursor.getCount();
+
         hiddenBars(holder);
         String name = mCursor.getString(PositiveFragment.COL_RUBRIC_NAME);
         holder.name.setText(name);
@@ -112,6 +124,8 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
 
         holder.rateHour.setVisibility(holder.tick ? View.GONE : View.VISIBLE);
         //holder.textView.setText(mItems.get(position));
+
+        //add bottom
         holder.tickCross.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -145,22 +159,22 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
 
     public void barsVisibility(float weight ,ItemViewHolder holder){
 
-        if (weight==1){
+        if (Math.abs(weight)==1){
             holder.bar1.setVisibility(View.VISIBLE);
         }
-        else if(weight==2){
+        else if(Math.abs(weight)==2){
             holder.bar1.setVisibility(View.VISIBLE);
             holder.bar2.setVisibility(View.VISIBLE);
-        }else if (weight==3){
+        }else if (Math.abs(weight)==3){
             holder.bar1.setVisibility(View.VISIBLE);
             holder.bar2.setVisibility(View.VISIBLE);
             holder.bar3.setVisibility(View.VISIBLE);
-        }else if (weight==4){
+        }else if (Math.abs(weight)==4){
             holder.bar1.setVisibility(View.VISIBLE);
             holder.bar2.setVisibility(View.VISIBLE);
             holder.bar3.setVisibility(View.VISIBLE);
             holder.bar4.setVisibility(View.VISIBLE);
-        }else if (weight==5){
+        }else if (Math.abs(weight)==5){
             holder.bar1.setVisibility(View.VISIBLE);
             holder.bar2.setVisibility(View.VISIBLE);
             holder.bar3.setVisibility(View.VISIBLE);
@@ -221,8 +235,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
     @Override
     public int getItemCount() {
         if ( null == mCursor ) return 0;
-        int r = mCursor.getCount();
-        return r;
+        return mCursor.getCount();
         //return mItems.size();
     }
 
@@ -231,13 +244,13 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         notifyDataSetChanged();
        // mEmptyView.setVisibility(getItemCount() == 0 ? View.VISIBLE : View.GONE);
     }
-    @Override
+   /* @Override
     public boolean onItemMove(int fromPosition, int toPosition) {
         Collections.swap(mItems, fromPosition, toPosition);
         notifyItemMoved(fromPosition, toPosition);
         return true;
     }
-
+*/
 
 
   /*  public int getSelectedItemPosition() {
@@ -250,7 +263,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
             //vfh.onClick(vfh.itemView);
         }
     }
-
+/*
     @Override
     public void onItemDismiss(int position) {
         mCursor.moveToPosition(position);
@@ -268,10 +281,10 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
 
 
 
-    }
+    }*/
 
 
-    public class ItemViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {
+    public class ItemViewHolder extends RecyclerView.ViewHolder {
 
         public final TextView name;
         //public final TextView weight;
@@ -310,8 +323,9 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
             bar5 = (ImageView)itemView.findViewById(R.id.bar5);
 
 
+
         }
-        @Override
+       /* @Override
         public void onItemSelected() {
             itemView.setBackgroundColor(Color.GRAY);
             //cardV.setCardBackgroundColor(Color.GREEN);
@@ -321,7 +335,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         public void onItemClear() {
             itemView.setBackgroundColor(0);
         }
-
+*/
 
        /* @Override
         public void onClick(View v) {
