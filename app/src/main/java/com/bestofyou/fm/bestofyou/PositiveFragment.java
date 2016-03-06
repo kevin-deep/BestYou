@@ -5,12 +5,14 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -41,6 +43,9 @@ public class PositiveFragment extends Fragment implements LoaderManager.LoaderCa
             SummaryContract.Rubric.NAME,
             SummaryContract.Rubric.WEIGHT
     };
+    public CollapsingToolbarLayout mCollapsingToobar;
+    public Toolbar mToolbar;
+
 
     private ItemTouchHelper mItemTouchHelper;
 
@@ -61,6 +66,8 @@ public class PositiveFragment extends Fragment implements LoaderManager.LoaderCa
         // Inflate the layout for this fragment
         View root =  inflater.inflate(R.layout.fragment_positive, container, false);
         rateView =  root.findViewById(R.id.rates_in_hour);
+
+
         mRecyclerView = (RecyclerView) root.findViewById(R.id.recycler_view);
         //mRecyclerView.setNestedScrollingEnabled(true);
         mRecyclerView.setHasFixedSize(true);

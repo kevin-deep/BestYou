@@ -6,4 +6,10 @@
     <dimen name="add_hours_height">30dp</dimen>
     <dimen name="add_hours_width">30dp</dimen>
 
+    <!-- Elevation-->
+    <dimen name="fab_elevation">2dp</dimen>
+    <dimen name="appbar_elevation">4dp</dimen>
+
+    <dimen name="fab_press_translation_z">6dp</dimen>
+    <dimen name="AppBarLayout_Height">260dp</dimen>
 </resources>

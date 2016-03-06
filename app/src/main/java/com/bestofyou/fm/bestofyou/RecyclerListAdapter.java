@@ -115,6 +115,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
 
 
         hiddenBars(holder);
+        if (pageType ==PAGE_TYPE_NEGATIVE) holder.updateNegativeIcons();
         String name = mCursor.getString(PositiveFragment.COL_RUBRIC_NAME);
         holder.name.setText(name);
         // Read weight from cursor
@@ -285,7 +286,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
 
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
-
+        public int pageType;
         public final TextView name;
         //public final TextView weight;
         public CardView cardV;
@@ -321,10 +322,19 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
             bar3 = (ImageView)itemView.findViewById(R.id.bar3);
             bar4 = (ImageView)itemView.findViewById(R.id.bar4);
             bar5 = (ImageView)itemView.findViewById(R.id.bar5);
-
-
+        }
+        //update the negative rubric ico showing on the negative view
+        public void updateNegativeIcons(){
+            bar1.setImageResource(R.drawable.ic_star_outline_24dp);
+            bar2.setImageResource(R.drawable.ic_star_outline_24dp);
+            bar3.setImageResource(R.drawable.ic_star_outline_24dp);
+            bar4.setImageResource(R.drawable.ic_star_outline_24dp);
+            bar5.setImageResource(R.drawable.ic_star_outline_24dp);
 
         }
+
+
+
        /* @Override
         public void onItemSelected() {
             itemView.setBackgroundColor(Color.GRAY);

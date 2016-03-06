@@ -45,7 +45,6 @@
                    android:layout_height="wrap_content"
                    android:id="@+id/bar2"
                    android:layout_alignRight="@+id/bar1"
-                   android:tint="@color/positive_bar"
                    android:src="@drawable/ic_grade_24dp"
                    />
                <ImageView

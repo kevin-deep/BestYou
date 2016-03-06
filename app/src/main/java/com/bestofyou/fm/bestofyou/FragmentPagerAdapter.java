@@ -10,7 +10,7 @@ import android.support.v4.app.FragmentManager;
 public class FragmentPagerAdapter extends android.support.v4.app.FragmentPagerAdapter {
 
     final int PAGE_COUNT = 2;
-    private String tabTitles[] = new String[] { "Positive", "Negative" };
+    private String tabTitles[] = new String[] { "Engaged", "Leisure" };
     private Context context;
 
     public FragmentPagerAdapter(FragmentManager fm, Context context) {
