@@ -38,9 +38,11 @@
     <integer name="duration">450</integer>
 
 
-
-
     <!-- TODO: Remove or change this placeholder text -->
     <string name="photo">Image Photo </string>
     <string name="action_add_new_habit">Add New Habit </string>
+    <string name="title_activity_add_newtype">addNewtypeActivity</string>
+
+
+    <string name="add_new_type_test">My new Habit</string>
 </resources>

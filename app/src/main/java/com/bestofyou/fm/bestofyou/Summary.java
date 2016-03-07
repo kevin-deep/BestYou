@@ -2,6 +2,7 @@ package com.bestofyou.fm.bestofyou;
 
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
+import com.bestofyou.fm.bestofyou.data.SummaryProvider;
 
 import com.bestofyou.fm.bestofyou.data.SummaryContract;
 import com.bestofyou.fm.bestofyou.data.SummaryHelper;
@@ -18,6 +20,7 @@ public class Summary extends AppCompatActivity implements View.OnClickListener{
     int x;
     private Button addP;
     private Button addN;
+    private Context mContext;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,6 +28,7 @@ public class Summary extends AppCompatActivity implements View.OnClickListener{
         addP = (Button)findViewById(R.id.addP);
         addN = (Button)findViewById(R.id.addN);
         //mDbHelper =  new SummaryHelper(this);
+        mContext =  this.getBaseContext();
 
 
         addP.setText("add positive list");
@@ -33,12 +37,12 @@ public class Summary extends AppCompatActivity implements View.OnClickListener{
                /* mDbHelper.insert("positive", 123);
                 x =mDbHelper.getCountAll();
                 Toast.makeText(getBaseContext(), "data"+x, Toast.LENGTH_SHORT).show();*/
-                insertRubric("Sports", 2);
-                insertRubric("Reading", 4);
-                insertRubric("Coding", 2);
-                insertRubric("Networking", 4);
-                insertRubric("Family Time", 4);
-                insertRubric("Early Sleeping", 4);
+                SummaryProvider.insertRubric(mContext, "Sports", 2);
+                SummaryProvider.insertRubric(mContext,"Reading", 4);
+                SummaryProvider.insertRubric(mContext,"Coding", 2);
+                SummaryProvider.insertRubric(mContext,"Networking", 4);
+                SummaryProvider.insertRubric(mContext,"Family Time", 4);
+                SummaryProvider.insertRubric(mContext,"Early Sleeping", 4);
 
             }
         });
@@ -48,32 +52,19 @@ public class Summary extends AppCompatActivity implements View.OnClickListener{
                /* mDbHelper.insert("positive", 123);
                 x =mDbHelper.getCountAll();
                 Toast.makeText(getBaseContext(), "data"+x, Toast.LENGTH_SHORT).show();*/
-                insertRubric("Sloth",-2 );
-                insertRubric("Smoking",-4 );
-                insertRubric("Watching TV",-2 );
-                insertRubric("Drinking",-4 );
-                insertRubric("Gaming",-4 );
-                insertRubric("Day dreaming",-4 );
-                insertRubric("Gluttony",-4 );
-                insertRubric("Wrath",-4 );
+                SummaryProvider.insertRubric(mContext,"Sloth", -2);
+                SummaryProvider.insertRubric(mContext,"Smoking", -4);
+                SummaryProvider.insertRubric(mContext,"Watching TV", -2);
+                SummaryProvider.insertRubric(mContext,"Drinking", -4);
+                SummaryProvider.insertRubric(mContext,"Gaming", -4);
+                SummaryProvider.insertRubric(mContext,"Day dreaming", -4);
+                SummaryProvider.insertRubric(mContext,"Gluttony", -4);
+                SummaryProvider.insertRubric(mContext,"Wrath", -4);
             }
         });
     }
 
-    public long insertRubric(String description,float weight ){
 
-        ContentValues rubric = new ContentValues();
-        rubric.put(SummaryContract.Rubric.NAME, description);
-        rubric.put(SummaryContract.Rubric.WEIGHT, weight);
-        rubric.put(SummaryContract.Rubric.POPULARITY, 0F);
-
-        Uri insertedUri =  this.getContentResolver().insert(
-                SummaryContract.Rubric.CONTENT_URI,
-                rubric
-        );
-        long locationId = ContentUris.parseId(insertedUri);
-        return locationId;
-    }
 
 
     @Override

@@ -18,13 +18,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Summary"></activity>
+        <activity android:name=".Summary" />
 
         <provider
-            android:authorities="@string/content_authority"
             android:name=".data.SummaryProvider"
+            android:authorities="@string/content_authority"
             android:exported="false"
             android:syncable="true" />
+
+        <activity
+            android:name=".AddNewtypeActivity"
+            android:label="@string/add_new_type_test"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Dialog">
+            <!--android:theme="@style/AppTheme">-->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.bestofyou.fm.bestofyou.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

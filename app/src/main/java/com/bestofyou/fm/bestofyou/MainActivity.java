@@ -1,30 +1,16 @@
 package com.bestofyou.fm.bestofyou;
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewTreeObserver;
-import android.widget.TextView;
-
-import com.bestofyou.fm.bestofyou.data.SummaryContract;
-import com.bestofyou.fm.bestofyou.helper.SimpleItemTouchHelperCallback;
 
 public class MainActivity extends AppCompatActivity {
   public CollapsingToolbarLayout mCollapsingToobar;
@@ -61,18 +47,26 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
 
+        FloatingActionButton addNewType = (FloatingActionButton) findViewById(R.id.addNewType);
+        addNewType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getBaseContext(), AddNewtypeActivity.class));
+            }
+        });
 
 
 
-       /* FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
+       FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();*/
                 callSummary();
             }
-        });*/
+        });
     }
 
     public void callSummary(){

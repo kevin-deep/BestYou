@@ -1,7 +1,10 @@
 package com.bestofyou.fm.bestofyou.data;
 
 import android.content.ContentProvider;
+import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -244,6 +247,23 @@ public class SummaryProvider extends ContentProvider {
         }
         retCursor.setNotificationUri(getContext().getContentResolver(), uri);
         return retCursor;
+    }
+
+
+
+    public static long insertRubric(Context contentResolver, String description,float weight ){
+
+        ContentValues rubric = new ContentValues();
+        rubric.put(SummaryContract.Rubric.NAME, description);
+        rubric.put(SummaryContract.Rubric.WEIGHT, weight);
+        rubric.put(SummaryContract.Rubric.POPULARITY, 0F);
+
+        Uri insertedUri =  contentResolver.getContentResolver().insert(
+                SummaryContract.Rubric.CONTENT_URI,
+                rubric
+        );
+        long locationId = ContentUris.parseId(insertedUri);
+        return locationId;
     }
 
 
