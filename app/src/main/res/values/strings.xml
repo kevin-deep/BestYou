@@ -45,4 +45,9 @@
 
 
     <string name="add_new_type_test">My new Habit</string>
+    <string name="title_activity_authentication">AuthenticationActivity</string>
+
+    <!--Google Plus Client ID-->
+    <string name="G_Plus_ID">com.googleusercontent.apps.210491937152-d4u9f5gtlvr7lksk4o4cdvs9a53r0i5</string>
+
 </resources>

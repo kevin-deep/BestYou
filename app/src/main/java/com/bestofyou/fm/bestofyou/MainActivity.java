@@ -11,10 +11,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 
 public class MainActivity extends AppCompatActivity {
   public CollapsingToolbarLayout mCollapsingToobar;
     public Toolbar mToolbar;
+    ImageView profile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
         mCollapsingToobar = (CollapsingToolbarLayout) findViewById(R.id.Collapse_toolbar);
         mToolbar  = (Toolbar) findViewById(R.id.toolbar);
+        profile = (ImageView)findViewById(R.id.profile);
       /*  mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,6 +57,15 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(getBaseContext(), AddNewtypeActivity.class));
             }
         });
+
+        profile.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getBaseContext(),AuthenticationActivity.class));
+            }
+        });
+
 
 
 

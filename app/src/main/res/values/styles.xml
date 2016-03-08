@@ -23,6 +23,7 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
     <style name="Dialog" parent="Theme.AppCompat.Dialog">
         <!--   your app branding color for the app bar -->
         <item name="colorPrimary">#3F51B5</item>

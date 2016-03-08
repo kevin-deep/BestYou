@@ -99,6 +99,7 @@ public class AddNewtypeActivity extends AppCompatActivity implements SeekBar.OnS
         if (switchButton2.isChecked()) convertToN = -1;
         float weight = Float.parseFloat(text_new_weight.getText().toString())*convertToN;
         SummaryProvider.insertRubric(this.getBaseContext(),newTypeName.getText().toString(),weight);
+        this.finish();
     }
     //check seeker value
     @Override

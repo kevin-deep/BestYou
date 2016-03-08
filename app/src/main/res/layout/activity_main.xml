@@ -92,5 +92,18 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/ic_sentiment_very_satisfied_black_18px" />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_account_circle_white_48dp"
+        android:id="@+id/profile"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="10dp"
+        app:layout_anchor="@id/appBar"
+        app:elevation="@dimen/appbar_elevation"
+        app:layout_anchorGravity="top|left|start"
+        android:stateListAnimator="@animator/fab_state_list_anim"
+        app:borderWidth="0dp"
+        />
 
 </android.support.design.widget.CoordinatorLayout>
