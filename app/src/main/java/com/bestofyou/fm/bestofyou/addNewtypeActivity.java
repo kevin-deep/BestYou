@@ -22,6 +22,7 @@ public class AddNewtypeActivity extends AppCompatActivity implements SeekBar.OnS
     TextView text_new_weight, textView, textView2;
     EditText newTypeName;
     SeekBar new_weight;
+    final float POPULARITY_DEFAULT = 20F;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,7 +99,7 @@ public class AddNewtypeActivity extends AppCompatActivity implements SeekBar.OnS
         float convertToN = 1;
         if (switchButton2.isChecked()) convertToN = -1;
         float weight = Float.parseFloat(text_new_weight.getText().toString())*convertToN;
-        SummaryProvider.insertRubric(this.getBaseContext(),newTypeName.getText().toString(),weight);
+        SummaryProvider.insertRubric(this.getBaseContext(),newTypeName.getText().toString(),weight, POPULARITY_DEFAULT);
         this.finish();
     }
     //check seeker value

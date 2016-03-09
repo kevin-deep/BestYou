@@ -71,7 +71,7 @@ public class Summary extends AppCompatActivity implements View.OnClickListener{
     public void onClick(View view) {
         if (view == addP){
             mDbHelper.insert("positive", 1);
-            x =mDbHelper.getCountAll();
+            //x =mDbHelper.getCountAll();
             Toast.makeText(this, "data"+x, Toast.LENGTH_SHORT).show();
         }
 

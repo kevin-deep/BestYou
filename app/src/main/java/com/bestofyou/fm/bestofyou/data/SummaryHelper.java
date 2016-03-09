@@ -126,14 +126,7 @@ public class SummaryHelper extends SQLiteOpenHelper {
         }*/
         return  total;
     }
-    public int getCountAll(){
-        //String countQuery = "SELECT * FROM " + SummaryContract.UsrHistory.TABLE_NAME;
-        String countQuery = "SELECT * FROM " + SummaryContract.Total.TABLE_NAME;
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(countQuery, null);
-        //cursor.close();
-            return cursor.getCount();
-    }
+
 
     private String getDateTime() {
         SimpleDateFormat dateFormat = new SimpleDateFormat(

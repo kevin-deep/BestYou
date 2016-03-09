@@ -9,7 +9,9 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.widget.Toast;
 
+import com.bestofyou.fm.bestofyou.RecyclerListAdapter;
 import com.bestofyou.fm.bestofyou.Summary;
 
 /**
@@ -20,7 +22,7 @@ public class SummaryProvider extends ContentProvider {
     static final int TOTAL = 1;
     static final int RUBRIC = 2;
     static final int HISTORY = 3;
-    private SummaryHelper mOpenHelper;
+    static SummaryHelper mOpenHelper;
 
     // The URI Matcher used by this content provider.
     private static final UriMatcher sUriMatcher = buildUriMatcher();
@@ -251,13 +253,12 @@ public class SummaryProvider extends ContentProvider {
 
 
 
-    public static long insertRubric(Context contentResolver, String description,float weight ){
+    public static long insertRubric(Context contentResolver, String description,float weight ,float popularity){
 
         ContentValues rubric = new ContentValues();
         rubric.put(SummaryContract.Rubric.NAME, description);
         rubric.put(SummaryContract.Rubric.WEIGHT, weight);
-        rubric.put(SummaryContract.Rubric.POPULARITY, 0F);
-
+        rubric.put(SummaryContract.Rubric.POPULARITY, popularity);
         Uri insertedUri =  contentResolver.getContentResolver().insert(
                 SummaryContract.Rubric.CONTENT_URI,
                 rubric
@@ -265,6 +266,84 @@ public class SummaryProvider extends ContentProvider {
         long locationId = ContentUris.parseId(insertedUri);
         return locationId;
     }
+
+    public static long insertRubric(Context contentResolver, String description,float weight){
+        return insertRubric(contentResolver, description, weight ,0F);
+    }
+
+
+    public static int getCountAll(){
+        //String countQuery = "SELECT * FROM " + SummaryContract.UsrHistory.TABLE_NAME;
+        String countQuery = "SELECT * FROM " + SummaryContract.Total.TABLE_NAME;
+        SQLiteDatabase db = mOpenHelper.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery, null);
+        //cursor.close();
+        return cursor.getCount();
+    }
+
+    public static void insertTotal(Context mContext,float weight ){
+
+
+
+        if (getCountAll() ==0){
+            //initial the table
+            ContentValues values = new ContentValues();
+            values.put(SummaryContract.Total.NAME, "Kevin");
+            values.put(SummaryContract.Total.P_IN_Total, 0F);
+            values.put(SummaryContract.Total.N_IN_Total, 0F);
+            mContext.getContentResolver().insert(SummaryContract.Total.CONTENT_URI,values);
+        }
+
+        // TODO: 2/28/2016 If weight > 0 then get the pTotal and add the weight on it if < 0 add to nTotal
+        //get the total table
+        Cursor c = mContext.getContentResolver().query(SummaryContract.Total.CONTENT_URI, RecyclerListAdapter.TOTAL_COLUMNS, null, null, null);
+        c.moveToPosition(0);
+        String name =   c.getString(RecyclerListAdapter.COL_TOTAL_NAME);
+        Float pPoint =   c.getFloat(RecyclerListAdapter.COL_TOTAL_P_TOTAL);
+        Float nPoint =   c.getFloat(RecyclerListAdapter.COL_TOTAL_N_TOTAL);
+
+        Toast.makeText(mContext, name + " " + pPoint.toString() + "  " + nPoint.toString(), Toast.LENGTH_LONG).show();
+        ContentValues historyValue = new ContentValues();
+        if (weight>=0) {
+            pPoint +=weight;
+            historyValue.put(SummaryContract.UsrHistory.P_History, weight);
+        }
+        else {
+            nPoint +=weight;
+            historyValue.put(SummaryContract.UsrHistory.N_History,weight);
+        }
+        //upgrade the history table
+        mContext.getContentResolver().insert(SummaryContract.UsrHistory.CONTENT_URI,historyValue);
+        //update the total table
+        ContentValues v = new ContentValues();
+        v.put(SummaryContract.Total.NAME,name);
+        v.put(SummaryContract.Total.P_IN_Total,pPoint);
+        v.put(SummaryContract.Total.N_IN_Total, nPoint);
+        mContext.getContentResolver().update(SummaryContract.Total.CONTENT_URI,v,null,null);
+    }
+
+    public static String[] getTotal(Context mContext){
+
+        //get the total table
+        Cursor c = mContext.getContentResolver().query(SummaryContract.Total.CONTENT_URI, RecyclerListAdapter.TOTAL_COLUMNS, null, null, null);
+        c.moveToPosition(0);
+        String name =   c.getString(RecyclerListAdapter.COL_TOTAL_NAME);
+        Float pPoint =   c.getFloat(RecyclerListAdapter.COL_TOTAL_P_TOTAL);
+        Float nPoint =   c.getFloat(RecyclerListAdapter.COL_TOTAL_N_TOTAL);
+        String pointInTotal[] = {pPoint.toString(),nPoint.toString()};
+        return pointInTotal;
+    }
+    public static String getPPoint(Context mContext){
+        String []pPoint = getTotal(mContext);
+        return pPoint[0];
+    }
+    public static String getNPoint(Context mContext){
+        String []pPoint = getTotal(mContext);
+        return pPoint[1];
+    }
+
+
+
 
 
 

@@ -12,4 +12,8 @@
 
     <dimen name="fab_press_translation_z">6dp</dimen>
     <dimen name="AppBarLayout_Height">260dp</dimen>
+
+    <!-- Header text size-->
+
+    <dimen name="header_text_size">30sp</dimen>
 </resources>

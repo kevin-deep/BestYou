@@ -41,7 +41,8 @@ public class PositiveFragment extends Fragment implements LoaderManager.LoaderCa
     private static final String[] RUBRIC_COLUMNS = {
             SummaryContract.Rubric.TABLE_NAME + "." + SummaryContract.Rubric._ID,
             SummaryContract.Rubric.NAME,
-            SummaryContract.Rubric.WEIGHT
+            SummaryContract.Rubric.WEIGHT,
+            SummaryContract.Rubric.POPULARITY + " AS p"
     };
     public CollapsingToolbarLayout mCollapsingToobar;
     public Toolbar mToolbar;
@@ -107,15 +108,15 @@ public class PositiveFragment extends Fragment implements LoaderManager.LoaderCa
         //initial the loader cursor
         Uri rubricUri = SummaryContract.Rubric.CONTENT_URI;
 
-        String select = "((" + SummaryContract.Rubric.NAME + " NOTNULL) AND ("
+        final String  select = "((" + SummaryContract.Rubric.NAME + " NOTNULL) AND ("
                 + SummaryContract.Rubric.WEIGHT + " >0 ))";
-
+        final String SORT = " p DESC";
         return new CursorLoader(this.getContext(),
                 rubricUri,
                 RUBRIC_COLUMNS,
                 select,
                 null,
-                null);
+                SORT);
     }
     //build the new loader
     @Override

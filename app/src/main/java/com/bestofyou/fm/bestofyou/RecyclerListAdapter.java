@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,31 +42,25 @@ import java.util.List;
 public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapter.ItemViewHolder>
         //implements ItemTouchHelperAdapter
 {
-    static final int COL_TOTAL_NAME = 1;
-    static final int COL_TOTAL_P_TOTAL = 2;
-    static final int COL_TOTAL_N_TOTAL = 3;
-    private static final String[] TOTAL_COLUMNS = {
+    public static final int COL_TOTAL_NAME = 1;
+    public static final int COL_TOTAL_P_TOTAL = 2;
+    public static final int COL_TOTAL_N_TOTAL = 3;
+    public static final String[] TOTAL_COLUMNS = {
             SummaryContract.Total.TABLE_NAME + "." + SummaryContract.Total._ID,
             SummaryContract.Total.NAME,
             SummaryContract.Total.P_IN_Total,
             SummaryContract.Total.N_IN_Total
     };
-
     public static final int PAGE_TYPE_POSITIVE = 1;
     public static final int PAGE_TYPE_NEGATIVE = 2;
-
-
     private Cursor mCursor;
     //final private ItemChoiceManager mICM;
     private Context mContext;
-    SummaryHelper dbhlper;
    // final private ForecastAdapterOnClickHandler mClickHandler;
     private View rateView;
     private int pageType;
     public static interface ForecastAdapterOnClickHandler {
         void onClick(Long date, ItemViewHolder vh);}
-
-
     private final List<String> mItems = new ArrayList<>();
 
     /*public RecyclerListAdapter() {
@@ -120,11 +115,18 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         holder.name.setText(name);
         // Read weight from cursor
         final float weight = mCursor.getFloat(PositiveFragment.COL_RUBRIC_WEIGHT);
-        barsVisibility(weight,holder);
+        barsVisibility(weight, holder);
         //holder.weight.setText(weight.toString());
 
         holder.rateHour.setVisibility(holder.tick ? View.GONE : View.VISIBLE);
         //holder.textView.setText(mItems.get(position));
+
+        holder.cardV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                holder.tickCross.callOnClick();
+            }
+        });
 
         //add bottom
         holder.tickCross.setOnClickListener(new View.OnClickListener() {
@@ -142,9 +144,9 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         holder.oneHour.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, "data", Toast.LENGTH_SHORT).show();
-                insertTotal(1*weight);
+                SummaryProvider.insertTotal(mContext, 1 * weight);
                 holder.tickCross.callOnClick();
+
             }
         });
 
@@ -152,8 +154,9 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
             @Override
             public void onClick(View v) {
                 Log.v("add two hour", "onClick");
-                insertTotal(2*weight);
+                SummaryProvider.insertTotal(mContext,2 * weight);
                 holder.tickCross.callOnClick();
+
             }
         });
     }
@@ -191,47 +194,6 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         holder.bar5.setVisibility(View.GONE);
     }
 
-    public void insertTotal(float weight ){
-        dbhlper = new SummaryHelper(mContext);
-
-
-        if (dbhlper.getCountAll() ==0){
-            //initial the table
-            ContentValues values = new ContentValues();
-            values.put(SummaryContract.Total.NAME, "Kevin");
-            values.put(SummaryContract.Total.P_IN_Total, 0F);
-            values.put(SummaryContract.Total.N_IN_Total, 0F);
-            mContext.getContentResolver().insert(SummaryContract.Total.CONTENT_URI,values);
-        }
-
-        // TODO: 2/28/2016 If weight > 0 then get the pTotal and add the weight on it if < 0 add to nTotal
-        //get the total table
-        Cursor c = mContext.getContentResolver().query(SummaryContract.Total.CONTENT_URI, TOTAL_COLUMNS, null, null, null);
-        c.moveToPosition(0);
-
-        String name =   c.getString(RecyclerListAdapter.COL_TOTAL_NAME);
-        Float pPoint =   c.getFloat(RecyclerListAdapter.COL_TOTAL_P_TOTAL);
-        Float nPoint =   c.getFloat(RecyclerListAdapter.COL_TOTAL_N_TOTAL);
-
-        Toast.makeText(mContext,name + " " + pPoint.toString()+ "  " + nPoint.toString(),Toast.LENGTH_LONG).show();
-        ContentValues historyValue = new ContentValues();
-        if (weight>=0) {
-            pPoint +=weight;
-            historyValue.put(SummaryContract.UsrHistory.P_History, weight);
-        }
-        else {
-            nPoint +=weight;
-            historyValue.put(SummaryContract.UsrHistory.N_History,weight);
-        }
-        //upgrade the history table
-        mContext.getContentResolver().insert(SummaryContract.UsrHistory.CONTENT_URI,historyValue);
-        //update the total table
-        ContentValues v = new ContentValues();
-        v.put(SummaryContract.Total.NAME,name);
-        v.put(SummaryContract.Total.P_IN_Total,pPoint);
-        v.put(SummaryContract.Total.N_IN_Total, nPoint);
-        mContext.getContentResolver().update(SummaryContract.Total.CONTENT_URI,v,null,null);
-    }
 
     @Override
     public int getItemCount() {
@@ -287,6 +249,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
         public int pageType;
+
         public final TextView name;
         //public final TextView weight;
         public CardView cardV;

@@ -12,11 +12,15 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.bestofyou.fm.bestofyou.data.SummaryProvider;
 
 public class MainActivity extends AppCompatActivity {
   public CollapsingToolbarLayout mCollapsingToobar;
     public Toolbar mToolbar;
-    ImageView profile;
+    FloatingActionButton profile;
+    public TextView pPoint, nPoint;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +34,10 @@ public class MainActivity extends AppCompatActivity {
 
         mCollapsingToobar = (CollapsingToolbarLayout) findViewById(R.id.Collapse_toolbar);
         mToolbar  = (Toolbar) findViewById(R.id.toolbar);
-        profile = (ImageView)findViewById(R.id.profile);
+        profile = (FloatingActionButton)findViewById(R.id.profile);
+        pPoint = (TextView)findViewById(R.id.p_point);
+        nPoint = (TextView)findViewById(R.id.n_point);
+
       /*  mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -38,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });*/
 
-
+        updateHeader();
 
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
@@ -106,6 +113,13 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    public void updateHeader(){
+        pPoint.setText(SummaryProvider.getPPoint(this.getBaseContext()));
+        nPoint.setText(SummaryProvider.getNPoint(this.getBaseContext()));
+    }
+
+
 
 
 

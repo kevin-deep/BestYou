@@ -39,7 +39,8 @@ public class NegativeFragment extends Fragment implements LoaderManager.LoaderCa
     private static final String[] RUBRIC_COLUMNS = {
             SummaryContract.Rubric.TABLE_NAME + "." + SummaryContract.Rubric._ID,
             SummaryContract.Rubric.NAME,
-            SummaryContract.Rubric.WEIGHT
+            SummaryContract.Rubric.WEIGHT,
+            SummaryContract.Rubric.POPULARITY + " AS p"
     };
 
     @Override
@@ -94,17 +95,19 @@ public class NegativeFragment extends Fragment implements LoaderManager.LoaderCa
         // This is called when a new Loader needs to be created.  This
         // fragment only uses one loader, so we don't care about checking the id.
         //initial the loader cursor
-        String select = "((" + SummaryContract.Rubric.NAME + " NOTNULL) AND ("
-                + SummaryContract.Rubric.WEIGHT + " <0 ))";
+        final String SELECT = "((" + SummaryContract.Rubric.NAME + " NOTNULL) AND ("
+                + SummaryContract.Rubric.WEIGHT + " <0 ) AND (" + SummaryContract.Rubric.POPULARITY + " NOTNULL " + "))";
+        //final String SORT =SummaryContract.Rubric.POPULARITY + " DESC";
+        final String SORT = " p DESC";
 
         Uri rubricUri = SummaryContract.Rubric.CONTENT_URI;
         return new CursorLoader(this.getContext(),
                 rubricUri,
                 // null,
                 RUBRIC_COLUMNS,
-                select,
+                SELECT,
                 null,
-                null);
+                SORT);
     }
 
 
