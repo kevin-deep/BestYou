@@ -6,14 +6,18 @@ package com.bestofyou.fm.bestofyou;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.net.Uri;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -40,7 +44,7 @@ import java.util.List;
  */
 
 public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapter.ItemViewHolder>
-        //implements ItemTouchHelperAdapter
+        implements ItemTouchHelperAdapter
 {
     public static final int COL_TOTAL_NAME = 1;
     public static final int COL_TOTAL_P_TOTAL = 2;
@@ -207,13 +211,12 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         notifyDataSetChanged();
        // mEmptyView.setVisibility(getItemCount() == 0 ? View.VISIBLE : View.GONE);
     }
-   /* @Override
+    @Override
     public boolean onItemMove(int fromPosition, int toPosition) {
-        Collections.swap(mItems, fromPosition, toPosition);
-        notifyItemMoved(fromPosition, toPosition);
+        /*Collections.swap(mItems, fromPosition, toPosition);
+        notifyItemMoved(fromPosition, toPosition);*/
         return true;
     }
-*/
 
 
   /*  public int getSelectedItemPosition() {
@@ -226,10 +229,9 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
             //vfh.onClick(vfh.itemView);
         }
     }
-/*
     @Override
     public void onItemDismiss(int position) {
-        mCursor.moveToPosition(position);
+        /*mCursor.moveToPosition(position);
 
         String name = mCursor.getString(PositiveFragment.COL_RUBRIC_NAME);
 
@@ -239,15 +241,15 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         mItems.remove(position);
         Toast.makeText(this.mContext, name+ "   "+weight , Toast.LENGTH_SHORT).show();
         notifyItemRemoved(position);
-        int lastIndex = getItemCount();
+        int lastIndex = getItemCount();*/
         //notifyItemMoved(position, lastIndex-1);
 
 
 
-    }*/
+    }
 
 
-    public class ItemViewHolder extends RecyclerView.ViewHolder {
+    public class ItemViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder{
         public int pageType;
 
         public final TextView name;
@@ -296,11 +298,25 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
 
         }
 
-
-
-       /* @Override
+        @Override
         public void onItemSelected() {
             itemView.setBackgroundColor(Color.GRAY);
+            Toast.makeText(mContext, "long Press detected", Toast.LENGTH_LONG);
+            Log.v("longpress detected", "longpress detected");
+
+
+            CharSequence colors[] = new CharSequence[] {"Delete", "Update"};
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+            //builder.setTitle("CRUD");
+            builder.setItems(colors, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Log.v("longpress detected", "longpress detected");
+                    //TODO swtich clause
+                }
+            });
+            builder.show();
             //cardV.setCardBackgroundColor(Color.GREEN);
         }
 
@@ -308,7 +324,6 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         public void onItemClear() {
             itemView.setBackgroundColor(0);
         }
-*/
 
        /* @Override
         public void onClick(View v) {

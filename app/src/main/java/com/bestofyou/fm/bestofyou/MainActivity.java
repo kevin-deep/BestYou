@@ -1,7 +1,9 @@
 package com.bestofyou.fm.bestofyou;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -14,13 +16,16 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bestofyou.fm.bestofyou.data.SummaryContract;
 import com.bestofyou.fm.bestofyou.data.SummaryProvider;
 
-public class MainActivity extends AppCompatActivity {
-  public CollapsingToolbarLayout mCollapsingToobar;
+public class MainActivity extends AppCompatActivity implements McontentObserver.Callback {
+    public CollapsingToolbarLayout mCollapsingToobar;
     public Toolbar mToolbar;
     FloatingActionButton profile;
     public TextView pPoint, nPoint;
+    //Content observer handler
+    McontentObserver observer = new McontentObserver(new Handler());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,14 +34,13 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
        /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-
         setSupportActionBar(toolbar);*/
 
         mCollapsingToobar = (CollapsingToolbarLayout) findViewById(R.id.Collapse_toolbar);
-        mToolbar  = (Toolbar) findViewById(R.id.toolbar);
-        profile = (FloatingActionButton)findViewById(R.id.profile);
-        pPoint = (TextView)findViewById(R.id.p_point);
-        nPoint = (TextView)findViewById(R.id.n_point);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        profile = (FloatingActionButton) findViewById(R.id.profile);
+        pPoint = (TextView) findViewById(R.id.p_point);
+        nPoint = (TextView) findViewById(R.id.n_point);
 
       /*  mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,9 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });*/
-
         updateHeader();
-
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager(),
@@ -65,19 +67,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        profile.setOnClickListener(new View.OnClickListener(){
+        profile.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getBaseContext(),AuthenticationActivity.class));
+                startActivity(new Intent(getBaseContext(), AuthenticationActivity.class));
             }
         });
 
 
-
-
-
-       FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -88,7 +87,24 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void callSummary(){
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initalObserver();
+    }
+
+    /***
+     *  also unregister the Content Observer, therwise you would create a memory leak
+     *  and the Activity would never be garbage collected.
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        getContentResolver().
+                unregisterContentObserver(observer);
+    }
+
+    public void callSummary() {
         startActivity(new Intent(this, Summary.class));
     }
 
@@ -98,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -110,17 +127,25 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
-    public void updateHeader(){
+    public  void updateHeader() {
         pPoint.setText(SummaryProvider.getPPoint(this.getBaseContext()));
         nPoint.setText(SummaryProvider.getNPoint(this.getBaseContext()));
     }
+    //register the Content Observer
+    public void initalObserver(){
+        observer.contexTo=this;
+        getApplicationContext().getContentResolver().registerContentObserver(
+                SummaryContract.Total.CONTENT_URI,
+                true,
+                observer
+        );
+    }
 
-
-
-
-
+    @Override
+    public void update_main_header() {
+        updateHeader();
+    }
 }

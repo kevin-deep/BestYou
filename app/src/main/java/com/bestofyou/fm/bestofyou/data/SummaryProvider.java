@@ -334,6 +334,7 @@ public class SummaryProvider extends ContentProvider {
         return pointInTotal;
     }
     public static String getPPoint(Context mContext){
+
         String []pPoint = getTotal(mContext);
         return pPoint[0];
     }

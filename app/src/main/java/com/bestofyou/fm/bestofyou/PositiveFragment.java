@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.bestofyou.fm.bestofyou.data.SummaryContract;
 import com.bestofyou.fm.bestofyou.helper.SimpleItemTouchHelperCallback;
@@ -28,7 +29,7 @@ import com.bestofyou.fm.bestofyou.helper.SimpleItemTouchHelperCallback;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PositiveFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+public class PositiveFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     RecyclerListAdapter mRecyclerAdapter;
     RecyclerView mRecyclerView;
     View rateView;
@@ -37,7 +38,7 @@ public class PositiveFragment extends Fragment implements LoaderManager.LoaderCa
 
     static final int COL_RUBRIC_NAME = 1;
     static final int COL_RUBRIC_WEIGHT = 2;
-
+    View root;
     private static final String[] RUBRIC_COLUMNS = {
             SummaryContract.Rubric.TABLE_NAME + "." + SummaryContract.Rubric._ID,
             SummaryContract.Rubric.NAME,
@@ -65,7 +66,7 @@ public class PositiveFragment extends Fragment implements LoaderManager.LoaderCa
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View root =  inflater.inflate(R.layout.fragment_positive, container, false);
+        root =  inflater.inflate(R.layout.fragment_positive, container, false);
         rateView =  root.findViewById(R.id.rates_in_hour);
 
 
@@ -81,9 +82,9 @@ public class PositiveFragment extends Fragment implements LoaderManager.LoaderCa
 
 
 
-     /*   ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mRecyclerAdapter);
+        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mRecyclerAdapter);
         mItemTouchHelper = new ItemTouchHelper(callback);
-        mItemTouchHelper.attachToRecyclerView(mRecyclerView);*/
+        mItemTouchHelper.attachToRecyclerView(mRecyclerView);
         return root;
     }
 
@@ -97,7 +98,10 @@ public class PositiveFragment extends Fragment implements LoaderManager.LoaderCa
         super.onActivityCreated(savedInstanceState);
     }
 
-
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
 
 
     @Override
@@ -167,5 +171,7 @@ public class PositiveFragment extends Fragment implements LoaderManager.LoaderCa
     private void updateEmptyView() {
 
     }
+
+
 
 }
