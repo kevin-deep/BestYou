@@ -30,6 +30,7 @@ import com.bestofyou.fm.bestofyou.helper.SimpleItemTouchHelperCallback;
  * A simple {@link Fragment} subclass.
  */
 public class PositiveFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+    public static final String LOG_TAG = PositiveFragment.class.getSimpleName();
     RecyclerListAdapter mRecyclerAdapter;
     RecyclerView mRecyclerView;
     View rateView;

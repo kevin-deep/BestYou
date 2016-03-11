@@ -11,6 +11,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.widget.Toast;
 
+import com.bestofyou.fm.bestofyou.PositiveFragment;
 import com.bestofyou.fm.bestofyou.RecyclerListAdapter;
 import com.bestofyou.fm.bestofyou.Summary;
 
@@ -251,10 +252,7 @@ public class SummaryProvider extends ContentProvider {
         return retCursor;
     }
 
-
-
     public static long insertRubric(Context contentResolver, String description,float weight ,float popularity){
-
         ContentValues rubric = new ContentValues();
         rubric.put(SummaryContract.Rubric.NAME, description);
         rubric.put(SummaryContract.Rubric.WEIGHT, weight);
@@ -271,7 +269,7 @@ public class SummaryProvider extends ContentProvider {
         return insertRubric(contentResolver, description, weight ,0F);
     }
 
-
+    //count the number of rows from total table
     public static int getCountAll(){
         //String countQuery = "SELECT * FROM " + SummaryContract.UsrHistory.TABLE_NAME;
         String countQuery = "SELECT * FROM " + SummaryContract.Total.TABLE_NAME;
@@ -280,11 +278,9 @@ public class SummaryProvider extends ContentProvider {
         //cursor.close();
         return cursor.getCount();
     }
-
+    //update total table
     public static void insertTotal(Context mContext,float weight ){
-
-
-
+        //initial data
         if (getCountAll() ==0){
             //initial the table
             ContentValues values = new ContentValues();
@@ -322,6 +318,7 @@ public class SummaryProvider extends ContentProvider {
         mContext.getContentResolver().update(SummaryContract.Total.CONTENT_URI,v,null,null);
     }
 
+    //get Total from total table
     public static String[] getTotal(Context mContext){
 
         //get the total table
@@ -333,15 +330,41 @@ public class SummaryProvider extends ContentProvider {
         String pointInTotal[] = {pPoint.toString(),nPoint.toString()};
         return pointInTotal;
     }
+    //get positive point total
     public static String getPPoint(Context mContext){
 
         String []pPoint = getTotal(mContext);
         return pPoint[0];
     }
+    //get negative point total
     public static String getNPoint(Context mContext){
         String []pPoint = getTotal(mContext);
         return pPoint[1];
     }
+    //get the row id from cursor
+    public static int getRubricId(Cursor c , int position){
+        c.moveToPosition(position);
+        int _id =   c.getInt(RecyclerListAdapter.COL_RUBRIC_ID);
+        return _id;
+    }
+
+    public static ContentValues getRubric(Cursor c , int position){
+        c.moveToPosition(position);
+        ContentValues value = new ContentValues();
+        int _id =   c.getInt(RecyclerListAdapter.COL_RUBRIC_ID);
+        String name =   c.getString(RecyclerListAdapter.COL_RUBRIC_NAME);
+        float weight =   c.getFloat(RecyclerListAdapter.COL_RUBRIC_WEIGHT);
+        Float popularity =   c.getFloat(RecyclerListAdapter.COL_RUBRIC_POPULARITY);
+        value.put(SummaryContract.Rubric._ID,_id);
+        value.put(SummaryContract.Rubric.NAME,name);
+        value.put(SummaryContract.Rubric.WEIGHT,weight);
+        value.put(SummaryContract.Rubric.POPULARITY,popularity);
+        return value;
+    }
+
+
+
+
 
 
 

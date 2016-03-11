@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
  */
 public class FragmentPagerAdapter extends android.support.v4.app.FragmentPagerAdapter {
 
+
     final int PAGE_COUNT = 2;
     private String tabTitles[] = new String[] { "Favored", "Hateful" };
     private Context context;

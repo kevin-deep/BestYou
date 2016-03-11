@@ -50,4 +50,8 @@
     <!--Google Plus Client ID-->
     <string name="G_Plus_ID">com.googleusercontent.apps.210491937152-d4u9f5gtlvr7lksk4o4cdvs9a53r0i5</string>
 
+
+    <!-- new activity bundle keys-->
+
+
 </resources>

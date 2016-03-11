@@ -20,6 +20,7 @@ import com.bestofyou.fm.bestofyou.data.SummaryContract;
 import com.bestofyou.fm.bestofyou.data.SummaryProvider;
 
 public class MainActivity extends AppCompatActivity implements McontentObserver.Callback {
+    public static final String LOG_TAG = MainActivity.class.getSimpleName();
     public CollapsingToolbarLayout mCollapsingToobar;
     public Toolbar mToolbar;
     FloatingActionButton profile;

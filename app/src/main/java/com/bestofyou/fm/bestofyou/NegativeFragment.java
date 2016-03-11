@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.bestofyou.fm.bestofyou.data.SummaryContract;
+import com.bestofyou.fm.bestofyou.helper.SimpleItemTouchHelperCallback;
 
 
 /**
@@ -26,13 +27,13 @@ import com.bestofyou.fm.bestofyou.data.SummaryContract;
  */
 public class NegativeFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-
+    public static final String LOG_TAG = NegativeFragment.class.getSimpleName();
     RecyclerListAdapter mRecyclerAdapter;
     RecyclerView mRecyclerView;
     View rateView;
     private static final int BEST_LOADER = 3; // have to be unique for every loader using in activity
     private int mPosition = RecyclerView.NO_POSITION;
-
+    private ItemTouchHelper mItemTouchHelper;
     static final int COL_RUBRIC_NAME = 1;
     static final int COL_RUBRIC_WEIGHT = 2;
 
@@ -66,9 +67,9 @@ public class NegativeFragment extends Fragment implements LoaderManager.LoaderCa
 
 
 
-     /*   ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mRecyclerAdapter);
+       ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mRecyclerAdapter);
         mItemTouchHelper = new ItemTouchHelper(callback);
-        mItemTouchHelper.attachToRecyclerView(mRecyclerView);*/
+        mItemTouchHelper.attachToRecyclerView(mRecyclerView);
         return root;
     }
 

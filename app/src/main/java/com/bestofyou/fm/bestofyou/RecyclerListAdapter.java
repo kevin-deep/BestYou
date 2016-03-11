@@ -7,10 +7,12 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -22,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,11 +52,24 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
     public static final int COL_TOTAL_NAME = 1;
     public static final int COL_TOTAL_P_TOTAL = 2;
     public static final int COL_TOTAL_N_TOTAL = 3;
+
+    public static final int COL_RUBRIC_ID = 0;
+    public static final int COL_RUBRIC_NAME = 1;
+    public static final int COL_RUBRIC_WEIGHT = 2;
+    public static final int COL_RUBRIC_POPULARITY = 3;
+
     public static final String[] TOTAL_COLUMNS = {
             SummaryContract.Total.TABLE_NAME + "." + SummaryContract.Total._ID,
             SummaryContract.Total.NAME,
             SummaryContract.Total.P_IN_Total,
             SummaryContract.Total.N_IN_Total
+    };
+
+    public static final String[] TOTAL_COLUMNS_RUBRIC = {
+            SummaryContract.Rubric.TABLE_NAME + "." + SummaryContract.Rubric._ID,
+            SummaryContract.Rubric.NAME,
+            SummaryContract.Rubric.WEIGHT,
+            SummaryContract.Rubric.POPULARITY
     };
     public static final int PAGE_TYPE_POSITIVE = 1;
     public static final int PAGE_TYPE_NEGATIVE = 2;
@@ -300,20 +316,41 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
 
         @Override
         public void onItemSelected() {
+            final int position = this.getLayoutPosition();
             itemView.setBackgroundColor(Color.GRAY);
-            Toast.makeText(mContext, "long Press detected", Toast.LENGTH_LONG);
-            Log.v("longpress detected", "longpress detected");
-
-
             CharSequence colors[] = new CharSequence[] {"Delete", "Update"};
-
             AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
             //builder.setTitle("CRUD");
             builder.setItems(colors, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    Log.v("longpress detected", "longpress detected");
-                    //TODO swtich clause
+
+                    //TODO switch clause
+                    switch (which) {
+                        case 0:
+                            Log.v("delete", "delete");
+                            String mSelectionClause = SummaryContract.Rubric._ID + " =?" ;
+                            int rowId = SummaryProvider.getRubricId(mCursor,position);
+                            String[] mSelectionArgs = {Integer.toString(rowId)};
+                            mContext.getContentResolver().delete(SummaryContract.Rubric.CONTENT_URI,
+                                    mSelectionClause,
+                                    mSelectionArgs
+                                    );
+                            break;
+                        case 1:
+                            Log.v("update", "update");
+                            ContentValues value = SummaryProvider.getRubric(mCursor,position);
+                            Bundle b=new Bundle();
+                            b.putFloat(SummaryContract.Rubric.WEIGHT, value.getAsFloat(SummaryContract.Rubric.WEIGHT));
+                            b.putString(SummaryContract.Rubric.NAME, value.getAsString(SummaryContract.Rubric.NAME));
+                            b.putFloat(SummaryContract.Rubric.POPULARITY, value.getAsFloat(SummaryContract.Rubric.POPULARITY));
+                            Intent intent=new Intent(mContext,AddNewtypeActivity.class);
+                            intent.putExtras(b);
+                            mContext.startActivity(intent);
+                            break;
+                        default:
+                            Log.v("error", "CRUD error");
+                    }
                 }
             });
             builder.show();
