@@ -7,15 +7,16 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:orientation="horizontal"
         android:layout_margin="@dimen/activity_horizontal_margin">
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:gravity="start"
             android:layout_weight="1"
-            android:textSize="@dimen/header_text_size"
             android:textColor="@color/ag_blue"
+            android:textSize="@dimen/header_text_size"
             android:text="Hey Jude"/>
         <TextView
             android:layout_width="wrap_content"
@@ -24,7 +25,7 @@
             android:gravity="end"
             android:textColor="@color/ag_blue"
             android:textSize="@dimen/header_text_size"
-            android:text="2016"/>
+            android:text="March"/>
     </LinearLayout>
 
     <LinearLayout
@@ -35,11 +36,11 @@
         <TextView
             android:id="@+id/p_point"
             android:layout_width="0dp"
-            android:textColor="@color/ag_blue"
             android:layout_weight="1"
             android:text="1000"
             android:gravity="center"
             android:textSize="@dimen/header_text_size"
+            android:textColor="@color/ag_blue"
             android:layout_height="match_parent" />
         <TextView
             android:layout_width="0dp"

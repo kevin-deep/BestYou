@@ -41,23 +41,12 @@ public class AddNewtypeActivity extends AppCompatActivity implements SeekBar.OnS
         // for second switch button
         switchButton2 = (Switch) findViewById(R.id.switchButton2);
 
-
         new_weight =(SeekBar) findViewById(R.id.new_weight);
         new_weight.setOnSeekBarChangeListener(this);
         text_new_weight = (TextView)findViewById(R.id.text_new_weight);
         newTypeName = (EditText)findViewById((R.id.habit_name));
 
-        //if this is a update event, shoot it on the screen
-        if (b != null) {
-            newTypeName.setText(b.getString(SummaryContract.Rubric.NAME));
-            if (b.getFloat(SummaryContract.Rubric.WEIGHT)>0){
-                switchButton.setChecked(true);
-            }else {
-                switchButton2.setChecked(true);
-            }
-            new_weight.setProgress(Math.abs(Math.round(b.getFloat(SummaryContract.Rubric.WEIGHT))));
-            popularity = b.getFloat(SummaryContract.Rubric.POPULARITY);
-        }
+
 
 
         switchButton.setChecked(true);
@@ -72,10 +61,6 @@ public class AddNewtypeActivity extends AppCompatActivity implements SeekBar.OnS
             }
         });
 
-
-
-
-
         textView2 = (TextView) findViewById(R.id.textView2);
 
         if (switchButton.isChecked()) {
@@ -83,7 +68,6 @@ public class AddNewtypeActivity extends AppCompatActivity implements SeekBar.OnS
         } else {
             switchButton2.setChecked(true);
         }
-
         switchButton2.setChecked(false);
         switchButton2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -102,9 +86,6 @@ public class AddNewtypeActivity extends AppCompatActivity implements SeekBar.OnS
         } else {
             switchButton.setChecked(true);
         }
-
-
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,6 +94,18 @@ public class AddNewtypeActivity extends AppCompatActivity implements SeekBar.OnS
 
             }
         });
+
+        //if this is a update event, shoot it on the screen
+        if (b != null) {
+            newTypeName.setText(b.getString(SummaryContract.Rubric.NAME));
+            if (b.getFloat(SummaryContract.Rubric.WEIGHT)>0){
+                switchButton.setChecked(true);
+            }else {
+                switchButton2.setChecked(true);
+            }
+            new_weight.setProgress(Math.abs(Math.round(b.getFloat(SummaryContract.Rubric.WEIGHT))));
+            popularity = b.getFloat(SummaryContract.Rubric.POPULARITY);
+        }
 
     }
 

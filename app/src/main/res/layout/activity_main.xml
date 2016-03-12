@@ -40,10 +40,31 @@
                  android:contentDescription="@string/photo"
                  android:scaleType="centerCrop"
                  app:layout_collapseMode="parallax"/>-->
-            <include
+
+            <ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/view_flipper"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <include
+                    android:id="@+id/include1"
+                    layout="@layout/header_view"
+                    android:scaleType="centerCrop"
+                    app:layout_collapseMode="parallax" />
+
+                <include
+                    android:id="@+id/map"
+                    layout="@layout/header_view2"
+                    android:scaleType="centerCrop"
+                    app:layout_collapseMode="parallax"/>
+            </ViewFlipper>
+
+            <!--<include
+                android:id="@+id/include1"
                 layout="@layout/header_view"
                 android:scaleType="centerCrop"
                 app:layout_collapseMode="parallax" />
+-->
 
             <!--enterAlwaysCollapsed and exitUntilCollapsed-->
 
