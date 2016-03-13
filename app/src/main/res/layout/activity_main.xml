@@ -48,20 +48,20 @@
 
                 <include
                     android:id="@+id/include1"
-                    layout="@layout/header_view"
+                    layout="@layout/header_view_day"
                     android:scaleType="centerCrop"
                     app:layout_collapseMode="parallax" />
 
                 <include
                     android:id="@+id/map"
-                    layout="@layout/header_view2"
+                    layout="@layout/header_view_month"
                     android:scaleType="centerCrop"
                     app:layout_collapseMode="parallax"/>
             </ViewFlipper>
 
             <!--<include
                 android:id="@+id/include1"
-                layout="@layout/header_view"
+                layout="@layout/header_view_day"
                 android:scaleType="centerCrop"
                 app:layout_collapseMode="parallax" />
 -->

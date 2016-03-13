@@ -3,13 +3,18 @@ package com.bestofyou.fm.bestofyou;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.SeekBar;
 import android.widget.Toast;
+
+import com.bestofyou.fm.bestofyou.CustomizedView.CircleProgressBar;
 import com.bestofyou.fm.bestofyou.data.SummaryProvider;
 
 import com.bestofyou.fm.bestofyou.data.SummaryContract;
@@ -62,7 +67,55 @@ public class Summary extends AppCompatActivity implements View.OnClickListener{
                 SummaryProvider.insertRubric(mContext,"Wrath", -4);
             }
         });
+
+
+        //customized progress bar
+        SeekBar seekBarProgress, seekBarThickness;
+     /*   seekBarProgress = (SeekBar) findViewById(R.id.seekBar_progress);
+        seekBarThickness = (SeekBar) findViewById(R.id.seekBar_thickness);
+        final Button button = (Button) findViewById(R.id.button);*/
+        final CircleProgressBar circleProgressBar = (CircleProgressBar) findViewById(R.id.custom_progressBar);
+        //Using ColorPickerLibrary to pick color for our CustomProgressbar
+        /*final ColorPickerDialog colorPickerDialog = new ColorPickerDialog();
+        colorPickerDialog.initialize(
+                R.string.select_color,
+                new int[]{
+                        Color.CYAN,
+                        Color.DKGRAY,
+                        Color.BLACK,
+                        Color.BLUE,
+                        Color.GREEN,
+                        Color.MAGENTA,
+                        Color.RED,
+                        Color.GRAY,
+                        Color.YELLOW},
+                Color.DKGRAY, 3, 2);*/
+
+
+        Resources res = getResources();
+        int color = res.getColor(R.color.ag_blue);
+                circleProgressBar.setColor(color);
+
+
+        /*seekBarProgress.setProgress((int) circleProgressBar.getProgress());
+        seekBarProgress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                if(b)
+                    circleProgressBar.setProgressWithAnimation(i);
+                else
+                    circleProgressBar.setProgress(i);
+            }*/
+
+        //max 100
+        circleProgressBar.setProgressWithAnimation(50);
+       //max40
+        circleProgressBar.setStrokeWidth(20);
+
+
     }
+
+
 
 
 

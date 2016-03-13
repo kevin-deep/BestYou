@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/background_light">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.4"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="start"
+            android:layout_weight="1"
+            android:textSize="@dimen/header_text_size"
+            android:textColor="@color/ag_blue"
+            android:text="Hey Jude"/>
+
+    </LinearLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center">
+        <com.bestofyou.fm.bestofyou.CustomizedView.CircleProgressBar
+            android:id="@+id/custom_progressBar"
+            android:layout_width="@dimen/progressBar_dimen"
+            android:layout_height="@dimen/progressBar_dimen"
+            app:progress="35"
+            app:progressBarThickness="4dp"
+            android:layout_gravity="center"
+            />
+        <TextView
+            android:id="@+id/title_header_month"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@color/ag_blue"
+            android:textSize="@dimen/header_text_size"
+            android:text="Month"/>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_gravity="bottom"
+            android:id="@+id/etail_header_month"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_detail_header_month"
+                android:src="@drawable/ic_show_chart_black_24px"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/header_detail_margin"
+                android:layout_toRightOf="@+id/btn_detail_header_month"
+                android:fontFamily="sans-serif"
+                android:layout_marginTop="@dimen/header_detail_margin"
+                android:textColor="@android:color/darker_gray"
+                android:text="@string/header_detail"/>
+        </RelativeLayout>
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        android:layout_weight="0.5">
+        <TextView
+            android:id="@+id/p_point_header_month"
+            android:layout_width="0dp"
+            android:textColor="@color/ag_blue"
+            android:layout_weight="1"
+            android:text="1000"
+            android:gravity="top|center_horizontal"
+            android:textSize="@dimen/header_text_size"
+            android:layout_height="match_parent" />
+        <TextView
+            android:layout_width="0dp"
+            android:id="@+id/n_point_header_month"
+            android:layout_weight="1"
+            android:textColor="@color/ag_blue"
+            android:text="999"
+            android:textSize="@dimen/header_text_size"
+            android:gravity="top|center_horizontal"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+</LinearLayout>

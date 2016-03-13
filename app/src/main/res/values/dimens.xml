@@ -14,8 +14,8 @@
     <dimen name="AppBarLayout_Height">260dp</dimen>
 
     <!-- Header text size-->
-
-    <dimen name="header_text_size">30sp</dimen>
+    <dimen name="header_text_size">20sp</dimen>
+    <dimen name="header_detail_margin">3dp</dimen>
 
 
     <!-- Today Widget -->
@@ -24,4 +24,7 @@
     <dimen name="widget_best_min_resize_width">40dp</dimen>
     <dimen name="widget_best_min_resize_height">@dimen/widget_best_default_height</dimen>
     <dimen name="widget_best_large_width">220dp</dimen>
+
+    <!-- round progress bar-->
+    <dimen name="progressBar_dimen">130dp</dimen>
 </resources>

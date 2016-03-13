@@ -298,7 +298,7 @@ public class SummaryProvider extends ContentProvider {
         Float pPoint =   c.getFloat(RecyclerListAdapter.COL_TOTAL_P_TOTAL);
         Float nPoint =   c.getFloat(RecyclerListAdapter.COL_TOTAL_N_TOTAL);
 
-        Toast.makeText(mContext, name + " " + pPoint.toString() + "  " + nPoint.toString(), Toast.LENGTH_LONG).show();
+        //Toast.makeText(mContext, name + " " + pPoint.toString() + "  " + nPoint.toString(), Toast.LENGTH_LONG).show();
         ContentValues historyValue = new ContentValues();
         if (weight>=0) {
             pPoint +=weight;
@@ -319,27 +319,25 @@ public class SummaryProvider extends ContentProvider {
     }
 
     //get Total from total table
-    public static String[] getTotal(Context mContext){
-
+    public static Float[] getTotal(Context mContext){
         //get the total table
         Cursor c = mContext.getContentResolver().query(SummaryContract.Total.CONTENT_URI, RecyclerListAdapter.TOTAL_COLUMNS, null, null, null);
         c.moveToPosition(0);
         String name =   c.getString(RecyclerListAdapter.COL_TOTAL_NAME);
         Float pPoint =   c.getFloat(RecyclerListAdapter.COL_TOTAL_P_TOTAL);
         Float nPoint =   c.getFloat(RecyclerListAdapter.COL_TOTAL_N_TOTAL);
-        String pointInTotal[] = {pPoint.toString(),nPoint.toString()};
+        Float pointInTotal[] = {pPoint,nPoint};
         c.close();
         return pointInTotal;
     }
     //get positive point total
-    public static String getPPoint(Context mContext){
-
-        String []pPoint = getTotal(mContext);
+    public static Float getPPoint(Context mContext){
+        Float []pPoint = getTotal(mContext);
         return pPoint[0];
     }
     //get negative point total
-    public static String getNPoint(Context mContext){
-        String []pPoint = getTotal(mContext);
+    public static Float getNPoint(Context mContext){
+        Float []pPoint = getTotal(mContext);
         return pPoint[1];
     }
     //get the row id from cursor

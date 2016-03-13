@@ -52,11 +52,6 @@ public class SummaryHelper extends SQLiteOpenHelper {
                 SummaryContract.Total.CREATED_AT +" DATETIME DEFAULT CURRENT_TIMESTAMP "+
                 " );";
 
-        ContentValues values = new ContentValues();
-
-
-
-
         sqLiteDatabase.execSQL(SQL_CREATE_SUMMARY_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_RUBRIC_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_TOTAL_TABLE);
@@ -66,6 +61,7 @@ public class SummaryHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + SummaryContract.UsrHistory.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + SummaryContract.Rubric.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + SummaryContract.Total.TABLE_NAME);
         onCreate(sqLiteDatabase);
     }
 

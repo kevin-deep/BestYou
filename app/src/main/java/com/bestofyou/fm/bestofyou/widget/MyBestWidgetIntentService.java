@@ -50,8 +50,8 @@ public class MyBestWidgetIntentService extends IntentService {
                 MyBestWidgetProvider.class));
 
         // Get Total data from the ContentProvider
-        String pTotal = SummaryProvider.getPPoint(this);
-        String nTotal = SummaryProvider.getNPoint(this);
+        String pTotal = SummaryProvider.getPPoint(this).toString();
+        String nTotal = SummaryProvider.getNPoint(this).toString();
         String description = getString(R.string.title_widget_mybest);
 
         if (pTotal == null|| nTotal ==null) {

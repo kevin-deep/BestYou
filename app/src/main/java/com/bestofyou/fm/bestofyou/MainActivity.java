@@ -2,6 +2,7 @@ package com.bestofyou.fm.bestofyou;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -10,6 +11,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.FloatMath;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Menu;
@@ -18,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
+import com.bestofyou.fm.bestofyou.CustomizedView.CircleProgressBar;
 import com.bestofyou.fm.bestofyou.data.SummaryContract;
 import com.bestofyou.fm.bestofyou.data.SummaryProvider;
 
@@ -28,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements McontentObserver.
     FloatingActionButton profile;
     public TextView pPoint, nPoint;
     ViewFlipper vf;
+    CircleProgressBar circleProgressBar;
     //Content observer handler
     McontentObserver observer = new McontentObserver(new Handler());
 
@@ -48,9 +52,9 @@ public class MainActivity extends AppCompatActivity implements McontentObserver.
         mCollapsingToobar = (CollapsingToolbarLayout) findViewById(R.id.Collapse_toolbar);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         profile = (FloatingActionButton) findViewById(R.id.profile);
-        pPoint = (TextView) findViewById(R.id.p_point);
-        nPoint = (TextView) findViewById(R.id.n_point);
-
+        pPoint = (TextView) findViewById(R.id.p_point_header_day);
+        nPoint = (TextView) findViewById(R.id.n_point_header_day);
+        circleProgressBar = (CircleProgressBar) findViewById(R.id.custom_progressBar);
 
         vf = (ViewFlipper) findViewById(R.id.view_flipper);
         vf.setInAnimation(this, android.R.anim.fade_in);
@@ -160,8 +164,18 @@ public class MainActivity extends AppCompatActivity implements McontentObserver.
     }
 
     public  void updateHeader() {
-        pPoint.setText(SummaryProvider.getPPoint(this.getBaseContext()));
-        nPoint.setText(SummaryProvider.getNPoint(this.getBaseContext()));
+        Float pPointMonth = SummaryProvider.getPPoint(this.getBaseContext());
+        Float nPointMonth = SummaryProvider.getNPoint(this.getBaseContext());
+        Float pPointPercentMonth = pPointMonth/(pPointMonth+Math.abs(nPointMonth))*100;
+
+        Resources res = getResources();
+        int color = res.getColor(R.color.ag_blue);
+        circleProgressBar.setColor(color);
+        circleProgressBar.setProgressWithAnimation(pPointPercentMonth);
+        circleProgressBar.setStrokeWidth(50);
+
+        pPoint.setText(Integer.toString(Math.round(pPointMonth)));
+        nPoint.setText(Integer.toString(Math.round(Math.abs(nPointMonth))));
     }
     //register the Content Observer
     public void initalObserver(){
