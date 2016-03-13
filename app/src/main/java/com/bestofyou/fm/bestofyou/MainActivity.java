@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements McontentObserver.
     }
 
     /***
-     *  also unregister the Content Observer, therwise you would create a memory leak
+     *  also unregister the Content Observer, otherwise you would create a memory leak
      *  and the Activity would never be garbage collected.
      */
     @Override

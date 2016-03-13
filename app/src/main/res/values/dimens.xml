@@ -16,4 +16,12 @@
     <!-- Header text size-->
 
     <dimen name="header_text_size">30sp</dimen>
+
+
+    <!-- Today Widget -->
+    <dimen name="widget_best_default_width">110dp</dimen>
+    <dimen name="widget_best_default_height">40dp</dimen>
+    <dimen name="widget_best_min_resize_width">40dp</dimen>
+    <dimen name="widget_best_min_resize_height">@dimen/widget_best_default_height</dimen>
+    <dimen name="widget_best_large_width">220dp</dimen>
 </resources>

@@ -328,6 +328,7 @@ public class SummaryProvider extends ContentProvider {
         Float pPoint =   c.getFloat(RecyclerListAdapter.COL_TOTAL_P_TOTAL);
         Float nPoint =   c.getFloat(RecyclerListAdapter.COL_TOTAL_N_TOTAL);
         String pointInTotal[] = {pPoint.toString(),nPoint.toString()};
+        c.close();
         return pointInTotal;
     }
     //get positive point total
