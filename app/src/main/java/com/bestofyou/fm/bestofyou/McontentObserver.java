@@ -2,6 +2,7 @@ package com.bestofyou.fm.bestofyou;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Handler;
@@ -12,7 +13,8 @@ import android.widget.Toast;
  */
 
     public class McontentObserver extends ContentObserver {
-    public Context contexTo = null; //This is for displaying Toasts
+    public Context contexTo = null;
+    public static final String ACTION_DATA_UPDATED ="com.bestofyou.fm.bestofyou.ACTION_DATA_UPDATED";
 
     public McontentObserver(Handler handler) {
         super(handler);
@@ -24,20 +26,20 @@ import android.widget.Toast;
     }
     @Override
     public void onChange(boolean selfChange, Uri uri) {
-        // do s.th.
-        // depending on the handler you might be on the UI
-        // thread, so be cautious!
-        ((Callback) contexTo ).update_main_header();
-       //ShowToast("Settings change detected");
+       ((Callback) contexTo ).update_main_header();
+        updateWidgets();
     }
-
-    /*private void ShowToast(String strMensaje) {
-        Toast toast1 = Toast.makeText(contexTo, strMensaje, Toast.LENGTH_SHORT);
-        toast1.show();
-    }
-*/
     interface Callback{
         void update_main_header();
     }
+
+    //send broadcast
+    private void updateWidgets() {
+        // Setting the package ensures that only components in our app will receive the broadcast
+        Intent dataUpdatedIntent = new Intent(ACTION_DATA_UPDATED)
+                .setPackage(contexTo.getPackageName());
+        contexTo.sendBroadcast(dataUpdatedIntent);
+    }
+
 
 }

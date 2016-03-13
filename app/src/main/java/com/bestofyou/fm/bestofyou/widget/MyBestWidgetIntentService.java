@@ -57,8 +57,6 @@ public class MyBestWidgetIntentService extends IntentService {
         if (pTotal == null|| nTotal ==null) {
             return;
         }
-
-
         /**
          * The first loop says, for each int in the array numbers, print the int.
          The second for loops says, for each String in the list, print the String.
@@ -87,8 +85,8 @@ public class MyBestWidgetIntentService extends IntentService {
             }
 
             //views.setTextViewText(R.id.widget_description, description);
-            views.setTextViewText(R.id.n_point, nTotal);
-            views.setTextViewText(R.id.p_point, pTotal);
+            views.setTextViewText(R.id.n_point_widget, nTotal);
+            views.setTextViewText(R.id.p_point_widget, pTotal);
             // Create an Intent to launch MainActivity
             Intent launchIntent = new Intent(this, MainActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, launchIntent, 0);
