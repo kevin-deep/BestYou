@@ -12,6 +12,7 @@
         >
         <TextView
             android:layout_width="match_parent"
+            android:id="@+id/usr_Name"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:gravity="start"
@@ -27,7 +28,7 @@
         android:layout_weight="1"
         android:gravity="center">
         <com.bestofyou.fm.bestofyou.CustomizedView.CircleProgressBar
-            android:id="@+id/custom_progressBar"
+            android:id="@+id/custom_progressBar_day"
             android:layout_width="@dimen/progressBar_dimen"
             android:layout_height="@dimen/progressBar_dimen"
             app:progress="35"

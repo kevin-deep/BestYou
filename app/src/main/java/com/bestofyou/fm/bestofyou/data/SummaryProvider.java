@@ -9,11 +9,16 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.bestofyou.fm.bestofyou.MainActivity;
 import com.bestofyou.fm.bestofyou.PositiveFragment;
 import com.bestofyou.fm.bestofyou.RecyclerListAdapter;
 import com.bestofyou.fm.bestofyou.Summary;
+
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by FM on 12/7/2015.
@@ -266,7 +271,7 @@ public class SummaryProvider extends ContentProvider {
     }
 
     public static long insertRubric(Context contentResolver, String description,float weight){
-        return insertRubric(contentResolver, description, weight ,0F);
+        return insertRubric(contentResolver, description, weight, 0F);
     }
 
     //count the number of rows from total table
@@ -283,11 +288,7 @@ public class SummaryProvider extends ContentProvider {
         //initial data
         if (getCountAll() ==0){
             //initial the table
-            ContentValues values = new ContentValues();
-            values.put(SummaryContract.Total.NAME, "Kevin");
-            values.put(SummaryContract.Total.P_IN_Total, 0F);
-            values.put(SummaryContract.Total.N_IN_Total, 0F);
-            mContext.getContentResolver().insert(SummaryContract.Total.CONTENT_URI,values);
+            initialTotalTable(mContext);
         }
 
         // TODO: 2/28/2016 If weight > 0 then get the pTotal and add the weight on it if < 0 add to nTotal
@@ -297,19 +298,13 @@ public class SummaryProvider extends ContentProvider {
         String name =   c.getString(RecyclerListAdapter.COL_TOTAL_NAME);
         Float pPoint =   c.getFloat(RecyclerListAdapter.COL_TOTAL_P_TOTAL);
         Float nPoint =   c.getFloat(RecyclerListAdapter.COL_TOTAL_N_TOTAL);
+        if (weight>=0){
+            pPoint +=weight;
+        }else {
+            nPoint +=weight;
+        }
 
         //Toast.makeText(mContext, name + " " + pPoint.toString() + "  " + nPoint.toString(), Toast.LENGTH_LONG).show();
-        ContentValues historyValue = new ContentValues();
-        if (weight>=0) {
-            pPoint +=weight;
-            historyValue.put(SummaryContract.UsrHistory.P_History, weight);
-        }
-        else {
-            nPoint +=weight;
-            historyValue.put(SummaryContract.UsrHistory.N_History,weight);
-        }
-        //upgrade the history table
-        mContext.getContentResolver().insert(SummaryContract.UsrHistory.CONTENT_URI,historyValue);
         //update the total table
         ContentValues v = new ContentValues();
         v.put(SummaryContract.Total.NAME,name);
@@ -318,8 +313,36 @@ public class SummaryProvider extends ContentProvider {
         mContext.getContentResolver().update(SummaryContract.Total.CONTENT_URI,v,null,null);
     }
 
+    private static void initialTotalTable(Context mContext){
+        ContentValues values = new ContentValues();
+        values.put(SummaryContract.Total.NAME, "Kevin");
+        values.put(SummaryContract.Total.P_IN_Total, 0F);
+        values.put(SummaryContract.Total.N_IN_Total, 0F);
+        mContext.getContentResolver().insert(SummaryContract.Total.CONTENT_URI,values);
+    }
+    public static void insertHistory(Context mContext,float weight, String habitName){
+
+        ContentValues historyValue = new ContentValues();
+        if (weight>=0) {
+            historyValue.put(SummaryContract.UsrHistory.P_History, weight);
+        }
+        else {
+            historyValue.put(SummaryContract.UsrHistory.N_History,weight);
+
+        }
+        historyValue.put(SummaryContract.UsrHistory.HABIT_NAME,habitName);
+        historyValue.put(SummaryContract.UsrHistory.USER_NAME, "Kevin");
+        //upgrade the history table
+        mContext.getContentResolver().insert(SummaryContract.UsrHistory.CONTENT_URI, historyValue);
+
+    }
+
     //get Total from total table
     public static Float[] getTotal(Context mContext){
+        if (getCountAll() ==0){
+            //initial the table
+            initialTotalTable(mContext);
+        }
         //get the total table
         Cursor c = mContext.getContentResolver().query(SummaryContract.Total.CONTENT_URI, RecyclerListAdapter.TOTAL_COLUMNS, null, null, null);
         c.moveToPosition(0);
@@ -357,9 +380,81 @@ public class SummaryProvider extends ContentProvider {
         value.put(SummaryContract.Rubric._ID,_id);
         value.put(SummaryContract.Rubric.NAME,name);
         value.put(SummaryContract.Rubric.WEIGHT,weight);
-        value.put(SummaryContract.Rubric.POPULARITY,popularity);
+        value.put(SummaryContract.Rubric.POPULARITY, popularity);
         return value;
     }
+    public static Float getPTotalToday(){
+        String sql = "SELECT SUM(" + SummaryContract.UsrHistory.P_History + ") FROM " + SummaryContract.UsrHistory.TABLE_NAME +  " WHERE " +
+                SummaryContract.UsrHistory.CREATED_AT + " >= date('now')";
+        System.out.println(sql);
+        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+        Cursor mCursor = db.rawQuery(sql, null);
+        Float pPoint = 0F;
+        if(mCursor.moveToFirst())
+        {
+            pPoint = mCursor.getFloat(0);
+        }
+        return pPoint;
+    }
+    public static Float getNtotalToday(){
+        String sql = "SELECT SUM(" + SummaryContract.UsrHistory.N_History + ") FROM " + SummaryContract.UsrHistory.TABLE_NAME +  " WHERE " +
+                SummaryContract.UsrHistory.CREATED_AT + " >= date('now')";
+        System.out.println(sql);
+        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+        Cursor mCursor = db.rawQuery(sql, null);
+        Float pPoint = 0F;
+        if(mCursor.moveToFirst())
+        {
+            pPoint = mCursor.getFloat(0);
+        }
+        return pPoint;
+    }
+
+    public static Float getNtotalMonth(){
+        String sql = "SELECT SUM(" + SummaryContract.UsrHistory.N_History + ") FROM " + SummaryContract.UsrHistory.TABLE_NAME +
+                " WHERE " + "strftime('%m', " + SummaryContract.UsrHistory.CREATED_AT + ") = '" +getMonth() + "'";
+        System.out.println(sql);
+        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+        Cursor mCursor = db.rawQuery(sql, null);
+        Float pPoint = 0F;
+        if(mCursor.moveToFirst())
+        {
+            pPoint = mCursor.getFloat(0);
+        }
+        return pPoint;
+    }
+
+    public static Float getPtotalMonth(){
+        String sql = "SELECT SUM(" + SummaryContract.UsrHistory.P_History + ") FROM " + SummaryContract.UsrHistory.TABLE_NAME +
+                " WHERE " + "strftime('%m', " + SummaryContract.UsrHistory.CREATED_AT + ") = '" +getMonth() + "'";
+                //SummaryContract.UsrHistory.CREATED_AT + " >= month('now')";
+        System.out.println(sql);
+        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+        Cursor mCursor = db.rawQuery(sql, null);
+        Float pPoint = 0F;
+        if(mCursor.moveToFirst())
+        {
+            pPoint = mCursor.getFloat(0);
+        }
+        return pPoint;
+    }
+
+    private static String getMonth(){
+        java.util.Date date= new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        int month = cal.get(Calendar.MONTH)+1;//month is zero-based
+        if (month>=10){
+            return Integer.toString(month);
+        }else{
+            return "0" + Integer.toString(month);
+        }
+    }
+
+
+
+
+
 
 
 

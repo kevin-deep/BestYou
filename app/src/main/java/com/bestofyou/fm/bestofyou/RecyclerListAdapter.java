@@ -122,6 +122,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
 
     @Override
     public void onBindViewHolder(final ItemViewHolder holder, int position) {
+        final int  thisPosition = position;
         mCursor.moveToPosition(position);
        /* int dateColumnIndex = mCursor.getColumnIndex(SummaryContract.Rubric.WEIGHT);
         //!!!!!Important This going to send the date into mClickHandler then it will be deliver to constructor
@@ -164,6 +165,9 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         holder.oneHour.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                ContentValues value = SummaryProvider.getRubric(mCursor,thisPosition);
+                String habitName = value.getAsString(SummaryContract.Rubric.NAME);
+                SummaryProvider.insertHistory(mContext,1*weight,habitName);
                 SummaryProvider.insertTotal(mContext, 1 * weight);
                 holder.tickCross.callOnClick();
 
@@ -174,6 +178,9 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
             @Override
             public void onClick(View v) {
                 Log.v("add two hour", "onClick");
+                ContentValues value = SummaryProvider.getRubric(mCursor,thisPosition);
+                String habitName = value.getAsString(SummaryContract.Rubric.NAME);
+                SummaryProvider.insertHistory(mContext, 2 * weight, habitName);
                 SummaryProvider.insertTotal(mContext,2 * weight);
                 holder.tickCross.callOnClick();
 

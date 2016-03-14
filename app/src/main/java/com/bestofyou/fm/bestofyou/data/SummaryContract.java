@@ -29,6 +29,8 @@ public class SummaryContract {
         public static final String TABLE_NAME = "mdb";
         // User name
         public static final String USER_NAME = "userName";
+
+        public static final String HABIT_NAME = "habitName";
         // timeStamp
         public static final String CREATED_AT = "created_at";
         // Positive history

@@ -29,16 +29,18 @@ public class MainActivity extends AppCompatActivity implements McontentObserver.
     public CollapsingToolbarLayout mCollapsingToobar;
     public Toolbar mToolbar;
     FloatingActionButton profile;
-    public TextView pPoint, nPoint;
+    public TextView pPoint, nPoint, userName, nPointM, pPointM;
     ViewFlipper vf;
-    CircleProgressBar circleProgressBar;
+    CircleProgressBar circleProgressBarDay,circleProgressBarMonth;
     //Content observer handler
     McontentObserver observer = new McontentObserver(new Handler());
 
     boolean header = true; //determine which header shoot on the screen
 
     private float initialX;
+    private AuthenticationActivity authInstance = new AuthenticationActivity();
 
+    //public String loginUsr = authInstance.currentUser.getDisplayName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +56,14 @@ public class MainActivity extends AppCompatActivity implements McontentObserver.
         profile = (FloatingActionButton) findViewById(R.id.profile);
         pPoint = (TextView) findViewById(R.id.p_point_header_day);
         nPoint = (TextView) findViewById(R.id.n_point_header_day);
-        circleProgressBar = (CircleProgressBar) findViewById(R.id.custom_progressBar);
+        pPointM = (TextView) findViewById(R.id.p_point_header_month);
+        nPointM = (TextView) findViewById(R.id.n_point_header_month);
+        circleProgressBarDay = (CircleProgressBar) findViewById(R.id.custom_progressBar_day);
+        circleProgressBarMonth = (CircleProgressBar) findViewById(R.id.custom_progressBar_month);
+        userName = (TextView) findViewById(R.id.usr_Name);
+
+
+
 
         vf = (ViewFlipper) findViewById(R.id.view_flipper);
         vf.setInAnimation(this, android.R.anim.fade_in);
@@ -66,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements McontentObserver.
             }
         });*/
         updateHeader();
+        //updateUserName();
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager(),
@@ -162,20 +172,35 @@ public class MainActivity extends AppCompatActivity implements McontentObserver.
         }
         return super.onOptionsItemSelected(item);
     }
+    /*public void updateUserName(){
+        userName.setText(loginUsr);
+    }*/
 
     public  void updateHeader() {
-        Float pPointMonth = SummaryProvider.getPPoint(this.getBaseContext());
-        Float nPointMonth = SummaryProvider.getNPoint(this.getBaseContext());
+      /*  Float pPointMonth = SummaryProvider.getPPoint(this.getBaseContext());
+        Float nPointMonth = SummaryProvider.getNPoint(this.getBaseContext());*/
+        Float pPointMonth = SummaryProvider.getPtotalMonth();
+        Float nPointMonth = SummaryProvider.getNtotalMonth();
         Float pPointPercentMonth = pPointMonth/(pPointMonth+Math.abs(nPointMonth))*100;
+        Float pPointDay= SummaryProvider.getPTotalToday();
+        Float nPointDay = SummaryProvider.getNtotalToday();
+        Float pPointPercentDay = pPointDay/(pPointDay+Math.abs(nPointDay))*100;
 
         Resources res = getResources();
         int color = res.getColor(R.color.ag_blue);
-        circleProgressBar.setColor(color);
-        circleProgressBar.setProgressWithAnimation(pPointPercentMonth);
-        circleProgressBar.setStrokeWidth(50);
+        circleProgressBarDay.setColor(color);
+        circleProgressBarDay.setProgressWithAnimation(pPointPercentMonth);
+        circleProgressBarDay.setStrokeWidth(50);
 
-        pPoint.setText(Integer.toString(Math.round(pPointMonth)));
-        nPoint.setText(Integer.toString(Math.round(Math.abs(nPointMonth))));
+        int colorMonth = res.getColor(R.color.colorAccent);
+        circleProgressBarMonth.setColor(colorMonth);
+        circleProgressBarMonth.setProgressWithAnimation(pPointPercentDay);
+        circleProgressBarMonth.setStrokeWidth(50);
+
+        pPointM.setText(Integer.toString(Math.round(pPointMonth)));
+        nPointM.setText(Integer.toString(Math.round(Math.abs(nPointMonth))));
+        pPoint.setText(Integer.toString(Math.round(pPointDay)));
+        nPoint.setText(Integer.toString(Math.round(Math.abs(nPointDay))));
     }
     //register the Content Observer
     public void initalObserver(){

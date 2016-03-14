@@ -12,6 +12,7 @@
         >
         <TextView
             android:layout_width="match_parent"
+            android:id="@+id/usr_Name"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:gravity="start"
@@ -27,7 +28,7 @@
         android:layout_weight="1"
         android:gravity="center">
         <com.bestofyou.fm.bestofyou.CustomizedView.CircleProgressBar
-            android:id="@+id/custom_progressBar"
+            android:id="@+id/custom_progressBar_month"
             android:layout_width="@dimen/progressBar_dimen"
             android:layout_height="@dimen/progressBar_dimen"
             app:progress="35"
@@ -39,31 +40,31 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textColor="@color/ag_blue"
-            android:textSize="@dimen/header_text_size"
-            android:text="Month"/>
-        <RelativeLayout
+    android:textColor="@color/ag_blue"
+    android:textSize="@dimen/header_text_size"
+    android:text="Month"/>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_gravity="bottom"
+        android:id="@+id/etail_header_month"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_height="wrap_content">
+        <ImageView
             android:layout_width="wrap_content"
-            android:layout_gravity="bottom"
-            android:id="@+id/etail_header_month"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/btn_detail_header_month"
-                android:src="@drawable/ic_show_chart_black_24px"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/header_detail_margin"
-                android:layout_toRightOf="@+id/btn_detail_header_month"
-                android:fontFamily="sans-serif"
-                android:layout_marginTop="@dimen/header_detail_margin"
-                android:textColor="@android:color/darker_gray"
-                android:text="@string/header_detail"/>
-        </RelativeLayout>
-    </FrameLayout>
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_detail_header_month"
+            android:src="@drawable/ic_show_chart_black_24px"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/header_detail_margin"
+            android:layout_toRightOf="@+id/btn_detail_header_month"
+            android:fontFamily="sans-serif"
+            android:layout_marginTop="@dimen/header_detail_margin"
+            android:textColor="@android:color/darker_gray"
+            android:text="@string/header_detail"/>
+    </RelativeLayout>
+</FrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

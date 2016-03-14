@@ -46,6 +46,7 @@ public class AuthenticationActivity extends AppCompatActivity implements GoogleA
     private static final int RC_SIGN_IN = 0;
     private static final int DIALOG_PLAY_SERVICES_ERROR = 0;
     private GoogleApiClient mGoogleApiClient;
+    public Person currentUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,7 +113,7 @@ public class AuthenticationActivity extends AppCompatActivity implements GoogleA
 
         // We are signed in!
         // Retrieve some profile information to personalize our app for the user.
-        Person currentUser = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
+        currentUser = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
         mStatus.setText(String.format("Signed In to G+ as %s", currentUser.getDisplayName()));
 
 
