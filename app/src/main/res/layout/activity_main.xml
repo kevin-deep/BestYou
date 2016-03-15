@@ -117,7 +117,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/ic_sentiment_very_satisfied_black_18px" />
-
+<!--
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/profile"
         android:layout_width="wrap_content"
@@ -129,6 +129,6 @@
         app:borderWidth="0dp"
         app:elevation="@dimen/appbar_elevation"
         app:layout_anchor="@id/appBar"
-        app:layout_anchorGravity="top|center" />
+        app:layout_anchorGravity="top|center" />-->
 
 </android.support.design.widget.CoordinatorLayout>

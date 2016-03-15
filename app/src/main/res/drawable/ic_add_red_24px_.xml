@@ -1,8 +1,8 @@
 
 
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="@dimen/add_hours_width"
-    android:height="@dimen/add_hours_height"
+    android:width="@dimen/add_hours_small"
+    android:height="@dimen/add_hours_small"
 android:viewportWidth="@integer/viewport_width"
 android:viewportHeight="@integer/viewport_height">
 

@@ -57,7 +57,8 @@
     <string name="header_detail">Show details</string>
 
 
-    <!-- new activity bundle keys-->
+    <!-- layout-->
+    <string name="add_habit_hint">What habit?</string>
 
 
 </resources>

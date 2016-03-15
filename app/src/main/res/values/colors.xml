@@ -11,10 +11,20 @@
 
     <color name="ag_blue">#69D2E7</color>
 
+    <!-- add button-->
+    <color name="btn_add">#2196f3</color>
+
 
 
     <!-- the activated state color -->
     <color name="activated">#E0E0E0</color>
+
+
+    <color name="priority_low">#4CAF50</color>
+    <color name="priority_medium">#03A9F4</color>
+    <color name="priority_high">#F44336</color>
+
+
 
 
 

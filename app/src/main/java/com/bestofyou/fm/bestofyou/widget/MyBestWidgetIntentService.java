@@ -6,14 +6,18 @@ import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.RemoteViews;
 
+import com.bestofyou.fm.bestofyou.CustomizedView.CircleProgressBar;
 import com.bestofyou.fm.bestofyou.MainActivity;
 import com.bestofyou.fm.bestofyou.R;
 import com.bestofyou.fm.bestofyou.data.SummaryContract;
@@ -48,13 +52,19 @@ public class MyBestWidgetIntentService extends IntentService {
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
         int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this,
                 MyBestWidgetProvider.class));
+        CircleProgressBar circleProgressBarDay;
 
         // Get Total data from the ContentProvider
-        String pTotal = SummaryProvider.getPPoint(this).toString();
-        String nTotal = SummaryProvider.getNPoint(this).toString();
+        Float pPointMonth = SummaryProvider.getPtotalMonth();
+        Float nPointMonth = SummaryProvider.getNtotalMonth();
+        Float pPointPercentMonth = pPointMonth/(pPointMonth+Math.abs(nPointMonth))*100;
+
+
+
         String description = getString(R.string.title_widget_mybest);
 
-        if (pTotal == null|| nTotal ==null) {
+
+        if (pPointMonth == null|| nPointMonth ==null) {
             return;
         }
         /**
@@ -69,11 +79,13 @@ public class MyBestWidgetIntentService extends IntentService {
             int largeWidth = getResources().getDimensionPixelSize(R.dimen.widget_best_large_width);
             int layoutId;
             if (widgetWidth >= largeWidth) {
-                layoutId = R.layout.widget_mybest_large;
+                //layoutId = R.layout.widget_mybest_large;
+                layoutId = R.layout.widget_mybest;
             } else if (widgetWidth >= defaultWidth) {
                 layoutId = R.layout.widget_mybest;
             } else {
-                layoutId = R.layout.widget_mybest_small;
+                //layoutId = R.layout.widget_mybest_small;
+                layoutId = R.layout.widget_mybest;
             }
             RemoteViews views = new RemoteViews(getPackageName(), layoutId);
 
@@ -85,8 +97,8 @@ public class MyBestWidgetIntentService extends IntentService {
             }
 
             //views.setTextViewText(R.id.widget_description, description);
-            views.setTextViewText(R.id.n_point_widget, nTotal);
-            views.setTextViewText(R.id.p_point_widget, pTotal);
+            views.setTextViewText(R.id.n_point_widget, Integer.toString(Math.round(Math.abs(nPointMonth))));
+            views.setTextViewText(R.id.p_point_widget, Integer.toString(Math.round(Math.abs(pPointMonth))));
             // Create an Intent to launch MainActivity
             Intent launchIntent = new Intent(this, MainActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, launchIntent, 0);

@@ -16,6 +16,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
@@ -29,9 +30,11 @@ public class MainActivity extends AppCompatActivity implements McontentObserver.
     public CollapsingToolbarLayout mCollapsingToobar;
     public Toolbar mToolbar;
     FloatingActionButton profile;
+    ImageButton menu, menuMonth;
     public TextView pPoint, nPoint, userName, nPointM, pPointM;
     ViewFlipper vf;
     CircleProgressBar circleProgressBarDay,circleProgressBarMonth;
+
     //Content observer handler
     McontentObserver observer = new McontentObserver(new Handler());
 
@@ -53,7 +56,9 @@ public class MainActivity extends AppCompatActivity implements McontentObserver.
         vf = (ViewFlipper)findViewById(R.id.view_flipper);
         mCollapsingToobar = (CollapsingToolbarLayout) findViewById(R.id.Collapse_toolbar);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        profile = (FloatingActionButton) findViewById(R.id.profile);
+        //profile = (FloatingActionButton) findViewById(R.id.profile);
+        menu = (ImageButton)findViewById(R.id.menu_main);
+        menuMonth = (ImageButton)findViewById(R.id.menu_main_month);
         pPoint = (TextView) findViewById(R.id.p_point_header_day);
         nPoint = (TextView) findViewById(R.id.n_point_header_day);
         pPointM = (TextView) findViewById(R.id.p_point_header_month);
@@ -94,7 +99,14 @@ public class MainActivity extends AppCompatActivity implements McontentObserver.
             }
         });
 
-        profile.setOnClickListener(new View.OnClickListener() {
+        menu.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getBaseContext(), AuthenticationActivity.class));
+            }
+        });
+        menuMonth.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -177,11 +189,11 @@ public class MainActivity extends AppCompatActivity implements McontentObserver.
     }*/
 
     public  void updateHeader() {
-      /*  Float pPointMonth = SummaryProvider.getPPoint(this.getBaseContext());
-        Float nPointMonth = SummaryProvider.getNPoint(this.getBaseContext());*/
+
         Float pPointMonth = SummaryProvider.getPtotalMonth();
         Float nPointMonth = SummaryProvider.getNtotalMonth();
         Float pPointPercentMonth = pPointMonth/(pPointMonth+Math.abs(nPointMonth))*100;
+
         Float pPointDay= SummaryProvider.getPTotalToday();
         Float nPointDay = SummaryProvider.getNtotalToday();
         Float pPointPercentDay = pPointDay/(pPointDay+Math.abs(nPointDay))*100;

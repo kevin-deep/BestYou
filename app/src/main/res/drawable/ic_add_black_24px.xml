@@ -1,8 +1,8 @@
 
 
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-android:width="@dimen/add_hours_width"
-android:height="@dimen/add_hours_height"
+android:width="@dimen/add_hours"
+android:height="@dimen/add_hours"
 android:viewportWidth="@integer/viewport_width"
 android:viewportHeight="@integer/viewport_height">
 
@@ -16,7 +16,7 @@ android:viewportHeight="@integer/viewport_height">
         android:pathData="M19,13 L13,13 L13,19 L11,19 L11,13 L5,13 L5,11 L11,11 L11,5 L13,5 L13,11 L19,11 L19,13 Z"
         android:strokeWidth="@integer/stroke_width"
         android:strokeLineCap="square"
-        android:strokeColor="@android:color/darker_gray"/>
+        android:strokeColor="@android:color/white"/>
 
 </group>
 

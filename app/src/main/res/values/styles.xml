@@ -16,6 +16,7 @@
         <item name="colorPrimaryDark">#303F9F</item>
         <!--   theme UI controls like checkboxes and text fields -->
         <item name="colorAccent">#FF4081</item>
+
     </style>
 
 
@@ -31,7 +32,7 @@
         <item name="colorPrimaryDark">#303F9F</item>
         <!--   theme UI controls like checkboxes and text fields -->
         <item name="colorAccent">#FF4081</item>
-
+      <!--  <item name="android:colorButtonNormal">#2196f3</item>-->
         <item name="android:colorBackground">@color/accent_material_light</item>
 
         <item name="android:colorBackgroundCacheHint">@null</item>

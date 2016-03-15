@@ -2,13 +2,13 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="400dp"
     android:layout_height="wrap_content"
+    android:id="@+id/addNewType"
     android:layout_gravity="center_horizontal"
     android:background="@android:color/white"
     android:padding="35dp"
     tools:context=".AddNewtypeActivity">
-
     <!--   app:layout_widthPercent="80%"
        app:layout_heightPercent="80%"-->
     <LinearLayout
@@ -26,100 +26,108 @@
             android:id="@+id/habit_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:layout_gravity="start"
+            android:gravity="start"
             android:background="@android:color/transparent"
-            android:hint="I want to:"
+            android:hint="@string/add_habit_hint"
             android:maxLength="10"
-            android:minHeight="3dp"
-            android:textColor="@android:color/darker_gray"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:minHeight="10dp"
+            android:textColor="@android:color/black"
             android:textColorHint="@android:color/darker_gray" />
+        <TextView
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:visibility="gone"
+            android:id="@+id/text_add_new_type"
+            android:textColor="@android:color/black"
+            android:text="How important of this habit to you? "/>
 
-        <!--<LinearLayout
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/priority"
+            android:visibility="gone"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:id="@+id/low"
+                android:layout_margin="@dimen/activity_horizontal_margin"
+                android:background="@drawable/btn_selector_low"
+                android:layout_height="wrap_content"
+                android:text="low" />
+            <Button
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:id="@+id/netural"
+                android:layout_margin="@dimen/activity_horizontal_margin"
+                android:background="@drawable/btn_selector_medium"
+                android:layout_height="wrap_content"
+                android:text="Neutral" />
+            <Button
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:id="@+id/high"
+                android:layout_margin="@dimen/activity_horizontal_margin"
+                android:background="@drawable/btn_selector_high"
+                android:layout_height="wrap_content"
+                android:text="high"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:layout_width="wrap_content"
+            android:id="@+id/habit_type"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_gravity="start"
+            android:visibility="gone"
+            >
+            <ImageButton
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_tick"
-                />
-            <ImageView
-                android:layout_width="wrap_content"
+                android:id="@+id/favor"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:src="@drawable/btn_selector_satisfied"/>
+
+            <ImageButton
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_cross"
+                android:id="@+id/hateful"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:src="@drawable/btn_selector_dissatisfied"
+                android:layout_marginBottom="50dp"
                 />
-        </LinearLayout>-->
-
-
-        <Switch
-            android:id="@+id/switchButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:text="I am going to keep this"
-            android:textColor="@android:color/black" />
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Engaged" />
-
-
-        <Switch
-            android:id="@+id/switchButton2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="30dp"
-            android:gravity="fill_horizontal"
-            android:text="I want to get rid of it"
-            android:textColor="@android:color/black" />
-
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Busy" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Weight:"
-            android:textColor="@android:color/black"></TextView>
-        <SeekBar
-
-            android:id="@+id/new_weight"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-
-            android:max="4"></SeekBar>
-
-        <TextView
-            android:id="@+id/text_new_weight"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/holo_red_light"></TextView>
-
+        </LinearLayout>
 
         <View
             android:id="@+id/moreSpace"
             android:layout_width="match_parent"
+            android:layout_gravity="center_vertical"
             android:layout_height="50dp"></View>
 
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        app:layout_anchor="@id/habit_name"
-        app:layout_anchorGravity="top|right|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:contentDescription="@string/action_add_new_habit"
-        android:src="@drawable/ic_add_black_24px"
-        android:stateListAnimator="@animator/fab_state_list_anim"
-        app:elevation="@dimen/appbar_elevation" />
+          android:id="@+id/fab_add_new_habit"
+          android:layout_width="40dp"
+          android:layout_height="40dp"
+          android:layout_margin="@dimen/fab_margin"
+          android:contentDescription="@string/action_add_new_habit"
+          android:src="@drawable/ic_add_black_24px"
+          android:stateListAnimator="@animator/fab_state_list_anim"
+          app:elevation="@dimen/appbar_elevation"
+        android:visibility="gone"
+         android:layout_gravity="bottom|center"
+           />
 
 </android.support.design.widget.CoordinatorLayout>

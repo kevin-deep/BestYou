@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/touch_selector_white"
+
         android:padding="8dp">
 
         <ImageView
@@ -24,7 +25,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:background="@android:color/holo_red_light"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@id/widget_icon"
         android:orientation="vertical">
@@ -35,9 +35,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:fontFamily="sans-serif"
-            android:textAppearance="?android:textAppearanceSmall"
+            android:textAppearance="?android:textAppearanceLarge"
             android:textColor="@android:color/black"
-            tools:text="100" />
+             />
         <TextView
             android:id="@+id/n_point_widget"
             android:layout_width="wrap_content"
@@ -45,8 +45,8 @@
             android:layout_gravity="center_horizontal"
             android:fontFamily="sans-serif"
             android:textAppearance="?android:textAppearanceSmall"
-            android:textColor="@android:color/black"
-            tools:text="100" />
+            android:textColor="@android:color/darker_gray"
+            />
     </LinearLayout>
     </RelativeLayout>
 </FrameLayout>

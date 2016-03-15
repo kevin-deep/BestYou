@@ -3,8 +3,8 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="add_hours_height">30dp</dimen>
-    <dimen name="add_hours_width">30dp</dimen>
+
+
 
     <!-- Elevation-->
     <dimen name="fab_elevation">2dp</dimen>
@@ -17,6 +17,11 @@
     <dimen name="header_text_size">20sp</dimen>
     <dimen name="header_detail_margin">3dp</dimen>
 
+    <!-- vector size-->
+    <dimen name="statisfy">60dp</dimen>
+    <dimen name="add_hours">50dp</dimen>
+    <dimen name="add_hours_small">25dp</dimen>
+
 
     <!-- Today Widget -->
     <dimen name="widget_best_default_width">110dp</dimen>
@@ -26,5 +31,5 @@
     <dimen name="widget_best_large_width">220dp</dimen>
 
     <!-- round progress bar-->
-    <dimen name="progressBar_dimen">130dp</dimen>
+    <dimen name="progressBar_dimen">138dp</dimen>
 </resources>
