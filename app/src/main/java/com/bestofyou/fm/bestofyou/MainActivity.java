@@ -201,12 +201,12 @@ public class MainActivity extends AppCompatActivity implements McontentObserver.
         Resources res = getResources();
         int color = res.getColor(R.color.ag_blue);
         circleProgressBarDay.setColor(color);
-        circleProgressBarDay.setProgressWithAnimation(pPointPercentMonth);
+        circleProgressBarDay.setProgressWithAnimation(pPointPercentDay);
         circleProgressBarDay.setStrokeWidth(50);
 
         int colorMonth = res.getColor(R.color.colorAccent);
         circleProgressBarMonth.setColor(colorMonth);
-        circleProgressBarMonth.setProgressWithAnimation(pPointPercentDay);
+        circleProgressBarMonth.setProgressWithAnimation(pPointPercentMonth);
         circleProgressBarMonth.setStrokeWidth(50);
 
         pPointM.setText(Integer.toString(Math.round(pPointMonth)));

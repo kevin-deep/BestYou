@@ -42,7 +42,7 @@ public class AddNewtypeActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_newtype);
-        Bundle b = getIntent().getExtras();
+        final Bundle b = getIntent().getExtras();
         newTypeName = (EditText)findViewById((R.id.habit_name));
         text_add_new_type = (TextView) findViewById(R.id.text_add_new_type);
         priority = (LinearLayout) findViewById(R.id.priority);
@@ -125,50 +125,19 @@ public class AddNewtypeActivity extends AppCompatActivity{
             }
         });
 
-
-        /*switchButton.setChecked(true);
-        switchButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean bChecked) {
-                if (bChecked) {
-                    switchButton2.setChecked(false);
-                } else {
-                    switchButton2.setChecked(true);
-                }
-            }
-        });
-
-        textView2 = (TextView) findViewById(R.id.textView2);
-
-        if (switchButton.isChecked()) {
-            switchButton2.setChecked(false);
-        } else {
-            switchButton2.setChecked(true);
-        }
-        switchButton2.setChecked(false);
-        switchButton2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean bChecked) {
-                if (bChecked) {
-                    switchButton.setChecked(false);
-                } else {
-                    switchButton.setChecked(true);
-                }
-            }
-        });
-
-        if (switchButton2.isChecked()) {
-            switchButton.setChecked(false);
-
-        } else {
-            switchButton.setChecked(true);
-        }*/
-
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (b!=null) {
+                    int rowId = b.getInt(SummaryContract.Rubric._ID);
+                    String[] mSelectionArgs = {Integer.toString(rowId)};
+                    String mSelectionClause = SummaryContract.Rubric._ID + " =?" ;
+                    getContentResolver().delete(SummaryContract.Rubric.CONTENT_URI,
+                            mSelectionClause,
+                            mSelectionArgs
+                    );
+                }
                 addToDatabase();
-
             }
         });
 

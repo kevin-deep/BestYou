@@ -283,8 +283,9 @@ public class SummaryProvider extends ContentProvider {
         //cursor.close();
         return cursor.getCount();
     }
+
     //update total table
-    public static void insertTotal(Context mContext,float weight ){
+    public static void insertTotal(Context mContext,Float weight ){
         //initial data
         if (getCountAll() ==0){
             //initial the table
@@ -311,6 +312,25 @@ public class SummaryProvider extends ContentProvider {
         v.put(SummaryContract.Total.P_IN_Total,pPoint);
         v.put(SummaryContract.Total.N_IN_Total, nPoint);
         mContext.getContentResolver().update(SummaryContract.Total.CONTENT_URI,v,null,null);
+    }
+
+    public static void updatePopularityRubric(Context mContext,int rowId){
+        String [] mSelectionArgs = {String.valueOf(rowId)};
+        //get the total table
+        Cursor c = mContext.getContentResolver().query(SummaryContract.Rubric.CONTENT_URI, RecyclerListAdapter.TOTAL_COLUMNS_RUBRIC, SummaryContract.Rubric._ID + " =?", mSelectionArgs, null);
+        c.moveToPosition(0);
+        String id  = c.getString(RecyclerListAdapter.COL_RUBRIC_ID);
+        String name = c.getString(RecyclerListAdapter.COL_RUBRIC_NAME);
+        Float weight =   c.getFloat(RecyclerListAdapter.COL_RUBRIC_WEIGHT);
+        Float pop =   c.getFloat(RecyclerListAdapter.COL_RUBRIC_POPULARITY);
+
+        ContentValues v = new ContentValues();
+        v.put(SummaryContract.Rubric.NAME,name);
+        v.put(SummaryContract.Rubric._ID,id);
+        v.put(SummaryContract.Rubric.WEIGHT, weight);
+        v.put(SummaryContract.Rubric.POPULARITY, pop+1);
+
+        mContext.getContentResolver().update(SummaryContract.Rubric.CONTENT_URI, v, SummaryContract.Rubric._ID+" =?", mSelectionArgs);
     }
 
     private static void initialTotalTable(Context mContext){

@@ -3,6 +3,7 @@ package com.bestofyou.fm.bestofyou;
 /**
  * Created by FM on 2/14/2016.
  */
+import android.app.Activity;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
@@ -13,6 +14,8 @@ import android.graphics.Color;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -22,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
@@ -81,8 +85,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
     private int pageType;
     public static interface ForecastAdapterOnClickHandler {
         void onClick(Long date, ItemViewHolder vh);}
-    private final List<String> mItems = new ArrayList<>();
-
+    View rootView;
     /*public RecyclerListAdapter() {
         mItems.addAll(Arrays.asList(STRINGS));
     }*/
@@ -100,6 +103,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         this.pageType = pageType;
         mContext = context;
         this.rateView = rateView;
+        rootView = ((Activity)mContext).getWindow().getDecorView().findViewById(android.R.id.content);
     }
 
 
@@ -121,24 +125,24 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
 
 
     @Override
-    public void onBindViewHolder(final ItemViewHolder holder, int position) {
+    public void onBindViewHolder(final ItemViewHolder holder, final int position) {
         final int  thisPosition = position;
         mCursor.moveToPosition(position);
        /* int dateColumnIndex = mCursor.getColumnIndex(SummaryContract.Rubric.WEIGHT);
         //!!!!!Important This going to send the date into mClickHandler then it will be deliver to constructor
         mClickHandler.onClick(mCursor.getLong(dateColumnIndex), this);*/
         // Read name from cursor
-
-
-        hiddenBars(holder);
-        if (pageType ==PAGE_TYPE_NEGATIVE) holder.updateNegativeIcons();
         String name = mCursor.getString(PositiveFragment.COL_RUBRIC_NAME);
         holder.name.setText(name);
         // Read weight from cursor
         final float weight = mCursor.getFloat(PositiveFragment.COL_RUBRIC_WEIGHT);
-        barsVisibility(weight, holder);
-        //holder.weight.setText(weight.toString());
-
+        if (Math.abs(weight) == 1F ){
+            holder.itemWeightColor.setBackgroundColor(ContextCompat.getColor(mContext, R.color.priority_low));
+        }else if(Math.abs(weight) == 2F){
+            holder.itemWeightColor.setBackgroundColor(ContextCompat.getColor(mContext, R.color.priority_medium));
+        }else {
+            holder.itemWeightColor.setBackgroundColor(ContextCompat.getColor(mContext, R.color.priority_high));
+        }
         holder.rateHour.setVisibility(holder.tick ? View.GONE : View.VISIBLE);
         //holder.textView.setText(mItems.get(position));
 
@@ -167,10 +171,10 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
             public void onClick(View v) {
                 ContentValues value = SummaryProvider.getRubric(mCursor,thisPosition);
                 String habitName = value.getAsString(SummaryContract.Rubric.NAME);
-                SummaryProvider.insertHistory(mContext,1*weight,habitName);
+                SummaryProvider.insertHistory(mContext, 1 * weight, habitName);
                 SummaryProvider.insertTotal(mContext, 1 * weight);
                 holder.tickCross.callOnClick();
-
+                snakeDisply(rootView, 1 * weight, pageType);
             }
         });
 
@@ -181,46 +185,52 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
                 ContentValues value = SummaryProvider.getRubric(mCursor,thisPosition);
                 String habitName = value.getAsString(SummaryContract.Rubric.NAME);
                 SummaryProvider.insertHistory(mContext, 2 * weight, habitName);
-                SummaryProvider.insertTotal(mContext,2 * weight);
+                SummaryProvider.insertTotal(mContext, 2 * weight);
+                int rowId = SummaryProvider.getRubricId(mCursor,position);
+                SummaryProvider.updatePopularityRubric(mContext,rowId);
                 holder.tickCross.callOnClick();
+                snakeDisply(rootView,2*weight, pageType);
+
+            }
+        });
+        holder.halfHour.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.v("add two hour", "onClick");
+                ContentValues value = SummaryProvider.getRubric(mCursor,thisPosition);
+                String habitName = value.getAsString(SummaryContract.Rubric.NAME);
+                SummaryProvider.insertHistory(mContext,  weight/2, habitName);
+                SummaryProvider.insertTotal(mContext,  weight/2);
+                holder.tickCross.callOnClick();
+                snakeDisply(rootView,weight/2, pageType);
+
+            }
+        });
+        holder.oneHalfHour.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.v("add two hour", "onClick");
+                ContentValues value = SummaryProvider.getRubric(mCursor, thisPosition);
+                String habitName = value.getAsString(SummaryContract.Rubric.NAME);
+                SummaryProvider.insertHistory(mContext, 1.5F * weight, habitName);
+                SummaryProvider.insertTotal(mContext, 1.5F * weight);
+                holder.tickCross.callOnClick();
+                snakeDisply(rootView, 1.5F * weight, pageType);
 
             }
         });
     }
 
-    public void barsVisibility(float weight ,ItemViewHolder holder){
+    private void snakeDisply(View view, Float weight, int habitType){
+        String toPlace;
+        if (habitType == PAGE_TYPE_POSITIVE) toPlace = "Positive Point";
+        else toPlace = "Negative Point";
+        String message = Float.toString(Math.abs(weight)) + " points has been added as " + toPlace;
+        Snackbar snackbar = Snackbar
+                .make(view, message, Snackbar.LENGTH_LONG);
 
-        if (Math.abs(weight)==1){
-            holder.bar1.setVisibility(View.VISIBLE);
-        }
-        else if(Math.abs(weight)==2){
-            holder.bar1.setVisibility(View.VISIBLE);
-            holder.bar2.setVisibility(View.VISIBLE);
-        }else if (Math.abs(weight)==3){
-            holder.bar1.setVisibility(View.VISIBLE);
-            holder.bar2.setVisibility(View.VISIBLE);
-            holder.bar3.setVisibility(View.VISIBLE);
-        }else if (Math.abs(weight)==4){
-            holder.bar1.setVisibility(View.VISIBLE);
-            holder.bar2.setVisibility(View.VISIBLE);
-            holder.bar3.setVisibility(View.VISIBLE);
-            holder.bar4.setVisibility(View.VISIBLE);
-        }else if (Math.abs(weight)==5){
-            holder.bar1.setVisibility(View.VISIBLE);
-            holder.bar2.setVisibility(View.VISIBLE);
-            holder.bar3.setVisibility(View.VISIBLE);
-            holder.bar4.setVisibility(View.VISIBLE);
-            holder.bar5.setVisibility(View.VISIBLE);
-        }
+        snackbar.show();
     }
-    private void hiddenBars(ItemViewHolder holder){
-        holder.bar1.setVisibility(View.GONE);
-        holder.bar2.setVisibility(View.GONE);
-        holder.bar3.setVisibility(View.GONE);
-        holder.bar4.setVisibility(View.GONE);
-        holder.bar5.setVisibility(View.GONE);
-    }
-
 
     @Override
     public int getItemCount() {
@@ -282,13 +292,10 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         private AnimatedVectorDrawable tickToCross;
         private AnimatedVectorDrawable crossToTick;
         private View rateHour;
-        private ImageView oneHour;
-        private ImageView twoHour;
-        private  ImageView bar1;
-        private  ImageView bar2;
-        private  ImageView bar3;
-        private  ImageView bar4;
-        private  ImageView bar5;
+        private Button oneHour,oneHalfHour,twoHour,halfHour;
+        private ImageView itemWeightColor;
+
+
         private boolean tick = true;
 
         public ItemViewHolder(View itemView) {
@@ -297,29 +304,22 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
             name = (TextView) itemView.findViewById(R.id.name);
             //weight = (TextView) itemView.findViewById(R.id.weight);
             rateHour = (View) itemView.findViewById(R.id.rates_in_hour);
-            oneHour = (ImageView)itemView.findViewById(R.id.ic_add_one_hour);
-            twoHour = (ImageView)itemView.findViewById(R.id.ic_add_two_hour);
+            oneHour = (Button)itemView.findViewById(R.id.btn_one_hour);
+            oneHalfHour = (Button)itemView.findViewById(R.id.btn_one_half_hour);
+            twoHour = (Button)itemView.findViewById(R.id.btn_two_hour);
+            halfHour = (Button)itemView.findViewById(R.id.btn_half_hour);
+
             //tickCross = (ImageView) itemView.findViewById(R.id.tick_cross);
             tickCross = (ImageView) itemView.findViewById(R.id.tick_cross);
             //tickToCross = (AnimatedVectorDrawable)itemView.getContext() .getDrawable(R.drawable.avd_tick_to_cross);
             tickToCross = (AnimatedVectorDrawable)itemView.getContext() .getDrawable(R.drawable.avd_click_to_show_red);
             crossToTick = (AnimatedVectorDrawable) itemView.getContext().getDrawable(R.drawable.avd_click_to_show_black);
+            itemWeightColor = (ImageView)itemView.findViewById(R.id.item_weight_color);
 
-            bar1 = (ImageView)itemView.findViewById(R.id.bar1);
-            bar2 = (ImageView)itemView.findViewById(R.id.bar2);
-            bar3 = (ImageView)itemView.findViewById(R.id.bar3);
-            bar4 = (ImageView)itemView.findViewById(R.id.bar4);
-            bar5 = (ImageView)itemView.findViewById(R.id.bar5);
+
         }
         //update the negative rubric ico showing on the negative view
-        public void updateNegativeIcons(){
-            bar1.setImageResource(R.drawable.ic_star_outline_24dp);
-            bar2.setImageResource(R.drawable.ic_star_outline_24dp);
-            bar3.setImageResource(R.drawable.ic_star_outline_24dp);
-            bar4.setImageResource(R.drawable.ic_star_outline_24dp);
-            bar5.setImageResource(R.drawable.ic_star_outline_24dp);
 
-        }
 
         @Override
         public void onItemSelected() {
@@ -347,10 +347,12 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
                         case 1:
                             Log.v("update", "update");
                             ContentValues value = SummaryProvider.getRubric(mCursor,position);
+                            int rowIdupdate = SummaryProvider.getRubricId(mCursor, position);
                             Bundle b=new Bundle();
                             b.putFloat(SummaryContract.Rubric.WEIGHT, value.getAsFloat(SummaryContract.Rubric.WEIGHT));
                             b.putString(SummaryContract.Rubric.NAME, value.getAsString(SummaryContract.Rubric.NAME));
                             b.putFloat(SummaryContract.Rubric.POPULARITY, value.getAsFloat(SummaryContract.Rubric.POPULARITY));
+                            b.putInt(SummaryContract.Rubric._ID, rowIdupdate);
                             Intent intent=new Intent(mContext,AddNewtypeActivity.class);
                             intent.putExtras(b);
                             mContext.startActivity(intent);
@@ -361,24 +363,12 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
                 }
             });
             builder.show();
-            //cardV.setCardBackgroundColor(Color.GREEN);
         }
 
         @Override
         public void onItemClear() {
             itemView.setBackgroundColor(0);
         }
-
-       /* @Override
-        public void onClick(View v) {
-            int adapterPosition = getAdapterPosition();
-            mCursor.moveToPosition(adapterPosition);
-            //get the index of this column
-            int dateColumnIndex = mCursor.getColumnIndex(SummaryContract.Rubric.WEIGHT);
-            //!!!!!Important This going to send the date into mClickHandler then it will be deliver to constructor
-            mClickHandler.onClick(mCursor.getLong(dateColumnIndex), this);
-            mICM.onClick(this);
-        }*/
 
     }
 
