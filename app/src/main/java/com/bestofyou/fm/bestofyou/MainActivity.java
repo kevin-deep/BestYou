@@ -12,6 +12,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.FloatMath;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Menu;
@@ -24,24 +25,30 @@ import android.widget.ViewFlipper;
 import com.bestofyou.fm.bestofyou.CustomizedView.CircleProgressBar;
 import com.bestofyou.fm.bestofyou.data.SummaryContract;
 import com.bestofyou.fm.bestofyou.data.SummaryProvider;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.Scopes;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.plus.Plus;
+import com.google.android.gms.plus.model.people.Person;
 
-public class MainActivity extends AppCompatActivity implements McontentObserver.Callback {
+public class MainActivity extends AppCompatActivity
+        implements McontentObserver.Callback,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener {
     public static final String LOG_TAG = MainActivity.class.getSimpleName();
     public CollapsingToolbarLayout mCollapsingToobar;
     public Toolbar mToolbar;
     FloatingActionButton profile;
     ImageButton menu, menuMonth;
-    public TextView pPoint, nPoint, userName, nPointM, pPointM;
+    public TextView pPoint, nPoint,nPointM, pPointM, usrNameDay, usrNameMonth;
     ViewFlipper vf;
     CircleProgressBar circleProgressBarDay,circleProgressBarMonth;
-
+    private GoogleApiClient mGoogleApiClient;
+    public Person currentUser;
     //Content observer handler
     McontentObserver observer = new McontentObserver(new Handler());
 
     boolean header = true; //determine which header shoot on the screen
-
     private float initialX;
-    private AuthenticationActivity authInstance = new AuthenticationActivity();
 
     //public String loginUsr = authInstance.currentUser.getDisplayName();
 
@@ -63,12 +70,12 @@ public class MainActivity extends AppCompatActivity implements McontentObserver.
         nPoint = (TextView) findViewById(R.id.n_point_header_day);
         pPointM = (TextView) findViewById(R.id.p_point_header_month);
         nPointM = (TextView) findViewById(R.id.n_point_header_month);
+        usrNameDay = (TextView) findViewById(R.id.usr_Name_day);
+        usrNameMonth = (TextView) findViewById(R.id.usr_Name_month);
         circleProgressBarDay = (CircleProgressBar) findViewById(R.id.custom_progressBar_day);
         circleProgressBarMonth = (CircleProgressBar) findViewById(R.id.custom_progressBar_month);
-        userName = (TextView) findViewById(R.id.usr_Name);
 
-
-
+        mGoogleApiClient = buildApiClient();
 
         vf = (ViewFlipper) findViewById(R.id.view_flipper);
         vf.setInAnimation(this, android.R.anim.fade_in);
@@ -90,6 +97,10 @@ public class MainActivity extends AppCompatActivity implements McontentObserver.
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
 
+            tabLayout.getTabAt(0).setIcon(R.drawable.ic_sentiment_very_satisfied_tab);
+            tabLayout.getTabAt(1).setIcon(R.drawable.ic_sentiment_very_dissatisfied_tab);
+
+
 
         FloatingActionButton addNewType = (FloatingActionButton) findViewById(R.id.addNewType);
         addNewType.setOnClickListener(new View.OnClickListener() {
@@ -99,8 +110,9 @@ public class MainActivity extends AppCompatActivity implements McontentObserver.
             }
         });
 
-        menu.setOnClickListener(new View.OnClickListener() {
 
+
+    menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getBaseContext(), AuthenticationActivity.class));
@@ -119,8 +131,6 @@ public class MainActivity extends AppCompatActivity implements McontentObserver.
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();*/
                 callSummary();
             }
         });
@@ -140,6 +150,11 @@ public class MainActivity extends AppCompatActivity implements McontentObserver.
         });
 
     }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mGoogleApiClient.connect();
+    }
 
 
     @Override
@@ -147,6 +162,23 @@ public class MainActivity extends AppCompatActivity implements McontentObserver.
         super.onResume();
         initalObserver();
     }
+    public  GoogleApiClient buildApiClient(){
+        return new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(Plus.API, Plus.PlusOptions.builder().build())
+                .addScope(new Scope(Scopes.PROFILE))
+                .build();
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        if (mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
+    }
+
 
     /***
      *  also unregister the Content Observer, otherwise you would create a memory leak
@@ -157,6 +189,43 @@ public class MainActivity extends AppCompatActivity implements McontentObserver.
         super.onPause();
         getContentResolver().
                 unregisterContentObserver(observer);
+    }
+
+
+    @Override
+    public void onConnectionSuspended(int cause) {
+        // The connection to Google Play services was lost for some reason.
+        // We call connect() to attempt to re-establish the connection or get a
+        // ConnectionResult that we can attempt to resolve.
+        mGoogleApiClient.connect();
+        Log.i(LOG_TAG, "onConnectionSuspended:" + cause);
+    }
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        // Reaching onConnected means we consider the user signed in.
+        Log.i(LOG_TAG, "onConnected");
+
+        // Update the user interface to reflect that the user is signed in.
+
+        // Indicate that the sign in process is complete.
+        // We are signed in!
+        // Retrieve some profile information to personalize our app for the user.
+        currentUser = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
+        String name = currentUser.getDisplayName();
+        if (name != null && name!=""){
+            usrNameDay.setText("Hey "+name);
+            usrNameMonth.setText("Hey " +name);
+        }
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult result) {
+        // Refer to the javadoc for ConnectionResult to see what error codes might
+        // be returned in onConnectionFailed.
+        Log.i(LOG_TAG, "onConnectionFailed: ConnectionResult.getErrorCode() = "
+                + result.getErrorCode());
+;
     }
 
     public void callSummary() {

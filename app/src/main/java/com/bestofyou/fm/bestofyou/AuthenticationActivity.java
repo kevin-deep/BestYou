@@ -65,7 +65,7 @@ public class AuthenticationActivity extends AppCompatActivity implements GoogleA
         mGoogleApiClient = buildApiClient();
     }
 
-    public GoogleApiClient buildApiClient(){
+    public  GoogleApiClient buildApiClient(){
         return new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -116,11 +116,10 @@ public class AuthenticationActivity extends AppCompatActivity implements GoogleA
         currentUser = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
         mStatus.setText(String.format("Signed In to G+ as %s", currentUser.getDisplayName()));
 
-
     }
 
     @Override
-    public void onConnectionFailed(ConnectionResult result) {
+     public void onConnectionFailed(ConnectionResult result) {
         // Refer to the javadoc for ConnectionResult to see what error codes might
         // be returned in onConnectionFailed.
         Log.i(TAG, "onConnectionFailed: ConnectionResult.getErrorCode() = "

@@ -14,7 +14,7 @@
         >
         <TextView
             android:layout_width="match_parent"
-            android:id="@+id/usr_Name"
+            android:id="@+id/usr_Name_day"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:gravity="start"

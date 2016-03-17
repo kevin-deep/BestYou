@@ -1,5 +1,6 @@
 package com.bestofyou.fm.bestofyou;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -69,6 +71,15 @@ public class AddNewtypeActivity extends AppCompatActivity{
             public void onTextChanged(CharSequence s, int start, int before, int count){}
         });
 
+        newTypeName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    hideKeyboard(v);
+                }
+            }
+        });
+
 
         low.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -76,8 +87,10 @@ public class AddNewtypeActivity extends AppCompatActivity{
                 low.setPressed(true);
                 high.setPressed(false);
                 netural.setPressed(false);
+                updateFAB();
                 updateHabitType();
-                snakeDisply(v,"+1 each hour");
+                snakeDisply(v, "+1 each hour");
+                hideKeyboard(v);
                 return true;
             }
         });
@@ -88,6 +101,8 @@ public class AddNewtypeActivity extends AppCompatActivity{
                 low.setPressed(false);
                 netural.setPressed(false);
                 updateHabitType();
+                hideKeyboard(v);
+                updateFAB();
                 snakeDisply(v, "+3 each hour");
                 return true;
             }
@@ -99,6 +114,8 @@ public class AddNewtypeActivity extends AppCompatActivity{
                 low.setPressed(false);
                 high.setPressed(false);
                 updateHabitType();
+                updateFAB();
+                hideKeyboard(v);
                 snakeDisply(v, "+2 each hour");
                 return true;
             }
@@ -111,6 +128,7 @@ public class AddNewtypeActivity extends AppCompatActivity{
                 hateful.setPressed(false);
                 snakeDisply(v, "I like this habit");
                 updateFAB();
+                hideKeyboard(v);
                 return true;
             }
         });
@@ -121,6 +139,7 @@ public class AddNewtypeActivity extends AppCompatActivity{
                 favor.setPressed(false);
                 snakeDisply(v, "I dislike this habit");
                 updateFAB();
+                hideKeyboard(v);
                 return true;
             }
         });
@@ -208,6 +227,11 @@ public class AddNewtypeActivity extends AppCompatActivity{
                 .make(view, message, Snackbar.LENGTH_LONG);
 
         snackbar.show();
+    }
+
+    public void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
 
