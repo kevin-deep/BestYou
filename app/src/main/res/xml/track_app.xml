@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ga_trackingId">UA-75273311-1</string>
+    <bool name="ga_autoActivityTracking">true</bool>
+    <screenName name="com.bestofyou.fm.bestofyou.MainActivity">
+        Main screen
+    </screenName>
+    <screenName name="com.bestofyou.fm.bestofyou.AddNewtypeActivity">
+        Add new habit
+    </screenName>
+    <screenName name="com.bestofyou.fm.bestofyou.NegativeFragment">
+        Negative Page
+    </screenName>
+    <screenName name="com.bestofyou.fm.bestofyou.PositiveFragment">
+        Positive Page
+    </screenName>
+    <screenName name="com.bestofyou.fm.bestofyou.AuthenticationActivity">
+        Option
+    </screenName>
+</resources>

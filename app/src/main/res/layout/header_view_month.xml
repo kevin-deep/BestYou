@@ -29,7 +29,7 @@
             android:gravity="end"
             android:layout_gravity="center_vertical"
             android:src="@drawable/ic_menu_black_24px"
-            android:background="@android:color/transparent"/>
+            android:background="@drawable/ripple"/>
 
     </LinearLayout>
     <FrameLayout

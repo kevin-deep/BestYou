@@ -74,8 +74,11 @@ public class MainActivity extends AppCompatActivity
         usrNameMonth = (TextView) findViewById(R.id.usr_Name_month);
         circleProgressBarDay = (CircleProgressBar) findViewById(R.id.custom_progressBar_day);
         circleProgressBarMonth = (CircleProgressBar) findViewById(R.id.custom_progressBar_month);
-
+        //build google ID
         mGoogleApiClient = buildApiClient();
+        //build google analytics
+        ((MyApplication)getApplication()).startTracking();
+
 
         vf = (ViewFlipper) findViewById(R.id.view_flipper);
         vf.setInAnimation(this, android.R.anim.fade_in);
@@ -270,6 +273,7 @@ public class MainActivity extends AppCompatActivity
         Resources res = getResources();
         int color = res.getColor(R.color.ag_blue);
         circleProgressBarDay.setColor(color);
+        if (pPointPercentDay ==100F) pPointPercentDay-=1F;
         circleProgressBarDay.setProgressWithAnimation(pPointPercentDay);
         circleProgressBarDay.setStrokeWidth(50);
 
