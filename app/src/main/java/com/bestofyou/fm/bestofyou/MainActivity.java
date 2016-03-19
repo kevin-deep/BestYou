@@ -2,6 +2,7 @@ package com.bestofyou.fm.bestofyou;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
@@ -33,15 +34,15 @@ import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 
 public class MainActivity extends AppCompatActivity
-        implements McontentObserver.Callback,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener {
+        implements McontentObserver.Callback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     public static final String LOG_TAG = MainActivity.class.getSimpleName();
     public CollapsingToolbarLayout mCollapsingToobar;
     public Toolbar mToolbar;
     FloatingActionButton profile;
     ImageButton menu, menuMonth;
-    public TextView pPoint, nPoint,nPointM, pPointM, usrNameDay, usrNameMonth;
+    public TextView pPoint, nPoint, nPointM, pPointM, usrNameDay, usrNameMonth;
     ViewFlipper vf;
-    CircleProgressBar circleProgressBarDay,circleProgressBarMonth;
+    CircleProgressBar circleProgressBarDay, circleProgressBarMonth;
     private GoogleApiClient mGoogleApiClient;
     public Person currentUser;
     //Content observer handler
@@ -60,12 +61,12 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
        /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);*/
-        vf = (ViewFlipper)findViewById(R.id.view_flipper);
+        vf = (ViewFlipper) findViewById(R.id.view_flipper);
         mCollapsingToobar = (CollapsingToolbarLayout) findViewById(R.id.Collapse_toolbar);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         //profile = (FloatingActionButton) findViewById(R.id.profile);
-        menu = (ImageButton)findViewById(R.id.menu_main);
-        menuMonth = (ImageButton)findViewById(R.id.menu_main_month);
+        menu = (ImageButton) findViewById(R.id.menu_main);
+        menuMonth = (ImageButton) findViewById(R.id.menu_main_month);
         pPoint = (TextView) findViewById(R.id.p_point_header_day);
         nPoint = (TextView) findViewById(R.id.n_point_header_day);
         pPointM = (TextView) findViewById(R.id.p_point_header_month);
@@ -77,18 +78,13 @@ public class MainActivity extends AppCompatActivity
         //build google ID
         mGoogleApiClient = buildApiClient();
         //build google analytics
-        ((MyApplication)getApplication()).startTracking();
+        ((MyApplication) getApplication()).startTracking();
 
 
         vf = (ViewFlipper) findViewById(R.id.view_flipper);
         vf.setInAnimation(this, android.R.anim.fade_in);
         vf.setOutAnimation(this, android.R.anim.fade_out);
-      /*  mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-            }
-        });*/
         updateHeader();
         //updateUserName();
         // Get the ViewPager and set it's PagerAdapter so that it can display items
@@ -100,9 +96,8 @@ public class MainActivity extends AppCompatActivity
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-            tabLayout.getTabAt(0).setIcon(R.drawable.ic_sentiment_very_satisfied_tab);
-            tabLayout.getTabAt(1).setIcon(R.drawable.ic_sentiment_very_dissatisfied_tab);
-
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_sentiment_very_satisfied_tab);
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_sentiment_very_dissatisfied_tab);
 
 
         FloatingActionButton addNewType = (FloatingActionButton) findViewById(R.id.addNewType);
@@ -114,8 +109,7 @@ public class MainActivity extends AppCompatActivity
         });
 
 
-
-    menu.setOnClickListener(new View.OnClickListener() {
+        menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getBaseContext(), AuthenticationActivity.class));
@@ -141,10 +135,10 @@ public class MainActivity extends AppCompatActivity
         vf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (header){
+                if (header) {
                     vf.setDisplayedChild(1);
                     header = !header;
-                }else {
+                } else {
                     vf.setDisplayedChild(0);
                     header = !header;
                 }
@@ -153,6 +147,7 @@ public class MainActivity extends AppCompatActivity
         });
 
     }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -165,7 +160,8 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
         initalObserver();
     }
-    public  GoogleApiClient buildApiClient(){
+
+    public GoogleApiClient buildApiClient() {
         return new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -173,6 +169,7 @@ public class MainActivity extends AppCompatActivity
                 .addScope(new Scope(Scopes.PROFILE))
                 .build();
     }
+
     @Override
     protected void onStop() {
         super.onStop();
@@ -184,8 +181,8 @@ public class MainActivity extends AppCompatActivity
 
 
     /***
-     *  also unregister the Content Observer, otherwise you would create a memory leak
-     *  and the Activity would never be garbage collected.
+     * also unregister the Content Observer, otherwise you would create a memory leak
+     * and the Activity would never be garbage collected.
      */
     @Override
     protected void onPause() {
@@ -203,6 +200,7 @@ public class MainActivity extends AppCompatActivity
         mGoogleApiClient.connect();
         Log.i(LOG_TAG, "onConnectionSuspended:" + cause);
     }
+
     @Override
     public void onConnected(Bundle connectionHint) {
         // Reaching onConnected means we consider the user signed in.
@@ -215,9 +213,9 @@ public class MainActivity extends AppCompatActivity
         // Retrieve some profile information to personalize our app for the user.
         currentUser = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
         String name = currentUser.getDisplayName();
-        if (name != null && name!=""){
-            usrNameDay.setText("Hey "+name);
-            usrNameMonth.setText("Hey " +name);
+        if (name != null && name != "") {
+            usrNameDay.setText("Hey " + name);
+            usrNameMonth.setText("Hey " + name);
         }
 
     }
@@ -228,7 +226,7 @@ public class MainActivity extends AppCompatActivity
         // be returned in onConnectionFailed.
         Log.i(LOG_TAG, "onConnectionFailed: ConnectionResult.getErrorCode() = "
                 + result.getErrorCode());
-;
+        ;
     }
 
     public void callSummary() {
@@ -260,20 +258,20 @@ public class MainActivity extends AppCompatActivity
         userName.setText(loginUsr);
     }*/
 
-    public  void updateHeader() {
+    public void updateHeader() {
 
         Float pPointMonth = SummaryProvider.getPtotalMonth();
         Float nPointMonth = SummaryProvider.getNtotalMonth();
-        Float pPointPercentMonth = pPointMonth/(pPointMonth+Math.abs(nPointMonth))*100;
+        Float pPointPercentMonth = pPointMonth / (pPointMonth + Math.abs(nPointMonth)) * 100;
 
-        Float pPointDay= SummaryProvider.getPTotalToday();
+        Float pPointDay = SummaryProvider.getPTotalToday();
         Float nPointDay = SummaryProvider.getNtotalToday();
-        Float pPointPercentDay = pPointDay/(pPointDay+Math.abs(nPointDay))*100;
+        Float pPointPercentDay = pPointDay / (pPointDay + Math.abs(nPointDay)) * 100;
 
         Resources res = getResources();
         int color = res.getColor(R.color.ag_blue);
         circleProgressBarDay.setColor(color);
-        if (pPointPercentDay ==100F) pPointPercentDay-=1F;
+        if (pPointPercentDay == 100F) pPointPercentDay -= 10F;
         circleProgressBarDay.setProgressWithAnimation(pPointPercentDay);
         circleProgressBarDay.setStrokeWidth(50);
 
@@ -287,9 +285,10 @@ public class MainActivity extends AppCompatActivity
         pPoint.setText(Integer.toString(Math.round(pPointDay)));
         nPoint.setText(Integer.toString(Math.round(Math.abs(nPointDay))));
     }
+
     //register the Content Observer
-    public void initalObserver(){
-        observer.contexTo=this;
+    public void initalObserver() {
+        observer.contexTo = this;
         getApplicationContext().getContentResolver().registerContentObserver(
                 SummaryContract.Total.CONTENT_URI,
                 true,
@@ -315,16 +314,16 @@ public class MainActivity extends AppCompatActivity
                     if (vf.getDisplayedChild() == 1)
                         break;
 
-				vf.setInAnimation(this, R.anim.in_right);
-				vf.setOutAnimation(this, R.anim.out_left);
+                    vf.setInAnimation(this, R.anim.in_right);
+                    vf.setOutAnimation(this, R.anim.out_left);
 
                     vf.showNext();
                 } else {
                     if (vf.getDisplayedChild() == 0)
                         break;
 
-				vf.setInAnimation(this, R.anim.in_left);
-				vf.setOutAnimation(this, R.anim.out_right);
+                    vf.setInAnimation(this, R.anim.in_left);
+                    vf.setOutAnimation(this, R.anim.out_right);
 
                     vf.showPrevious();
                 }
@@ -332,4 +331,22 @@ public class MainActivity extends AppCompatActivity
         }
         return false;
     }
+
+    /***
+     * Checks that application runs first time and write flag at SharedPreferences
+     *
+     * @return true if 1st time
+     */
+    private boolean isFirstTime() {
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        boolean ranBefore = preferences.getBoolean("RanBefore", false);
+        if (!ranBefore) {
+            // first time
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean("RanBefore", true);
+            editor.commit();
+        }
+        return !ranBefore;
+    }
+
 }

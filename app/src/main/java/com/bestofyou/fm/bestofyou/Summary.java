@@ -1,5 +1,6 @@
 package com.bestofyou.fm.bestofyou;
 
+import android.app.Activity;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
@@ -8,10 +9,14 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.animation.Interpolator;
+import android.view.animation.OvershootInterpolator;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bestofyou.fm.bestofyou.CustomizedView.CircleProgressBar;
@@ -26,6 +31,7 @@ public class Summary extends AppCompatActivity implements View.OnClickListener{
     private Button addP;
     private Button addN;
     private Context mContext;
+    private Interpolator interpolator;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +40,10 @@ public class Summary extends AppCompatActivity implements View.OnClickListener{
         addN = (Button)findViewById(R.id.addN);
         //mDbHelper =  new SummaryHelper(this);
         mContext =  this.getBaseContext();
+        TextView t = (TextView)findViewById(R.id.testId);
 
+
+       // Utility.overshootInterpolator(t,this);
 
         addP.setText("add positive list");
         addP.setOnClickListener(new View.OnClickListener() {

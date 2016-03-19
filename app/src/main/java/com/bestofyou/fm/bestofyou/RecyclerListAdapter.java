@@ -16,15 +16,19 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Interpolator;
+import android.view.animation.OvershootInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -134,6 +138,8 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         // Read name from cursor
         String name = mCursor.getString(PositiveFragment.COL_RUBRIC_NAME);
         holder.name.setText(name);
+
+
         // Read weight from cursor
         final float weight = mCursor.getFloat(PositiveFragment.COL_RUBRIC_WEIGHT);
         if (Math.abs(weight) == 1F ){
@@ -157,12 +163,14 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         holder.tickCross.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //AnimatedVectorDrawable drawable = holder.tick ? holder.tickToCross : holder.crossToTick;
+
                 AnimatedVectorDrawable drawable = holder.tick ? holder.tickToCross : holder.crossToTick;
                 holder.tickCross.setImageDrawable(drawable);
                 drawable.start();
                 holder.tick=!holder.tick;
                 holder.rateHour.setVisibility(holder.tick ?  View.GONE:View.VISIBLE);
+                Utility.overshootInterpolator(holder.rateHour, mContext);
+                Utility.overshootInterpolator(holder.twoHour, mContext);
             }
         });
 
@@ -371,5 +379,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         }
 
     }
+
+
 
 }

@@ -16,6 +16,7 @@ import com.bestofyou.fm.bestofyou.MainActivity;
 import com.bestofyou.fm.bestofyou.PositiveFragment;
 import com.bestofyou.fm.bestofyou.RecyclerListAdapter;
 import com.bestofyou.fm.bestofyou.Summary;
+import com.bestofyou.fm.bestofyou.Utility;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -330,7 +331,7 @@ public class SummaryProvider extends ContentProvider {
         v.put(SummaryContract.Rubric.WEIGHT, weight);
         v.put(SummaryContract.Rubric.POPULARITY, pop+1);
 
-        mContext.getContentResolver().update(SummaryContract.Rubric.CONTENT_URI, v, SummaryContract.Rubric._ID+" =?", mSelectionArgs);
+        mContext.getContentResolver().update(SummaryContract.Rubric.CONTENT_URI, v, SummaryContract.Rubric._ID + " =?", mSelectionArgs);
     }
 
     private static void initialTotalTable(Context mContext){
@@ -432,7 +433,7 @@ public class SummaryProvider extends ContentProvider {
 
     public static Float getNtotalMonth(){
         String sql = "SELECT SUM(" + SummaryContract.UsrHistory.N_History + ") FROM " + SummaryContract.UsrHistory.TABLE_NAME +
-                " WHERE " + "strftime('%m', " + SummaryContract.UsrHistory.CREATED_AT + ") = '" +getMonth() + "'";
+                " WHERE " + "strftime('%m', " + SummaryContract.UsrHistory.CREATED_AT + ") = '" + Utility.getMonth() + "'";
         System.out.println(sql);
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         Cursor mCursor = db.rawQuery(sql, null);
@@ -446,7 +447,7 @@ public class SummaryProvider extends ContentProvider {
 
     public static Float getPtotalMonth(){
         String sql = "SELECT SUM(" + SummaryContract.UsrHistory.P_History + ") FROM " + SummaryContract.UsrHistory.TABLE_NAME +
-                " WHERE " + "strftime('%m', " + SummaryContract.UsrHistory.CREATED_AT + ") = '" +getMonth() + "'";
+                " WHERE " + "strftime('%m', " + SummaryContract.UsrHistory.CREATED_AT + ") = '" +Utility.getMonth() + "'";
                 //SummaryContract.UsrHistory.CREATED_AT + " >= month('now')";
         System.out.println(sql);
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
@@ -459,17 +460,7 @@ public class SummaryProvider extends ContentProvider {
         return pPoint;
     }
 
-    private static String getMonth(){
-        java.util.Date date= new Date();
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        int month = cal.get(Calendar.MONTH)+1;//month is zero-based
-        if (month>=10){
-            return Integer.toString(month);
-        }else{
-            return "0" + Integer.toString(month);
-        }
-    }
+
 
 
 
