@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
@@ -35,11 +36,12 @@ import com.google.android.gms.plus.model.people.Person;
 
 public class MainActivity extends AppCompatActivity
         implements McontentObserver.Callback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
-    public static final String LOG_TAG = MainActivity.class.getSimpleName();
+        public static final String LOG_TAG = MainActivity.class.getSimpleName();
     public CollapsingToolbarLayout mCollapsingToobar;
     public Toolbar mToolbar;
     FloatingActionButton profile;
     ImageButton menu, menuMonth;
+    RelativeLayout  btn_detail_header_month, btn_detail_header_day;
     public TextView pPoint, nPoint, nPointM, pPointM, usrNameDay, usrNameMonth;
     ViewFlipper vf;
     CircleProgressBar circleProgressBarDay, circleProgressBarMonth;
@@ -67,6 +69,8 @@ public class MainActivity extends AppCompatActivity
         //profile = (FloatingActionButton) findViewById(R.id.profile);
         menu = (ImageButton) findViewById(R.id.menu_main);
         menuMonth = (ImageButton) findViewById(R.id.menu_main_month);
+        btn_detail_header_month = (RelativeLayout) findViewById(R.id.detail_header_month);
+        btn_detail_header_day = (RelativeLayout) findViewById(R.id.detail_header_day);
         pPoint = (TextView) findViewById(R.id.p_point_header_day);
         nPoint = (TextView) findViewById(R.id.n_point_header_day);
         pPointM = (TextView) findViewById(R.id.p_point_header_month);
@@ -108,7 +112,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-
         menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -142,6 +145,21 @@ public class MainActivity extends AppCompatActivity
                     vf.setDisplayedChild(0);
                     header = !header;
                 }
+
+            }
+        });
+
+        btn_detail_header_month.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getBaseContext(), History.class));
+
+            }
+        });
+        btn_detail_header_day.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getBaseContext(), History.class));
 
             }
         });

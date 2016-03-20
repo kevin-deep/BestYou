@@ -31,20 +31,14 @@
         android:layout_weight="0.4"
         android:gravity="center">
         <TextView
+            android:id="@+id/testId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/testId"
-            android:textColor="@android:color/black"
-            android:text="This is a test "/>
-
-        <com.bestofyou.fm.bestofyou.CustomizedView.CircleProgressBar
-            android:id="@+id/custom_progressBar"
-            android:layout_width="@dimen/progressBar_dimen"
-            android:layout_height="@dimen/progressBar_dimen"
-            app:progress="35"
-            app:progressBarThickness="4dp"
-
-            />
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="Hello World"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:textColor="@android:color/black" />
 
     </LinearLayout>
 

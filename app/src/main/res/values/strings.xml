@@ -59,6 +59,7 @@
 
     <!-- layout-->
     <string name="add_habit_hint">What habit?</string>
+    <string name="title_activity_history">History</string>
 
 
 </resources>

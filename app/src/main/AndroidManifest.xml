@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.bestofyou.fm.bestofyou">
-    <!-- Google plus login-->
+
+    <!-- Google plus login -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.USE_FINGERPRINT" />
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.BROADCAST_STICKY" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-
     <meta-data
         android:name="com.google.android.gms.version"
         android:value="@integer/google_play_services_version" />
+
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -55,7 +55,7 @@
             android:name=".AuthenticationActivity"
             android:label="@string/title_activity_authentication"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
 
         <intent-filter>
             <action android:name="android.intent.action.VIEW" />
@@ -67,6 +67,7 @@
                 android:host="Android client 1"
                 android:scheme="@string/G_Plus_ID" />
         </intent-filter>
+
         <meta-data
             android:name="android.support.PARENT_ACTIVITY"
             android:value="com.bestofyou.fm.bestofyou.MainActivity" />
@@ -79,11 +80,23 @@
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="com.bestofyou.fm.bestofyou.ACTION_DATA_UPDATED" />
             </intent-filter>
+
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_info" />
         </receiver>
+
         <service android:name=".widget.MyBestWidgetIntentService" />
+
+        <activity
+            android:name=".History"
+            android:label="@string/title_activity_history"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.bestofyou.fm.bestofyou.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

@@ -32,7 +32,7 @@
         <item name="colorPrimaryDark">#303F9F</item>
         <!--   theme UI controls like checkboxes and text fields -->
         <item name="colorAccent">#FF4081</item>
-      <!--  <item name="android:colorButtonNormal">#2196f3</item>-->
+        <!--  <item name="android:colorButtonNormal">#2196f3</item>-->
         <item name="android:colorBackground">@color/accent_material_light</item>
 
         <item name="android:colorBackgroundCacheHint">@null</item>
@@ -51,6 +51,7 @@
 
         <item name="tabBackground">@android:color/white</item>
     </style>
+
     <style name="MyCustomTextAppearance" parent="TextAppearance.Design.Tab">
         <item name="textAllCaps">false</item>
         <item name="android:textSize">14sp</item>

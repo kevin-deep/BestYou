@@ -30,8 +30,10 @@ public class Summary extends AppCompatActivity implements View.OnClickListener{
     int x;
     private Button addP;
     private Button addN;
-    private Context mContext;
+    public Context mContext;
     private Interpolator interpolator;
+    TextView t;
+    Activity activity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,24 +41,42 @@ public class Summary extends AppCompatActivity implements View.OnClickListener{
         addP = (Button)findViewById(R.id.addP);
         addN = (Button)findViewById(R.id.addN);
         //mDbHelper =  new SummaryHelper(this);
-        mContext =  this.getBaseContext();
-        TextView t = (TextView)findViewById(R.id.testId);
+        mContext =  getBaseContext();
 
+        t = (TextView)findViewById(R.id.testId);
+
+        activity = (Activity) mContext;
 
        // Utility.overshootInterpolator(t,this);
 
         addP.setText("add positive list");
         addP.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-               /* mDbHelper.insert("positive", 123);
-                x =mDbHelper.getCountAll();
-                Toast.makeText(getBaseContext(), "data"+x, Toast.LENGTH_SHORT).show();*/
-                SummaryProvider.insertRubric(mContext, "Sports", 2);
+
+               /* SummaryProvider.insertRubric(mContext, "Sports", 2);
                 SummaryProvider.insertRubric(mContext,"Reading", 4);
                 SummaryProvider.insertRubric(mContext,"Coding", 2);
                 SummaryProvider.insertRubric(mContext,"Networking", 4);
                 SummaryProvider.insertRubric(mContext,"Family Time", 4);
-                SummaryProvider.insertRubric(mContext,"Early Sleeping", 4);
+                SummaryProvider.insertRubric(mContext,"Early Sleeping", 4);*/
+                DisplayMetrics metrics = new DisplayMetrics();
+                activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+                t.setTranslationX(metrics.widthPixels);
+
+                try {
+                    String path = "OvershootInterpolator";
+                    if (path == null)
+                        return;
+
+                    interpolator = (Interpolator) OvershootInterpolator.class.newInstance();
+                    t.animate().setInterpolator(interpolator)
+                            .setDuration(500)
+                            .setStartDelay(500)
+                            .translationXBy(-metrics.widthPixels)
+                            .start();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
 
             }
         });
@@ -66,60 +86,17 @@ public class Summary extends AppCompatActivity implements View.OnClickListener{
                /* mDbHelper.insert("positive", 123);
                 x =mDbHelper.getCountAll();
                 Toast.makeText(getBaseContext(), "data"+x, Toast.LENGTH_SHORT).show();*/
-                SummaryProvider.insertRubric(mContext,"Sloth", -2);
-                SummaryProvider.insertRubric(mContext,"Smoking", -4);
-                SummaryProvider.insertRubric(mContext,"Watching TV", -2);
-                SummaryProvider.insertRubric(mContext,"Drinking", -4);
-                SummaryProvider.insertRubric(mContext,"Gaming", -4);
-                SummaryProvider.insertRubric(mContext,"Day dreaming", -4);
-                SummaryProvider.insertRubric(mContext,"Gluttony", -4);
-                SummaryProvider.insertRubric(mContext,"Wrath", -4);
+                SummaryProvider.insertRubric(mContext, "Sloth", -2);
+                SummaryProvider.insertRubric(mContext, "Smoking", -4);
+                SummaryProvider.insertRubric(mContext, "Watching TV", -2);
+                SummaryProvider.insertRubric(mContext, "Drinking", -4);
+                SummaryProvider.insertRubric(mContext, "Gaming", -4);
+                SummaryProvider.insertRubric(mContext, "Day dreaming", -4);
+                SummaryProvider.insertRubric(mContext, "Gluttony", -4);
+                SummaryProvider.insertRubric(mContext, "Wrath", -4);
             }
         });
 
-
-        //customized progress bar
-        SeekBar seekBarProgress, seekBarThickness;
-     /*   seekBarProgress = (SeekBar) findViewById(R.id.seekBar_progress);
-        seekBarThickness = (SeekBar) findViewById(R.id.seekBar_thickness);
-        final Button button = (Button) findViewById(R.id.button);*/
-        final CircleProgressBar circleProgressBar = (CircleProgressBar) findViewById(R.id.custom_progressBar);
-        //Using ColorPickerLibrary to pick color for our CustomProgressbar
-        /*final ColorPickerDialog colorPickerDialog = new ColorPickerDialog();
-        colorPickerDialog.initialize(
-                R.string.select_color,
-                new int[]{
-                        Color.CYAN,
-                        Color.DKGRAY,
-                        Color.BLACK,
-                        Color.BLUE,
-                        Color.GREEN,
-                        Color.MAGENTA,
-                        Color.RED,
-                        Color.GRAY,
-                        Color.YELLOW},
-                Color.DKGRAY, 3, 2);*/
-
-
-        Resources res = getResources();
-        int color = res.getColor(R.color.ag_blue);
-                circleProgressBar.setColor(color);
-
-
-        /*seekBarProgress.setProgress((int) circleProgressBar.getProgress());
-        seekBarProgress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                if(b)
-                    circleProgressBar.setProgressWithAnimation(i);
-                else
-                    circleProgressBar.setProgress(i);
-            }*/
-
-        //max 100
-        circleProgressBar.setProgressWithAnimation(50);
-       //max40
-        circleProgressBar.setStrokeWidth(20);
 
 
     }
