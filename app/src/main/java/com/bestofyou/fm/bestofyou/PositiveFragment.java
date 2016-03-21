@@ -31,15 +31,15 @@ import com.bestofyou.fm.bestofyou.helper.SimpleItemTouchHelperCallback;
  */
 public class PositiveFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     public static final String LOG_TAG = PositiveFragment.class.getSimpleName();
-    RecyclerListAdapter mRecyclerAdapter;
-    RecyclerView mRecyclerView;
-    View rateView;
+    private RecyclerListAdapter mRecyclerAdapter;
+    private RecyclerView mRecyclerView;
+    private View rateView;
     private static final int BEST_LOADER = 2; // have to be unique for every loader using in activity
     private int mPosition = RecyclerView.NO_POSITION;
 
     static final int COL_RUBRIC_NAME = 1;
     static final int COL_RUBRIC_WEIGHT = 2;
-    View root;
+    private View root;
     private static final String[] RUBRIC_COLUMNS = {
             SummaryContract.Rubric.TABLE_NAME + "." + SummaryContract.Rubric._ID,
             SummaryContract.Rubric.NAME,

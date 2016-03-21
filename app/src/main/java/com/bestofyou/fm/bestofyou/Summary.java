@@ -53,30 +53,12 @@ public class Summary extends AppCompatActivity implements View.OnClickListener{
         addP.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-               /* SummaryProvider.insertRubric(mContext, "Sports", 2);
-                SummaryProvider.insertRubric(mContext,"Reading", 4);
-                SummaryProvider.insertRubric(mContext,"Coding", 2);
-                SummaryProvider.insertRubric(mContext,"Networking", 4);
-                SummaryProvider.insertRubric(mContext,"Family Time", 4);
-                SummaryProvider.insertRubric(mContext,"Early Sleeping", 4);*/
-                DisplayMetrics metrics = new DisplayMetrics();
-                activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
-                t.setTranslationX(metrics.widthPixels);
-
-                try {
-                    String path = "OvershootInterpolator";
-                    if (path == null)
-                        return;
-
-                    interpolator = (Interpolator) OvershootInterpolator.class.newInstance();
-                    t.animate().setInterpolator(interpolator)
-                            .setDuration(500)
-                            .setStartDelay(500)
-                            .translationXBy(-metrics.widthPixels)
-                            .start();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
+                    SummaryProvider.insertRubric(mContext, "Sports", 2);
+                    SummaryProvider.insertRubric(mContext,"Reading", 4);
+                    SummaryProvider.insertRubric(mContext,"Coding", 2);
+                    SummaryProvider.insertRubric(mContext,"Networking", 4);
+                    SummaryProvider.insertRubric(mContext,"Family Time", 4);
+                    SummaryProvider.insertRubric(mContext,"Early Sleeping", 4);
 
             }
         });

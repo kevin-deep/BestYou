@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
@@ -80,7 +81,8 @@ public class CircleProgressBar extends View{
 
     public void setColor(int color) {
         this.color = color;
-        backgroundPaint.setColor(adjustAlpha(color, 0.3f));
+        //backgroundPaint.setColor(adjustAlpha(color, 0.3f));
+        backgroundPaint.setColor((ContextCompat.getColor(this.getContext(), R.color.negative_text)));
         foregroundPaint.setColor(color);
         invalidate();
         requestLayout();

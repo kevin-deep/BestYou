@@ -23,6 +23,10 @@
     <color name="priority_low">#4CAF50</color>
     <color name="priority_medium">#03A9F4</color>
     <color name="priority_high">#F44336</color>
+    <color name="negative_text">#E0E4CC</color>
+
+
+
 
 
 

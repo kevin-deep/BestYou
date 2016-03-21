@@ -4,23 +4,16 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.SeekBar;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.bestofyou.fm.bestofyou.data.SummaryContract;
@@ -89,7 +82,7 @@ public class AddNewtypeActivity extends AppCompatActivity{
                 netural.setPressed(false);
                 updateFAB();
                 updateHabitType();
-                snakeDisply(v, "+1 each hour");
+                Utility.snakeDisplay(v, "+1 each hour");
                 hideKeyboard(v);
                 return true;
             }
@@ -103,7 +96,7 @@ public class AddNewtypeActivity extends AppCompatActivity{
                 updateHabitType();
                 hideKeyboard(v);
                 updateFAB();
-                snakeDisply(v, "+3 each hour");
+                Utility.snakeDisplay(v, "+3 each hour");
                 return true;
             }
         });
@@ -116,7 +109,7 @@ public class AddNewtypeActivity extends AppCompatActivity{
                 updateHabitType();
                 updateFAB();
                 hideKeyboard(v);
-                snakeDisply(v, "+2 each hour");
+                Utility.snakeDisplay(v, "+2 each hour");
                 return true;
             }
         });
@@ -126,7 +119,7 @@ public class AddNewtypeActivity extends AppCompatActivity{
             public boolean onTouch(View v, MotionEvent event) {
                 favor.setPressed(true);
                 hateful.setPressed(false);
-                snakeDisply(v, "I like this habit");
+                Utility.snakeDisplay(v, "I like this habit");
                 updateFAB();
                 hideKeyboard(v);
                 return true;
@@ -137,7 +130,7 @@ public class AddNewtypeActivity extends AppCompatActivity{
             public boolean onTouch(View v, MotionEvent event) {
                 hateful.setPressed(true);
                 favor.setPressed(false);
-                snakeDisply(v, "I dislike this habit");
+                Utility.snakeDisplay(v, "I dislike this habit");
                 updateFAB();
                 hideKeyboard(v);
                 return true;
@@ -222,12 +215,6 @@ public class AddNewtypeActivity extends AppCompatActivity{
         return sc.hasNextInt();
     }
 
-    private void snakeDisply(View view, String message){
-        Snackbar snackbar = Snackbar
-                .make(view, message, Snackbar.LENGTH_LONG);
-
-        snackbar.show();
-    }
 
     public void hideKeyboard(View view) {
         InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);

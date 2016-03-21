@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:text="How important of this habit to you? "
+            android:text="@string/how_important_habit"
             android:textColor="@android:color/black"
             android:visibility="gone" />
 
@@ -64,7 +64,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/btn_selector_low"
                 android:focusableInTouchMode="true"
-                android:text="low" />
+                android:text="@string/habit_low" />
 
             <Button
                 android:id="@+id/netural"
@@ -74,7 +74,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/btn_selector_medium"
                 android:focusableInTouchMode="true"
-                android:text="Neutral" />
+                android:text="@string/habit_neutral" />
 
             <Button
                 android:id="@+id/high"
@@ -84,7 +84,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/btn_selector_high"
                 android:focusableInTouchMode="true"
-                android:text="high" />
+                android:text="@string/habit_high" />
         </LinearLayout>
 
         <LinearLayout

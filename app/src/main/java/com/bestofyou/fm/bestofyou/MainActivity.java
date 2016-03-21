@@ -1,8 +1,8 @@
 package com.bestofyou.fm.bestofyou;
 
-import android.content.Context;
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,16 +10,15 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.FloatMath;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
@@ -39,17 +38,16 @@ public class MainActivity extends AppCompatActivity
         public static final String LOG_TAG = MainActivity.class.getSimpleName();
     public CollapsingToolbarLayout mCollapsingToobar;
     public Toolbar mToolbar;
-    FloatingActionButton profile;
-    ImageButton menu, menuMonth;
-    RelativeLayout  btn_detail_header_month, btn_detail_header_day;
+    private ImageButton menu, menuMonth;
+    private RelativeLayout  btn_detail_header_month, btn_detail_header_day;
     public TextView pPoint, nPoint, nPointM, pPointM, usrNameDay, usrNameMonth;
-    ViewFlipper vf;
-    CircleProgressBar circleProgressBarDay, circleProgressBarMonth;
+    private ViewFlipper vf;
+    private CircleProgressBar circleProgressBarDay, circleProgressBarMonth;
     private GoogleApiClient mGoogleApiClient;
     public Person currentUser;
     //Content observer handler
-    McontentObserver observer = new McontentObserver(new Handler());
-
+    private McontentObserver observer = new McontentObserver(new Handler());
+    private Activity activity;
     boolean header = true; //determine which header shoot on the screen
     private float initialX;
 
@@ -58,6 +56,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        activity = this;
 
 
         setContentView(R.layout.activity_main);
@@ -102,6 +101,30 @@ public class MainActivity extends AppCompatActivity
 
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_sentiment_very_satisfied_tab);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_sentiment_very_dissatisfied_tab);
+
+        if (Utility.isFirstTime(this, getString(R.string.first_time_login))) {
+           /* CharSequence dList[] = new CharSequence[]{"Yes", "No"};
+            AlertDialog.Builder builder = new AlertDialog.Builder(this.getBaseContext());
+            builder.setTitle("Do you want to import some popular habits? ");
+            builder.setItems(dList, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    //TODO switch clause
+                    switch (which) {
+                        case 0:
+                           //Utility.insertDefaultHabits(activity.getBaseContext());
+                            break;
+                        case 1:
+                            //Utility.snakeDisplay(getWindow().getDecorView().getRootView(), "You can import habits from menu later.");
+                            break;
+                        default:
+                            Log.v("error", "CRUD error");
+                    }
+                }
+            });
+            builder.show();*/
+        }
 
 
         FloatingActionButton addNewType = (FloatingActionButton) findViewById(R.id.addNewType);
@@ -287,7 +310,8 @@ public class MainActivity extends AppCompatActivity
         Float pPointPercentDay = pPointDay / (pPointDay + Math.abs(nPointDay)) * 100;
 
         Resources res = getResources();
-        int color = res.getColor(R.color.ag_blue);
+        //int color = res.getColor(R.color.ag_blue);
+        int color = res.getColor(R.color.colorAccent);
         circleProgressBarDay.setColor(color);
         if (pPointPercentDay == 100F) pPointPercentDay -= 10F;
         circleProgressBarDay.setProgressWithAnimation(pPointPercentDay);
@@ -350,21 +374,8 @@ public class MainActivity extends AppCompatActivity
         return false;
     }
 
-    /***
-     * Checks that application runs first time and write flag at SharedPreferences
-     *
-     * @return true if 1st time
-     */
-    private boolean isFirstTime() {
-        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-        boolean ranBefore = preferences.getBoolean("RanBefore", false);
-        if (!ranBefore) {
-            // first time
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putBoolean("RanBefore", true);
-            editor.commit();
-        }
-        return !ranBefore;
-    }
+
+
+
 
 }

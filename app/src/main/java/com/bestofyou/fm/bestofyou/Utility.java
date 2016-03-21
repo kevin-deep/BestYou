@@ -3,6 +3,7 @@ package com.bestofyou.fm.bestofyou;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -10,6 +11,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
 import android.view.animation.OvershootInterpolator;
+
+import com.bestofyou.fm.bestofyou.data.SummaryProvider;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -74,6 +77,41 @@ public class Utility {
         Animation zoomOutAnimation = AnimationUtils.loadAnimation(mContext, R.anim.zoom_out_animation);
         v.startAnimation(zoomOutAnimation);
     }
+
+
+    public static void snakeDisplay(View view, String message){
+        Snackbar snackbar = Snackbar
+                .make(view, message, Snackbar.LENGTH_LONG);
+
+        snackbar.show();
+    }
+
+    public static void insertDefaultHabits(Context mContext){
+
+
+        SummaryProvider.insertRubric(mContext,"Reading", 4);
+        SummaryProvider.insertRubric(mContext,"Coding", 2);
+        SummaryProvider.insertRubric(mContext,"Networking", 4);
+        SummaryProvider.insertRubric(mContext,"Family Time", 4);
+        SummaryProvider.insertRubric(mContext,"Early Sleeping", 4);
+        SummaryProvider.insertRubric(mContext,"Exercise", 4);
+        SummaryProvider.insertRubric(mContext,"Fruit", 4);
+        SummaryProvider.insertRubric(mContext,"Call family", 4);
+
+
+        SummaryProvider.insertRubric(mContext, "To much Sweet", -2);
+        SummaryProvider.insertRubric(mContext, "To much Smoking", -4);
+        SummaryProvider.insertRubric(mContext, "Watching TV", -2);
+        SummaryProvider.insertRubric(mContext, "Drinking", -4);
+        SummaryProvider.insertRubric(mContext, "Gaming", -4);
+        SummaryProvider.insertRubric(mContext, "Day dreaming", -4);
+        SummaryProvider.insertRubric(mContext, "Nail Biting", -4);
+        SummaryProvider.insertRubric(mContext, "Night Owl", -4);
+
+    }
+
+
+
 
 
 }

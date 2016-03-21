@@ -28,9 +28,9 @@ import com.bestofyou.fm.bestofyou.helper.SimpleItemTouchHelperCallback;
 public class NegativeFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String LOG_TAG = NegativeFragment.class.getSimpleName();
-    RecyclerListAdapter mRecyclerAdapter;
-    RecyclerView mRecyclerView;
-    View rateView;
+    private RecyclerListAdapter mRecyclerAdapter;
+    private RecyclerView mRecyclerView;
+    private View rateView;
     private static final int BEST_LOADER = 3; // have to be unique for every loader using in activity
     private int mPosition = RecyclerView.NO_POSITION;
     private ItemTouchHelper mItemTouchHelper;

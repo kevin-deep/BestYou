@@ -49,13 +49,10 @@ public class MyApplication extends Application {
 
         if (mTracker == null) {
             GoogleAnalytics ga = GoogleAnalytics.getInstance(this);
-
             // Get the config data for the tracker
             mTracker = ga.newTracker(R.xml.track_app);
-
             // Enable tracking of activities
             ga.enableAutoActivityReports(this);
-
             // Set the log level to verbose.
             ga.getLogger().setLogLevel(Logger.LogLevel.VERBOSE);
         }

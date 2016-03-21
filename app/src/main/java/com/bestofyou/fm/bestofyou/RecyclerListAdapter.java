@@ -5,7 +5,6 @@ package com.bestofyou.fm.bestofyou;
  */
 
 import android.app.Activity;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,42 +12,24 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.AnimatedVectorDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.Interpolator;
-import android.view.animation.OvershootInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bestofyou.fm.bestofyou.data.SummaryContract;
 import com.bestofyou.fm.bestofyou.helper.ItemTouchHelperAdapter;
 import com.bestofyou.fm.bestofyou.helper.ItemTouchHelperViewHolder;
-import com.bestofyou.fm.bestofyou.data.SummaryHelper;
 import com.bestofyou.fm.bestofyou.data.SummaryProvider;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 
 /**
@@ -155,97 +136,119 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         //!!!!!Important This going to send the date into mClickHandler then it will be deliver to constructor
         mClickHandler.onClick(mCursor.getLong(dateColumnIndex), this);*/
         // Read name from cursor
-        String name = mCursor.getString(PositiveFragment.COL_RUBRIC_NAME);
-        holder.name.setText(name);
         activity = (Activity) mContext;
+        if (pageType == PAGE_TYPE_NEGATIVE || pageType == PAGE_TYPE_POSITIVE) {
+            String name = mCursor.getString(PositiveFragment.COL_RUBRIC_NAME);
+            holder.name.setText(name);
 
-        // Read weight from cursor
-        final float weight = mCursor.getFloat(PositiveFragment.COL_RUBRIC_WEIGHT);
-        if (Math.abs(weight) == 1F) {
-            holder.itemWeightColor.setBackgroundColor(ContextCompat.getColor(mContext, R.color.priority_low));
-        } else if (Math.abs(weight) == 2F) {
-            holder.itemWeightColor.setBackgroundColor(ContextCompat.getColor(mContext, R.color.priority_medium));
+            // Read weight from cursor
+            final float weight = mCursor.getFloat(PositiveFragment.COL_RUBRIC_WEIGHT);
+            if (Math.abs(weight) == 1F) {
+                holder.itemWeightColor.setBackgroundColor(ContextCompat.getColor(mContext, R.color.priority_low));
+            } else if (Math.abs(weight) == 2F) {
+                holder.itemWeightColor.setBackgroundColor(ContextCompat.getColor(mContext, R.color.priority_medium));
+            } else {
+                holder.itemWeightColor.setBackgroundColor(ContextCompat.getColor(mContext, R.color.priority_high));
+            }
+            holder.rateHour.setVisibility(holder.tick ? View.GONE : View.VISIBLE);
+            //holder.textView.setText(mItems.get(position));
+
+            holder.cardV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    holder.tickCross.callOnClick();
+                }
+            });
+
+            //add bottom
+            holder.tickCross.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    AnimatedVectorDrawable drawable = holder.tick ? holder.tickToCross : holder.crossToTick;
+                    holder.tickCross.setImageDrawable(drawable);
+                    drawable.start();
+                    holder.tick = !holder.tick;
+                    holder.rateHour.setVisibility(holder.tick ? View.GONE : View.VISIBLE);
+                    Utility.overshootInterpolator(activity, holder.rateHour, 300, 200);
+                }
+            });
+
+            holder.oneHour.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ContentValues value = SummaryProvider.getRubric(mCursor, thisPosition);
+                    String habitName = value.getAsString(SummaryContract.Rubric.NAME);
+                    SummaryProvider.insertHistory(mContext, 1 * weight, habitName);
+                    SummaryProvider.insertTotal(mContext, 1 * weight);
+                    holder.tickCross.callOnClick();
+                    snakeDisply(rootView, 1 * weight, pageType);
+                }
+            });
+
+            holder.twoHour.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.v("add two hour", "onClick");
+                    ContentValues value = SummaryProvider.getRubric(mCursor, thisPosition);
+                    String habitName = value.getAsString(SummaryContract.Rubric.NAME);
+                    SummaryProvider.insertHistory(mContext, 2 * weight, habitName);
+                    SummaryProvider.insertTotal(mContext, 2 * weight);
+                    int rowId = SummaryProvider.getRubricId(mCursor, position);
+                    SummaryProvider.updatePopularityRubric(mContext, rowId);
+                    holder.tickCross.callOnClick();
+                    snakeDisply(rootView, 2 * weight, pageType);
+
+                }
+            });
+            holder.halfHour.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.v("add two hour", "onClick");
+                    ContentValues value = SummaryProvider.getRubric(mCursor, thisPosition);
+                    String habitName = value.getAsString(SummaryContract.Rubric.NAME);
+                    SummaryProvider.insertHistory(mContext, weight / 2, habitName);
+                    SummaryProvider.insertTotal(mContext, weight / 2);
+                    Utility.zoomIn(mContext, v);
+                    holder.tickCross.callOnClick();
+                    snakeDisply(rootView, weight / 2, pageType);
+
+                }
+            });
+            holder.oneHalfHour.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.v("add two hour", "onClick");
+                    ContentValues value = SummaryProvider.getRubric(mCursor, thisPosition);
+                    String habitName = value.getAsString(SummaryContract.Rubric.NAME);
+                    SummaryProvider.insertHistory(mContext, 1.5F * weight, habitName);
+                    SummaryProvider.insertTotal(mContext, 1.5F * weight);
+                    holder.tickCross.callOnClick();
+                    snakeDisply(rootView, 1.5F * weight, pageType);
+
+                }
+            });
+
+        }else if (pageType ==PAGE_TYPE_History) {
+            String name = mCursor.getString(History.COL_HISTORY_NAME);
+            Float pPoint = mCursor.getFloat(History.COL_HISTORY_PHISTORY);
+            Float nPoint = mCursor.getFloat(History.COL_HISTORY_NHISTORY);
+            String timeStamp = mCursor.getString(History.COL_HISTORY_CRATED_AT);
+            holder.nameHistory.setText(name);
+            if (nPoint != 0.0){
+                holder.nameWeightHistory.setText(Float.toString(Math.abs(nPoint)));
+                holder.nameWeightHistory.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
+            }else {
+                holder.nameWeightHistory.setText(Float.toString(Math.abs(pPoint)));
+                holder.nameWeightHistory.setTextColor(ContextCompat.getColor(mContext, R.color.negative_text));
+            }
+            holder.timeHistory.setText(timeStamp);
+
+
         } else {
-            holder.itemWeightColor.setBackgroundColor(ContextCompat.getColor(mContext, R.color.priority_high));
+            Log.v("the pageType no get", LOG_TAG);
         }
-        holder.rateHour.setVisibility(holder.tick ? View.GONE : View.VISIBLE);
-        //holder.textView.setText(mItems.get(position));
 
-        holder.cardV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                holder.tickCross.callOnClick();
-            }
-        });
-
-        //add bottom
-        holder.tickCross.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                AnimatedVectorDrawable drawable = holder.tick ? holder.tickToCross : holder.crossToTick;
-                holder.tickCross.setImageDrawable(drawable);
-                drawable.start();
-                holder.tick = !holder.tick;
-                holder.rateHour.setVisibility(holder.tick ? View.GONE : View.VISIBLE);
-                Utility.overshootInterpolator(activity, holder.rateHour, 300, 200);
-            }
-        });
-
-        holder.oneHour.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ContentValues value = SummaryProvider.getRubric(mCursor, thisPosition);
-                String habitName = value.getAsString(SummaryContract.Rubric.NAME);
-                SummaryProvider.insertHistory(mContext, 1 * weight, habitName);
-                SummaryProvider.insertTotal(mContext, 1 * weight);
-                holder.tickCross.callOnClick();
-                snakeDisply(rootView, 1 * weight, pageType);
-            }
-        });
-
-        holder.twoHour.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.v("add two hour", "onClick");
-                ContentValues value = SummaryProvider.getRubric(mCursor, thisPosition);
-                String habitName = value.getAsString(SummaryContract.Rubric.NAME);
-                SummaryProvider.insertHistory(mContext, 2 * weight, habitName);
-                SummaryProvider.insertTotal(mContext, 2 * weight);
-                int rowId = SummaryProvider.getRubricId(mCursor, position);
-                SummaryProvider.updatePopularityRubric(mContext, rowId);
-                holder.tickCross.callOnClick();
-                snakeDisply(rootView, 2 * weight, pageType);
-
-            }
-        });
-        holder.halfHour.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.v("add two hour", "onClick");
-                ContentValues value = SummaryProvider.getRubric(mCursor, thisPosition);
-                String habitName = value.getAsString(SummaryContract.Rubric.NAME);
-                SummaryProvider.insertHistory(mContext, weight / 2, habitName);
-                SummaryProvider.insertTotal(mContext, weight / 2);
-                Utility.zoomIn(mContext, v);
-                holder.tickCross.callOnClick();
-                snakeDisply(rootView, weight / 2, pageType);
-
-            }
-        });
-        holder.oneHalfHour.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.v("add two hour", "onClick");
-                ContentValues value = SummaryProvider.getRubric(mCursor, thisPosition);
-                String habitName = value.getAsString(SummaryContract.Rubric.NAME);
-                SummaryProvider.insertHistory(mContext, 1.5F * weight, habitName);
-                SummaryProvider.insertTotal(mContext, 1.5F * weight);
-                holder.tickCross.callOnClick();
-                snakeDisply(rootView, 1.5F * weight, pageType);
-
-            }
-        });
     }
 
     private void snakeDisply(View view, Float weight, int habitType) {
@@ -322,6 +325,8 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         private Button oneHour, oneHalfHour, twoHour, halfHour;
         private ImageView itemWeightColor;
 
+        private TextView nameHistory, nameWeightHistory, timeHistory;
+
 
         private boolean tick = true;
 
@@ -343,19 +348,21 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
             crossToTick = (AnimatedVectorDrawable) itemView.getContext().getDrawable(R.drawable.avd_click_to_show_black);
             itemWeightColor = (ImageView) itemView.findViewById(R.id.item_weight_color);
 
+            nameHistory = (TextView)itemView.findViewById(R.id.name_history);
+            nameWeightHistory = (TextView)itemView.findViewById(R.id.name_weight_history);
+            timeHistory = (TextView)itemView.findViewById(R.id.time_history);
+
 
         }
         //update the negative rubric ico showing on the negative view
-
-
         @Override
         public void onItemSelected() {
             final int position = this.getLayoutPosition();
             itemView.setBackgroundColor(Color.GRAY);
-            CharSequence colors[] = new CharSequence[]{"Delete", "Update"};
+            CharSequence dList[] = new CharSequence[]{"Delete", "Update"};
             AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
             //builder.setTitle("CRUD");
-            builder.setItems(colors, new DialogInterface.OnClickListener() {
+            builder.setItems(dList, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 

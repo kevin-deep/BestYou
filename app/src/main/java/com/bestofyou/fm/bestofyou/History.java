@@ -20,6 +20,12 @@ public class History extends AppCompatActivity implements LoaderManager.LoaderCa
     private RecyclerView mRecyclerView;
     private RecyclerListAdapter mRecyclerAdapter;
     private static final int BEST_LOADER = 3;
+    static final int COL_HISTORY_ID = 0;
+    static final int COL_HISTORY_NAME = 1;
+    static final int COL_HISTORY_NHISTORY = 3;
+    static final int COL_HISTORY_PHISTORY = 2;
+    static final int COL_HISTORY_CRATED_AT =4;
+
     private static final String[] HISTORY_COLUMNS = {
             SummaryContract.UsrHistory.TABLE_NAME + "." + SummaryContract.UsrHistory._ID,
             SummaryContract.UsrHistory.HABIT_NAME,
@@ -31,7 +37,7 @@ public class History extends AppCompatActivity implements LoaderManager.LoaderCa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setContentView(R.layout.activity_history);
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         //mRecyclerView.setNestedScrollingEnabled(true);
         mRecyclerView.setHasFixedSize(true);
@@ -63,7 +69,7 @@ public class History extends AppCompatActivity implements LoaderManager.LoaderCa
         return new CursorLoader(this,
                 historyUri,
                 HISTORY_COLUMNS,
-                select,
+                null,
                 null,
                 SORT);
     }

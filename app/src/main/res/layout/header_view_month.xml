@@ -58,6 +58,8 @@
         android:layout_gravity="bottom"
         android:id="@+id/detail_header_month"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:clickable="true"
+        android:background="?attr/selectableItemBackground"
         android:layout_height="wrap_content">
         <ImageView
             android:layout_width="wrap_content"
@@ -86,7 +88,6 @@
             android:layout_width="0dp"
             android:textColor="@color/ag_blue"
             android:layout_weight="1"
-            android:text="1000"
             android:gravity="top|center_horizontal"
             android:textSize="@dimen/header_text_size"
             android:layout_height="match_parent" />
@@ -94,8 +95,7 @@
             android:layout_width="0dp"
             android:id="@+id/n_point_header_month"
             android:layout_weight="1"
-            android:textColor="@color/ag_blue"
-            android:text="999"
+            android:textColor="@color/negative_text"
             android:textSize="@dimen/header_text_size"
             android:gravity="top|center_horizontal"
             android:layout_height="match_parent" />
