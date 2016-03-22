@@ -102,29 +102,7 @@ public class MainActivity extends AppCompatActivity
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_sentiment_very_satisfied_tab);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_sentiment_very_dissatisfied_tab);
 
-        if (Utility.isFirstTime(this, getString(R.string.first_time_login))) {
-           /* CharSequence dList[] = new CharSequence[]{"Yes", "No"};
-            AlertDialog.Builder builder = new AlertDialog.Builder(this.getBaseContext());
-            builder.setTitle("Do you want to import some popular habits? ");
-            builder.setItems(dList, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
 
-                    //TODO switch clause
-                    switch (which) {
-                        case 0:
-                           //Utility.insertDefaultHabits(activity.getBaseContext());
-                            break;
-                        case 1:
-                            //Utility.snakeDisplay(getWindow().getDecorView().getRootView(), "You can import habits from menu later.");
-                            break;
-                        default:
-                            Log.v("error", "CRUD error");
-                    }
-                }
-            });
-            builder.show();*/
-        }
 
 
         FloatingActionButton addNewType = (FloatingActionButton) findViewById(R.id.addNewType);
@@ -255,8 +233,8 @@ public class MainActivity extends AppCompatActivity
         currentUser = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
         String name = currentUser.getDisplayName();
         if (name != null && name != "") {
-            usrNameDay.setText("Hey " + name);
-            usrNameMonth.setText("Hey " + name);
+            usrNameDay.setText("Hey " + Utility.subUpToSpace(name));
+            usrNameMonth.setText("Hey " + Utility.subUpToSpace(name));
         }
 
     }
@@ -313,12 +291,13 @@ public class MainActivity extends AppCompatActivity
         //int color = res.getColor(R.color.ag_blue);
         int color = res.getColor(R.color.colorAccent);
         circleProgressBarDay.setColor(color);
-        if (pPointPercentDay == 100F) pPointPercentDay -= 10F;
+        circleProgressBarDay.setProgressWithAnimation(50);
         circleProgressBarDay.setProgressWithAnimation(pPointPercentDay);
         circleProgressBarDay.setStrokeWidth(50);
 
         int colorMonth = res.getColor(R.color.colorAccent);
         circleProgressBarMonth.setColor(colorMonth);
+        circleProgressBarMonth.setProgressWithAnimation(50);
         circleProgressBarMonth.setProgressWithAnimation(pPointPercentMonth);
         circleProgressBarMonth.setStrokeWidth(50);
 

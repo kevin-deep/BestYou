@@ -1,6 +1,7 @@
 package com.bestofyou.fm.bestofyou;
 
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
@@ -47,10 +48,13 @@ public class AuthenticationActivity extends AppCompatActivity implements GoogleA
     private static final int DIALOG_PLAY_SERVICES_ERROR = 0;
     private GoogleApiClient mGoogleApiClient;
     public Person currentUser;
+    private Button importData;
+    private Context mContext;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_authentication);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -58,6 +62,15 @@ public class AuthenticationActivity extends AppCompatActivity implements GoogleA
         mSignOutButton = (Button) findViewById(R.id.sign_out_button);
         mRevokeButton = (Button) findViewById(R.id.revoke_access_button);
         mStatus = (TextView) findViewById(R.id.sign_in_status);
+        importData = (Button) findViewById(R.id.import_habits);
+        mContext = this.getBaseContext();
+        importData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utility.insertDefaultHabits(mContext);
+                Utility.snakeDisplay(getWindow().getDecorView().getRootView(),"Habits have been added");
+            }
+        });
 
         mSignInButton.setOnClickListener(this);
         mSignOutButton.setOnClickListener(this);

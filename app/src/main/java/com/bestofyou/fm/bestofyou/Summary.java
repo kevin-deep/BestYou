@@ -31,23 +31,15 @@ public class Summary extends AppCompatActivity implements View.OnClickListener{
     private Button addP;
     private Button addN;
     public Context mContext;
-    private Interpolator interpolator;
     TextView t;
-    Activity activity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_summary);
         addP = (Button)findViewById(R.id.addP);
         addN = (Button)findViewById(R.id.addN);
-        //mDbHelper =  new SummaryHelper(this);
         mContext =  getBaseContext();
-
         t = (TextView)findViewById(R.id.testId);
-
-        activity = (Activity) mContext;
-
-       // Utility.overshootInterpolator(t,this);
 
         addP.setText("add positive list");
         addP.setOnClickListener(new View.OnClickListener() {
@@ -65,9 +57,6 @@ public class Summary extends AppCompatActivity implements View.OnClickListener{
 
         addN.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-               /* mDbHelper.insert("positive", 123);
-                x =mDbHelper.getCountAll();
-                Toast.makeText(getBaseContext(), "data"+x, Toast.LENGTH_SHORT).show();*/
                 SummaryProvider.insertRubric(mContext, "Sloth", -2);
                 SummaryProvider.insertRubric(mContext, "Smoking", -4);
                 SummaryProvider.insertRubric(mContext, "Watching TV", -2);
@@ -79,20 +68,12 @@ public class Summary extends AppCompatActivity implements View.OnClickListener{
             }
         });
 
-
-
     }
-
-
-
-
-
 
     @Override
     public void onClick(View view) {
         if (view == addP){
             mDbHelper.insert("positive", 1);
-            //x =mDbHelper.getCountAll();
             Toast.makeText(this, "data"+x, Toast.LENGTH_SHORT).show();
         }
 

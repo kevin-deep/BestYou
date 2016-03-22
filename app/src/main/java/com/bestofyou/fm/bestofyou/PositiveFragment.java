@@ -1,6 +1,7 @@
 package com.bestofyou.fm.bestofyou;
 
 
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,10 +11,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -69,10 +72,8 @@ public class PositiveFragment extends Fragment implements LoaderManager.LoaderCa
         // Inflate the layout for this fragment
         root =  inflater.inflate(R.layout.fragment_positive, container, false);
         rateView =  root.findViewById(R.id.rates_in_hour);
-
-
         mRecyclerView = (RecyclerView) root.findViewById(R.id.recycler_view);
-        //mRecyclerView.setNestedScrollingEnabled(true);
+
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         //RecyclerListAdapter adapter = new RecyclerListAdapter();
@@ -82,6 +83,29 @@ public class PositiveFragment extends Fragment implements LoaderManager.LoaderCa
         mRecyclerView.setAdapter(mRecyclerAdapter);
 
 
+        if (Utility.isFirstTime(getActivity(), getString(R.string.first_time_login))) {
+            CharSequence dList[] = new CharSequence[]{"Yes", "No"};
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("Do you want to import some popular habits? ");
+            builder.setItems(dList, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    //TODO switch clause
+                    switch (which) {
+                        case 0:
+                            Utility.insertDefaultHabits(getActivity().getBaseContext());
+                            break;
+                        case 1:
+                            Utility.snakeDisplay(getActivity().getWindow().getDecorView().getRootView(), "You can import habits from menu later.");
+                            break;
+                        default:
+                            Log.v("error", "CRUD error");
+                    }
+                }
+            });
+            builder.show();
+        }
 
         ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mRecyclerAdapter);
         mItemTouchHelper = new ItemTouchHelper(callback);
@@ -135,29 +159,6 @@ public class PositiveFragment extends Fragment implements LoaderManager.LoaderCa
         if ( data.getCount() == 0 ) {
             getActivity().supportStartPostponedEnterTransition();}else{
 
-            /*mRecyclerView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                @Override
-                public boolean onPreDraw() {
-
-                    // Since we know we're going to get items, we keep the listener around until
-                    // we see Children.
-                    if (mRecyclerView.getChildCount() > 0) {
-                        mRecyclerView.getViewTreeObserver().removeOnPreDrawListener(this);
-                        int itemPosition = mRecyclerAdapter.getSelectedItemPosition();
-                        if (RecyclerView.NO_POSITION == itemPosition) itemPosition = 0;
-                        RecyclerView.ViewHolder vh = mRecyclerView.findViewHolderForAdapterPosition(itemPosition);
-                        if (null != vh) {
-                            //// TODO: 2/20/2016
-                            mRecyclerAdapter.selectView(vh);
-                        }
-
-                        //if ( mHoldForTransition )  getActivity().supportStartPostponedEnterTransition();
-                       *//* this.postponeEnterTransition ();*//*
-                        return true;
-                    }
-                    return false;
-                }
-            });*/
         }
     }
     //release any resource
@@ -165,14 +166,6 @@ public class PositiveFragment extends Fragment implements LoaderManager.LoaderCa
     public void onLoaderReset(Loader<Cursor> Loader) {
         mRecyclerAdapter.swapCursor(null);
     }
-
-    /*
-      Updates the empty hours rate view
-   */
-    private void updateEmptyView() {
-
-    }
-
 
 
 }

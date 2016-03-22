@@ -242,7 +242,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
                 holder.nameWeightHistory.setText(Float.toString(Math.abs(pPoint)));
                 holder.nameWeightHistory.setTextColor(ContextCompat.getColor(mContext, R.color.negative_text));
             }
-            holder.timeHistory.setText(timeStamp);
+            holder.timeHistory.setText(Utility.cutTimeFromDate(timeStamp));
 
 
         } else {
@@ -307,8 +307,6 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         notifyItemRemoved(position);
         int lastIndex = getItemCount();*/
         //notifyItemMoved(position, lastIndex-1);
-
-
     }
 
 

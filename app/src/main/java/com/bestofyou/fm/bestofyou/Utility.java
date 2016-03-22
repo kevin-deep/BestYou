@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -14,6 +15,8 @@ import android.view.animation.OvershootInterpolator;
 
 import com.bestofyou.fm.bestofyou.data.SummaryProvider;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -72,46 +75,65 @@ public class Utility {
             ex.printStackTrace();
         }
     }
-    public static void zoomIn(Context mContext, View v){
+
+    public static void zoomIn(Context mContext, View v) {
 
         Animation zoomOutAnimation = AnimationUtils.loadAnimation(mContext, R.anim.zoom_out_animation);
         v.startAnimation(zoomOutAnimation);
     }
 
 
-    public static void snakeDisplay(View view, String message){
+    public static void snakeDisplay(View view, String message) {
         Snackbar snackbar = Snackbar
                 .make(view, message, Snackbar.LENGTH_LONG);
 
         snackbar.show();
     }
 
-    public static void insertDefaultHabits(Context mContext){
+    public static String subUpToSpace(String string) {
+        if (string.contains(" ")) {
+            return string.substring(0, string.indexOf(" "));
+        } else {
+            return string;
+        }
+    }
+
+    public static void insertDefaultHabits(Context mContext) {
 
 
-        SummaryProvider.insertRubric(mContext,"Reading", 4);
-        SummaryProvider.insertRubric(mContext,"Coding", 2);
-        SummaryProvider.insertRubric(mContext,"Networking", 4);
-        SummaryProvider.insertRubric(mContext,"Family Time", 4);
-        SummaryProvider.insertRubric(mContext,"Early Sleeping", 4);
-        SummaryProvider.insertRubric(mContext,"Exercise", 4);
-        SummaryProvider.insertRubric(mContext,"Fruit", 4);
-        SummaryProvider.insertRubric(mContext,"Call family", 4);
+        SummaryProvider.insertRubric(mContext, "Reading", 1);
+        SummaryProvider.insertRubric(mContext, "Coding", 2);
+        SummaryProvider.insertRubric(mContext, "Networking", 3);
+        SummaryProvider.insertRubric(mContext, "Family Time", 3);
+        SummaryProvider.insertRubric(mContext, "Early Sleeping", 2);
+        SummaryProvider.insertRubric(mContext, "Exercise", 2);
+        SummaryProvider.insertRubric(mContext, "Fruit", 1);
+        SummaryProvider.insertRubric(mContext, "Call family", 1);
 
 
         SummaryProvider.insertRubric(mContext, "To much Sweet", -2);
-        SummaryProvider.insertRubric(mContext, "To much Smoking", -4);
+        SummaryProvider.insertRubric(mContext, "To much Smoking", -3);
         SummaryProvider.insertRubric(mContext, "Watching TV", -2);
-        SummaryProvider.insertRubric(mContext, "Drinking", -4);
-        SummaryProvider.insertRubric(mContext, "Gaming", -4);
-        SummaryProvider.insertRubric(mContext, "Day dreaming", -4);
-        SummaryProvider.insertRubric(mContext, "Nail Biting", -4);
-        SummaryProvider.insertRubric(mContext, "Night Owl", -4);
+        SummaryProvider.insertRubric(mContext, "Drinking", -1);
+        SummaryProvider.insertRubric(mContext, "Gaming", -1);
+        SummaryProvider.insertRubric(mContext, "Day dreaming", -2);
+        SummaryProvider.insertRubric(mContext, "Nail Biting", -3);
+        SummaryProvider.insertRubric(mContext, "Night Owl", -1);
 
     }
 
-
-
+    public static String cutTimeFromDate(String time) {
+        String reformattedStr = time;
+        SimpleDateFormat fromUser = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat myFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            reformattedStr = myFormat.format(fromUser.parse(time));
+            System.out.println(reformattedStr);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return reformattedStr;
+    }
 
 
 }
