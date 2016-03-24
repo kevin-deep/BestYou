@@ -135,5 +135,9 @@ public class Utility {
         return reformattedStr;
     }
 
+    public static String floatToString(Float number){
+        return Integer.toString(Math.round(Math.abs(number)));
+    }
+
 
 }

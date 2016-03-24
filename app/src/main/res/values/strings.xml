@@ -66,9 +66,15 @@
     <string name="habit_high">High</string>
 
     <string name="option_import_data">Import popular habits: </string>
+    <string name="option_share_achievement">Share my Achievement: </string>
     <string name="option_import_button">Import</string>
+    <string name="option_import_share">share</string>
     <!-- Key-->
     <string name="first_time_login">First_time_log</string>
+
+    <string name="action_share">Share</string>
+
+    <string name="notification_message">Remember to check all you habits for today</string>
 
 
 

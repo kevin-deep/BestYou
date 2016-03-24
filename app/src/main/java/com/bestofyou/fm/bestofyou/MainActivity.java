@@ -1,8 +1,14 @@
 package com.bestofyou.fm.bestofyou;
 
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,6 +32,7 @@ import android.widget.ViewFlipper;
 import com.bestofyou.fm.bestofyou.CustomizedView.CircleProgressBar;
 import com.bestofyou.fm.bestofyou.data.SummaryContract;
 import com.bestofyou.fm.bestofyou.data.SummaryProvider;
+import com.bestofyou.fm.bestofyou.service.ServiceClockInOut;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -50,6 +57,9 @@ public class MainActivity extends AppCompatActivity
     private Activity activity;
     boolean header = true; //determine which header shoot on the screen
     private float initialX;
+
+    private BroadcastReceiver mMessageReceiver;
+
 
     //public String loginUsr = authInstance.currentUser.getDisplayName();
 
@@ -98,11 +108,38 @@ public class MainActivity extends AppCompatActivity
         // Give the TabLayout the ViewPager
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
-
+        //draw the ico on table layout
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_sentiment_very_satisfied_tab);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_sentiment_very_dissatisfied_tab);
 
+        //register mMessageReceiver and start the service
+        registerReceiver(mMessageReceiver, new IntentFilter("time"));
+        startService(new Intent(getApplicationContext(), ServiceClockInOut.class));
 
+        BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String timer = intent.getStringExtra("timer");
+                //Utils.showNotification(mContext, 1);
+                Log.v(timer, "timer in Mainactivity");
+
+                /*NotificationManager notifManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+                Intent dest = new Intent(activity, MainActivity.class);
+                PendingIntent pendingIntent = PendingIntent.getActivity(activity, 0, dest, 0);
+
+                Notification notification = new Notification.Builder(activity)
+                        .setContentTitle("My Application")
+                        .setContentText("Go to application now!")
+                        .setSmallIcon(R.drawable.ic_sentiment_very_satisfied_tab)
+                        .setContentIntent(pendingIntent)
+                        .build();
+
+                notifManager.notify(1, notification);*/
+
+
+            }
+        };
 
 
         FloatingActionButton addNewType = (FloatingActionButton) findViewById(R.id.addNewType);
@@ -303,8 +340,8 @@ public class MainActivity extends AppCompatActivity
 
         pPointM.setText(Integer.toString(Math.round(pPointMonth)));
         nPointM.setText(Integer.toString(Math.round(Math.abs(nPointMonth))));
-        pPoint.setText(Integer.toString(Math.round(pPointDay)));
-        nPoint.setText(Integer.toString(Math.round(Math.abs(nPointDay))));
+        pPoint.setText(Utility.floatToString(pPointDay));
+        nPoint.setText(Utility.floatToString(nPointDay));
     }
 
     //register the Content Observer
@@ -321,7 +358,6 @@ public class MainActivity extends AppCompatActivity
     public void update_main_header() {
         updateHeader();
     }
-
 
     @Override
     public boolean onTouchEvent(MotionEvent touchevent) {
@@ -345,7 +381,6 @@ public class MainActivity extends AppCompatActivity
 
                     vf.setInAnimation(this, R.anim.in_left);
                     vf.setOutAnimation(this, R.anim.out_right);
-
                     vf.showPrevious();
                 }
                 break;

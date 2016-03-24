@@ -1,5 +1,6 @@
 package com.bestofyou.fm.bestofyou;
 
+import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -18,6 +20,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.bestofyou.fm.bestofyou.data.SummaryProvider;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.SignInButton;
@@ -50,6 +53,7 @@ public class AuthenticationActivity extends AppCompatActivity implements GoogleA
     public Person currentUser;
     private Button importData;
     private Context mContext;
+    private Activity mActivity= this;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +73,17 @@ public class AuthenticationActivity extends AppCompatActivity implements GoogleA
             public void onClick(View v) {
                 Utility.insertDefaultHabits(mContext);
                 Utility.snakeDisplay(getWindow().getDecorView().getRootView(),"Habits have been added");
+            }
+        });
+
+        getWindow().getDecorView().getRootView().findViewById(R.id.share_achievement).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Float total[] = SummaryProvider.getTotal(mContext);
+                startActivity(Intent.createChooser(ShareCompat.IntentBuilder.from(mActivity)
+                        .setType("text/plain")
+                        .setText("I have been get " + Utility.floatToString(total[0]) + " Positive points" + " and " + Utility.floatToString(total[1]) + " negative point at Best Of You")
+                                .getIntent(), getString(R.string.action_share)));
             }
         });
 
