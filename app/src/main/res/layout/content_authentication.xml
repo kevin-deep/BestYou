@@ -123,6 +123,29 @@
             android:text="@string/option_import_share" />
 
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:layout_weight="1"
+            android:textStyle="bold"
+            android:text="@string/pref_enable_notifications_label"
+            android:textSize="15sp" />
+
+       <CheckBox
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:id="@+id/notification_checkbox"
+           />
+
+    </LinearLayout>
+
 
 
 </LinearLayout>

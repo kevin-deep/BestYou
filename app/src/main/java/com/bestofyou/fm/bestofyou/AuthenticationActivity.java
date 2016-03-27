@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.bestofyou.fm.bestofyou.data.SummaryProvider;
@@ -54,6 +55,7 @@ public class AuthenticationActivity extends AppCompatActivity implements GoogleA
     private Button importData;
     private Context mContext;
     private Activity mActivity= this;
+    private CheckBox notification;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,12 +69,13 @@ public class AuthenticationActivity extends AppCompatActivity implements GoogleA
         mRevokeButton = (Button) findViewById(R.id.revoke_access_button);
         mStatus = (TextView) findViewById(R.id.sign_in_status);
         importData = (Button) findViewById(R.id.import_habits);
+        notification = (CheckBox)findViewById(R.id.notification_checkbox);
         mContext = this.getBaseContext();
         importData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Utility.insertDefaultHabits(mContext);
-                Utility.snakeDisplay(getWindow().getDecorView().getRootView(),"Habits have been added");
+                Utility.snakeDisplay(getWindow().getDecorView().getRootView(), "Habits have been added");
             }
         });
 
@@ -83,7 +86,7 @@ public class AuthenticationActivity extends AppCompatActivity implements GoogleA
                 startActivity(Intent.createChooser(ShareCompat.IntentBuilder.from(mActivity)
                         .setType("text/plain")
                         .setText("I have been get " + Utility.floatToString(total[0]) + " Positive points" + " and " + Utility.floatToString(total[1]) + " negative point at Best Of You")
-                                .getIntent(), getString(R.string.action_share)));
+                        .getIntent(), getString(R.string.action_share)));
             }
         });
 
@@ -91,6 +94,9 @@ public class AuthenticationActivity extends AppCompatActivity implements GoogleA
         mSignOutButton.setOnClickListener(this);
         mRevokeButton.setOnClickListener(this);
         mGoogleApiClient = buildApiClient();
+
+       //// TODO: 3/27/2016 add the notification checkbox listener, alternatively check this activity to PreferenceActivity
+
     }
 
     public  GoogleApiClient buildApiClient(){
