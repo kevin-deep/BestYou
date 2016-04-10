@@ -175,17 +175,16 @@ public class ServiceClockInOut extends Service {
                 int nIco = R.drawable.ic_sentiment_very_dissatisfied_tab;
                 int ico = (SummaryProvider.getPtotalMonth() > SummaryProvider.getNtotalMonth()) ? pIco : nIco;
                 //int color = 0xff123456;
-                int color = getResources().getColor(R.color.transparent_color);
+
                 Notification notification = new Notification.Builder(this)
                         .setContentTitle(context.getString(R.string.notification_title))
                         .setContentText(contentText)
                         .setSmallIcon(ico)
-                        .setColor(color)
+
                         .setContentIntent(pendingIntent)
                         .build();
 
                 notifManager.notify(1, notification);
-
 
                 //refreshing last sync
                 SharedPreferences.Editor editor = prefs.edit();

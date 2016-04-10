@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity
     private RelativeLayout  btn_detail_header_month, btn_detail_header_day;
     public TextView pPoint, nPoint, nPointM, pPointM, usrNameDay, usrNameMonth;
     private ViewFlipper vf;
-    private CircleProgressBar circleProgressBarDay, circleProgressBarMonth;
+    //private  CircleProgressBar circleProgressBarDay, circleProgressBarMonth;
     private GoogleApiClient mGoogleApiClient;
     public Person currentUser;
     //Content observer handler
@@ -86,8 +86,7 @@ public class MainActivity extends AppCompatActivity
         nPointM = (TextView) findViewById(R.id.n_point_header_month);
         usrNameDay = (TextView) findViewById(R.id.usr_Name_day);
         usrNameMonth = (TextView) findViewById(R.id.usr_Name_month);
-        circleProgressBarDay = (CircleProgressBar) findViewById(R.id.custom_progressBar_day);
-        circleProgressBarMonth = (CircleProgressBar) findViewById(R.id.custom_progressBar_month);
+
         //build google ID
         mGoogleApiClient = buildApiClient();
         //build google analytics
@@ -316,6 +315,10 @@ public class MainActivity extends AppCompatActivity
 
     public void updateHeader() {
 
+        final CircleProgressBar circleProgressBarDay = (CircleProgressBar) findViewById(R.id.custom_progressBar_day);
+        final CircleProgressBar circleProgressBarMonth = (CircleProgressBar) findViewById(R.id.custom_progressBar_month);
+        circleProgressBarDay.setProgress(0);
+        circleProgressBarMonth.setProgress(0);
         Float pPointMonth = SummaryProvider.getPtotalMonth();
         Float nPointMonth = SummaryProvider.getNtotalMonth();
         Float pPointPercentMonth = pPointMonth / (pPointMonth + Math.abs(nPointMonth)) * 100;
@@ -324,24 +327,20 @@ public class MainActivity extends AppCompatActivity
         Float nPointDay = SummaryProvider.getNtotalToday();
         Float pPointPercentDay = pPointDay / (pPointDay + Math.abs(nPointDay)) * 100;
 
-        Resources res = getResources();
-        //int color = res.getColor(R.color.ag_blue);
-        int color = res.getColor(R.color.colorAccent);
-        circleProgressBarDay.setColor(color);
-        circleProgressBarDay.setProgressWithAnimation(50);
-        circleProgressBarDay.setProgressWithAnimation(pPointPercentDay);
-        circleProgressBarDay.setStrokeWidth(50);
-
-        int colorMonth = res.getColor(R.color.colorAccent);
-        circleProgressBarMonth.setColor(colorMonth);
-        circleProgressBarMonth.setProgressWithAnimation(50);
-        circleProgressBarMonth.setProgressWithAnimation(pPointPercentMonth);
-        circleProgressBarMonth.setStrokeWidth(50);
-
+        setProgressbar(circleProgressBarDay, pPointPercentDay);
+        setProgressbar(circleProgressBarMonth, pPointPercentMonth);
         pPointM.setText(Integer.toString(Math.round(pPointMonth)));
         nPointM.setText(Integer.toString(Math.round(Math.abs(nPointMonth))));
         pPoint.setText(Utility.floatToString(pPointDay));
         nPoint.setText(Utility.floatToString(nPointDay));
+    }
+
+    private void setProgressbar( CircleProgressBar bar, Float percentage){
+        Resources res = getResources();
+        int color = res.getColor(R.color.colorAccent);
+        bar.setColor(color);
+        bar.setProgressWithAnimation(percentage);
+        bar.setStrokeWidth(50);
     }
 
     //register the Content Observer
