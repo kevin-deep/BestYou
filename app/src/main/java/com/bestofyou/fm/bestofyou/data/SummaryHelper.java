@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  * Created by FM on 12/7/2015.
  */
 public class SummaryHelper extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 7;
+    private static final int DATABASE_VERSION = 9;
     public static final String DATABASE_NAME = "best.db";
     public SummaryHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -42,6 +42,7 @@ public class SummaryHelper extends SQLiteOpenHelper {
                 SummaryContract.Rubric.NAME + " TEXT, " +
                 SummaryContract.Rubric.WEIGHT + " REAL NOT NULL, " +
                 SummaryContract.Rubric.POPULARITY + " REAL NOT NULL, " +
+                SummaryContract.Rubric.COMMITMENT + " REAL NOT NULL, " +
                 SummaryContract.Rubric.CREATED_AT +" DATETIME DEFAULT CURRENT_TIMESTAMP "+
                 " );";
 

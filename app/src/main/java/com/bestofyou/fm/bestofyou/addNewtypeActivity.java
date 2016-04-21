@@ -82,7 +82,7 @@ public class AddNewtypeActivity extends AppCompatActivity{
                 netural.setPressed(false);
                 updateFAB();
                 updateHabitType();
-                Utility.snakeDisplay(v, "+1 each hour");
+                Utility.snakeDisplay(v, "+1 point each hour");
                 hideKeyboard(v);
                 return true;
             }
@@ -96,7 +96,7 @@ public class AddNewtypeActivity extends AppCompatActivity{
                 updateHabitType();
                 hideKeyboard(v);
                 updateFAB();
-                Utility.snakeDisplay(v, "+3 each hour");
+                Utility.snakeDisplay(v, "+3 points each hour");
                 return true;
             }
         });
@@ -109,7 +109,7 @@ public class AddNewtypeActivity extends AppCompatActivity{
                 updateHabitType();
                 updateFAB();
                 hideKeyboard(v);
-                Utility.snakeDisplay(v, "+2 each hour");
+                Utility.snakeDisplay(v, "+2 points each hour");
                 return true;
             }
         });

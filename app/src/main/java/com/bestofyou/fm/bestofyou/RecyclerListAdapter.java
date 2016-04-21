@@ -50,6 +50,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
     public static final int COL_RUBRIC_NAME = 1;
     public static final int COL_RUBRIC_WEIGHT = 2;
     public static final int COL_RUBRIC_POPULARITY = 3;
+    public static final int COL_RUBRIC_COMMITMENT = 4;
 
     public static final String[] TOTAL_COLUMNS = {
             SummaryContract.Total.TABLE_NAME + "." + SummaryContract.Total._ID,
@@ -62,7 +63,9 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
             SummaryContract.Rubric.TABLE_NAME + "." + SummaryContract.Rubric._ID,
             SummaryContract.Rubric.NAME,
             SummaryContract.Rubric.WEIGHT,
-            SummaryContract.Rubric.POPULARITY
+            SummaryContract.Rubric.POPULARITY,
+            SummaryContract.Rubric.COMMITMENT,
+
     };
     public static final int PAGE_TYPE_POSITIVE = 1;
     public static final int PAGE_TYPE_NEGATIVE = 2;
@@ -139,7 +142,10 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         activity = (Activity) mContext;
         if (pageType == PAGE_TYPE_NEGATIVE || pageType == PAGE_TYPE_POSITIVE) {
             String name = mCursor.getString(PositiveFragment.COL_RUBRIC_NAME);
+            Float commitment = mCursor.getFloat(PositiveFragment.COL_RUBRIC_COMMITMENT);
+
             holder.name.setText(name);
+            holder.commitment.setText(Integer.toString(Math.round(commitment)));
 
             // Read weight from cursor
             final float weight = mCursor.getFloat(PositiveFragment.COL_RUBRIC_WEIGHT);
@@ -170,6 +176,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
                     drawable.start();
                     holder.tick = !holder.tick;
                     holder.rateHour.setVisibility(holder.tick ? View.GONE : View.VISIBLE);
+                    holder.commitment.setVisibility(holder.tick ? View.GONE : View.VISIBLE);
                     Utility.overshootInterpolator(activity, holder.rateHour, 300, 200);
                 }
             });
@@ -181,6 +188,8 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
                     String habitName = value.getAsString(SummaryContract.Rubric.NAME);
                     SummaryProvider.insertHistory(mContext, 1 * weight, habitName);
                     SummaryProvider.insertTotal(mContext, 1 * weight);
+                    int rowId = SummaryProvider.getRubricId(mCursor, position);
+                    SummaryProvider.updatePopularityRubric(mContext, rowId, 1 * weight);
                     holder.tickCross.callOnClick();
                     snakeDisply(rootView, 1 * weight, pageType);
                 }
@@ -195,7 +204,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
                     SummaryProvider.insertHistory(mContext, 2 * weight, habitName);
                     SummaryProvider.insertTotal(mContext, 2 * weight);
                     int rowId = SummaryProvider.getRubricId(mCursor, position);
-                    SummaryProvider.updatePopularityRubric(mContext, rowId);
+                    SummaryProvider.updatePopularityRubric(mContext, rowId, 2 * weight);
                     holder.tickCross.callOnClick();
                     snakeDisply(rootView, 2 * weight, pageType);
 
@@ -209,6 +218,8 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
                     String habitName = value.getAsString(SummaryContract.Rubric.NAME);
                     SummaryProvider.insertHistory(mContext, weight / 2, habitName);
                     SummaryProvider.insertTotal(mContext, weight / 2);
+                    int rowId = SummaryProvider.getRubricId(mCursor, position);
+                    SummaryProvider.updatePopularityRubric(mContext, rowId, weight / 2);
                     Utility.zoomIn(mContext, v);
                     holder.tickCross.callOnClick();
                     snakeDisply(rootView, weight / 2, pageType);
@@ -223,6 +234,8 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
                     String habitName = value.getAsString(SummaryContract.Rubric.NAME);
                     SummaryProvider.insertHistory(mContext, 1.5F * weight, habitName);
                     SummaryProvider.insertTotal(mContext, 1.5F * weight);
+                    int rowId = SummaryProvider.getRubricId(mCursor, position);
+                    SummaryProvider.updatePopularityRubric(mContext, rowId, 1.5F * weight);
                     holder.tickCross.callOnClick();
                     snakeDisply(rootView, 1.5F * weight, pageType);
 
@@ -323,8 +336,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         private Button oneHour, oneHalfHour, twoHour, halfHour;
         private ImageView itemWeightColor;
 
-        private TextView nameHistory, nameWeightHistory, timeHistory;
-
+        private TextView nameHistory, nameWeightHistory, timeHistory, commitment;
 
         private boolean tick = true;
 
@@ -332,6 +344,8 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
             super(itemView);
             cardV = (CardView) itemView.findViewById(R.id.card_view);
             name = (TextView) itemView.findViewById(R.id.name);
+            commitment = (TextView) itemView.findViewById(R.id.commitment);
+
             //weight = (TextView) itemView.findViewById(R.id.weight);
             rateHour = (View) itemView.findViewById(R.id.rates_in_hour);
             oneHour = (Button) itemView.findViewById(R.id.btn_one_hour);

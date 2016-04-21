@@ -60,7 +60,7 @@
     <!-- layout-->
     <string name="add_habit_hint">What habit?</string>
     <string name="title_activity_history">History</string>
-    <string name="how_important_habit">How important of this habit to you? </string>
+    <string name="how_important_habit">How important for you? </string>
     <string name="habit_low">LOW</string>
     <string name="habit_neutral">Neutral</string>
     <string name="habit_high">High</string>
@@ -89,11 +89,6 @@
     <!-- Strings related to Notification preference -->
     <string name="pref_last_notification">last_notification
     </string>
-
-
-
-
-
 
 
 </resources>

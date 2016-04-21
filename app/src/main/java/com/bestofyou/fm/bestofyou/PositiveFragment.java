@@ -42,12 +42,14 @@ public class PositiveFragment extends Fragment implements LoaderManager.LoaderCa
 
     static final int COL_RUBRIC_NAME = 1;
     static final int COL_RUBRIC_WEIGHT = 2;
+    static final int COL_RUBRIC_COMMITMENT = 4;
     private View root;
     private static final String[] RUBRIC_COLUMNS = {
             SummaryContract.Rubric.TABLE_NAME + "." + SummaryContract.Rubric._ID,
             SummaryContract.Rubric.NAME,
             SummaryContract.Rubric.WEIGHT,
-            SummaryContract.Rubric.POPULARITY + " AS p"
+            SummaryContract.Rubric.POPULARITY + " AS p",
+            SummaryContract.Rubric.COMMITMENT
     };
     public CollapsingToolbarLayout mCollapsingToobar;
     public Toolbar mToolbar;

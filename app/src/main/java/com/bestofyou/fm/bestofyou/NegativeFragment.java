@@ -41,7 +41,8 @@ public class NegativeFragment extends Fragment implements LoaderManager.LoaderCa
             SummaryContract.Rubric.TABLE_NAME + "." + SummaryContract.Rubric._ID,
             SummaryContract.Rubric.NAME,
             SummaryContract.Rubric.WEIGHT,
-            SummaryContract.Rubric.POPULARITY + " AS p"
+            SummaryContract.Rubric.POPULARITY + " AS p",
+            SummaryContract.Rubric.COMMITMENT
     };
 
     @Override

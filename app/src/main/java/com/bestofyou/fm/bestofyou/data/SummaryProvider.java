@@ -98,7 +98,7 @@ public class SummaryProvider extends ContentProvider {
 
         switch (match) {
             case HISTORY:
-               // normalizeDate(values);
+                // normalizeDate(values);
                 rowsUpdated = db.update(SummaryContract.UsrHistory.TABLE_NAME, values, selection,
                         selectionArgs);
                 break;
@@ -144,18 +144,18 @@ public class SummaryProvider extends ContentProvider {
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 break;
             }
-            case RUBRIC:{
-                long _id=db.insert(SummaryContract.Rubric.TABLE_NAME,null,values);
-                if(_id>0)
-                    returnUri=SummaryContract.Rubric.buildRubricUri(_id);//build the content Uri follow by ID
+            case RUBRIC: {
+                long _id = db.insert(SummaryContract.Rubric.TABLE_NAME, null, values);
+                if (_id > 0)
+                    returnUri = SummaryContract.Rubric.buildRubricUri(_id);//build the content Uri follow by ID
                 else
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 break;
             }
-            case TOTAL:{
-                long _id=db.insert(SummaryContract.Total.TABLE_NAME,null,values);
-                if(_id>0)
-                    returnUri=SummaryContract.Total.buildTotalUri(_id);//build the content Uri follow by ID
+            case TOTAL: {
+                long _id = db.insert(SummaryContract.Total.TABLE_NAME, null, values);
+                if (_id > 0)
+                    returnUri = SummaryContract.Total.buildTotalUri(_id);//build the content Uri follow by ID
                 else
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 break;
@@ -186,7 +186,7 @@ public class SummaryProvider extends ContentProvider {
         final int match = sUriMatcher.match(uri);
         int rowsDeleted;
         // this makes delete all rows return the number of rows deleted
-        if ( null == selection ) selection = "1";
+        if (null == selection) selection = "1";
         switch (match) {
             case HISTORY:
                 rowsDeleted = db.delete(
@@ -258,12 +258,13 @@ public class SummaryProvider extends ContentProvider {
         return retCursor;
     }
 
-    public static long insertRubric(Context contentResolver, String description,float weight ,float popularity){
+    public static long insertRubric(Context contentResolver, String description, float weight, float popularity) {
         ContentValues rubric = new ContentValues();
         rubric.put(SummaryContract.Rubric.NAME, description);
         rubric.put(SummaryContract.Rubric.WEIGHT, weight);
         rubric.put(SummaryContract.Rubric.POPULARITY, popularity);
-        Uri insertedUri =  contentResolver.getContentResolver().insert(
+        rubric.put(SummaryContract.Rubric.COMMITMENT, 0.0f);
+        Uri insertedUri = contentResolver.getContentResolver().insert(
                 SummaryContract.Rubric.CONTENT_URI,
                 rubric
         );
@@ -271,12 +272,12 @@ public class SummaryProvider extends ContentProvider {
         return locationId;
     }
 
-    public static long insertRubric(Context contentResolver, String description,float weight){
+    public static long insertRubric(Context contentResolver, String description, float weight) {
         return insertRubric(contentResolver, description, weight, 0F);
     }
 
     //count the number of rows from total table
-    public static int getCountAll(){
+    public static int getCountAll() {
         //String countQuery = "SELECT * FROM " + SummaryContract.UsrHistory.TABLE_NAME;
         String countQuery = "SELECT * FROM " + SummaryContract.Total.TABLE_NAME;
         SQLiteDatabase db = mOpenHelper.getReadableDatabase();
@@ -286,9 +287,9 @@ public class SummaryProvider extends ContentProvider {
     }
 
     //update total table
-    public static void insertTotal(Context mContext,Float weight ){
+    public static void insertTotal(Context mContext, Float weight) {
         //initial data
-        if (getCountAll() ==0){
+        if (getCountAll() == 0) {
             //initial the table
             initialTotalTable(mContext);
         }
@@ -297,61 +298,64 @@ public class SummaryProvider extends ContentProvider {
         //get the total table
         Cursor c = mContext.getContentResolver().query(SummaryContract.Total.CONTENT_URI, RecyclerListAdapter.TOTAL_COLUMNS, null, null, null);
         c.moveToPosition(0);
-        String name =   c.getString(RecyclerListAdapter.COL_TOTAL_NAME);
-        Float pPoint =   c.getFloat(RecyclerListAdapter.COL_TOTAL_P_TOTAL);
-        Float nPoint =   c.getFloat(RecyclerListAdapter.COL_TOTAL_N_TOTAL);
-        if (weight>=0){
-            pPoint +=weight;
-        }else {
-            nPoint +=weight;
+        String name = c.getString(RecyclerListAdapter.COL_TOTAL_NAME);
+        Float pPoint = c.getFloat(RecyclerListAdapter.COL_TOTAL_P_TOTAL);
+        Float nPoint = c.getFloat(RecyclerListAdapter.COL_TOTAL_N_TOTAL);
+        if (weight >= 0) {
+            pPoint += weight;
+        } else {
+            nPoint += weight;
         }
 
         //Toast.makeText(mContext, name + " " + pPoint.toString() + "  " + nPoint.toString(), Toast.LENGTH_LONG).show();
         //update the total table
         ContentValues v = new ContentValues();
-        v.put(SummaryContract.Total.NAME,name);
-        v.put(SummaryContract.Total.P_IN_Total,pPoint);
+        v.put(SummaryContract.Total.NAME, name);
+        v.put(SummaryContract.Total.P_IN_Total, pPoint);
         v.put(SummaryContract.Total.N_IN_Total, nPoint);
-        mContext.getContentResolver().update(SummaryContract.Total.CONTENT_URI,v,null,null);
+        mContext.getContentResolver().update(SummaryContract.Total.CONTENT_URI, v, null, null);
     }
 
-    public static void updatePopularityRubric(Context mContext,int rowId){
-        String [] mSelectionArgs = {String.valueOf(rowId)};
+    //update the popularity and commitment
+    public static void updatePopularityRubric(Context mContext, int rowId, Float commitment) {
+        String[] mSelectionArgs = {String.valueOf(rowId)};
         //get the total table
         Cursor c = mContext.getContentResolver().query(SummaryContract.Rubric.CONTENT_URI, RecyclerListAdapter.TOTAL_COLUMNS_RUBRIC, SummaryContract.Rubric._ID + " =?", mSelectionArgs, null);
         c.moveToPosition(0);
-        String id  = c.getString(RecyclerListAdapter.COL_RUBRIC_ID);
+        String id = c.getString(RecyclerListAdapter.COL_RUBRIC_ID);
         String name = c.getString(RecyclerListAdapter.COL_RUBRIC_NAME);
-        Float weight =   c.getFloat(RecyclerListAdapter.COL_RUBRIC_WEIGHT);
-        Float pop =   c.getFloat(RecyclerListAdapter.COL_RUBRIC_POPULARITY);
+        Float weight = c.getFloat(RecyclerListAdapter.COL_RUBRIC_WEIGHT);
+        Float pop = c.getFloat(RecyclerListAdapter.COL_RUBRIC_POPULARITY);
+        Float commit = c.getFloat(RecyclerListAdapter.COL_RUBRIC_COMMITMENT);
 
         ContentValues v = new ContentValues();
-        v.put(SummaryContract.Rubric.NAME,name);
-        v.put(SummaryContract.Rubric._ID,id);
+        v.put(SummaryContract.Rubric.NAME, name);
+        v.put(SummaryContract.Rubric._ID, id);
         v.put(SummaryContract.Rubric.WEIGHT, weight);
-        v.put(SummaryContract.Rubric.POPULARITY, pop+1);
+        v.put(SummaryContract.Rubric.POPULARITY, pop + 1);
+        v.put(SummaryContract.Rubric.COMMITMENT, commit + commitment);
 
         mContext.getContentResolver().update(SummaryContract.Rubric.CONTENT_URI, v, SummaryContract.Rubric._ID + " =?", mSelectionArgs);
     }
 
-    private static void initialTotalTable(Context mContext){
+    private static void initialTotalTable(Context mContext) {
         ContentValues values = new ContentValues();
         values.put(SummaryContract.Total.NAME, "Kevin");
         values.put(SummaryContract.Total.P_IN_Total, 0F);
         values.put(SummaryContract.Total.N_IN_Total, 0F);
-        mContext.getContentResolver().insert(SummaryContract.Total.CONTENT_URI,values);
+        mContext.getContentResolver().insert(SummaryContract.Total.CONTENT_URI, values);
     }
-    public static void insertHistory(Context mContext,float weight, String habitName){
+
+    public static void insertHistory(Context mContext, float weight, String habitName) {
 
         ContentValues historyValue = new ContentValues();
-        if (weight>=0) {
+        if (weight >= 0) {
             historyValue.put(SummaryContract.UsrHistory.P_History, weight);
-        }
-        else {
-            historyValue.put(SummaryContract.UsrHistory.N_History,weight);
+        } else {
+            historyValue.put(SummaryContract.UsrHistory.N_History, weight);
 
         }
-        historyValue.put(SummaryContract.UsrHistory.HABIT_NAME,habitName);
+        historyValue.put(SummaryContract.UsrHistory.HABIT_NAME, habitName);
         historyValue.put(SummaryContract.UsrHistory.USER_NAME, "Kevin");
         //upgrade the history table
         mContext.getContentResolver().insert(SummaryContract.UsrHistory.CONTENT_URI, historyValue);
@@ -359,124 +363,109 @@ public class SummaryProvider extends ContentProvider {
     }
 
     //get Total from total table
-    public static Float[] getTotal(Context mContext){
-        if (getCountAll() ==0){
+    public static Float[] getTotal(Context mContext) {
+        if (getCountAll() == 0) {
             //initial the table
             initialTotalTable(mContext);
         }
         //get the total table
         Cursor c = mContext.getContentResolver().query(SummaryContract.Total.CONTENT_URI, RecyclerListAdapter.TOTAL_COLUMNS, null, null, null);
         c.moveToPosition(0);
-        String name =   c.getString(RecyclerListAdapter.COL_TOTAL_NAME);
-        Float pPoint =   c.getFloat(RecyclerListAdapter.COL_TOTAL_P_TOTAL);
-        Float nPoint =   c.getFloat(RecyclerListAdapter.COL_TOTAL_N_TOTAL);
-        Float pointInTotal[] = {pPoint,nPoint};
+        String name = c.getString(RecyclerListAdapter.COL_TOTAL_NAME);
+        Float pPoint = c.getFloat(RecyclerListAdapter.COL_TOTAL_P_TOTAL);
+        Float nPoint = c.getFloat(RecyclerListAdapter.COL_TOTAL_N_TOTAL);
+        Float pointInTotal[] = {pPoint, nPoint};
         c.close();
         return pointInTotal;
     }
+
     //get positive point total
-    public static Float getPPoint(Context mContext){
-        Float []pPoint = getTotal(mContext);
+    public static Float getPPoint(Context mContext) {
+        Float[] pPoint = getTotal(mContext);
         return pPoint[0];
     }
+
     //get negative point total
-    public static Float getNPoint(Context mContext){
-        Float []pPoint = getTotal(mContext);
+    public static Float getNPoint(Context mContext) {
+        Float[] pPoint = getTotal(mContext);
         return pPoint[1];
     }
+
     //get the row id from cursor
-    public static int getRubricId(Cursor c , int position){
+    public static int getRubricId(Cursor c, int position) {
         c.moveToPosition(position);
-        int _id =   c.getInt(RecyclerListAdapter.COL_RUBRIC_ID);
+        int _id = c.getInt(RecyclerListAdapter.COL_RUBRIC_ID);
         return _id;
     }
 
-    public static ContentValues getRubric(Cursor c , int position){
+    public static ContentValues getRubric(Cursor c, int position) {
         c.moveToPosition(position);
         ContentValues value = new ContentValues();
-        int _id =   c.getInt(RecyclerListAdapter.COL_RUBRIC_ID);
-        String name =   c.getString(RecyclerListAdapter.COL_RUBRIC_NAME);
-        float weight =   c.getFloat(RecyclerListAdapter.COL_RUBRIC_WEIGHT);
-        Float popularity =   c.getFloat(RecyclerListAdapter.COL_RUBRIC_POPULARITY);
-        value.put(SummaryContract.Rubric._ID,_id);
-        value.put(SummaryContract.Rubric.NAME,name);
-        value.put(SummaryContract.Rubric.WEIGHT,weight);
+        int _id = c.getInt(RecyclerListAdapter.COL_RUBRIC_ID);
+        String name = c.getString(RecyclerListAdapter.COL_RUBRIC_NAME);
+        float weight = c.getFloat(RecyclerListAdapter.COL_RUBRIC_WEIGHT);
+        Float popularity = c.getFloat(RecyclerListAdapter.COL_RUBRIC_POPULARITY);
+        Float commitment = c.getFloat(RecyclerListAdapter.COL_RUBRIC_COMMITMENT);
+        value.put(SummaryContract.Rubric._ID, _id);
+        value.put(SummaryContract.Rubric.NAME, name);
+        value.put(SummaryContract.Rubric.WEIGHT, weight);
         value.put(SummaryContract.Rubric.POPULARITY, popularity);
+        value.put(SummaryContract.Rubric.COMMITMENT, commitment);
         return value;
     }
-    public static Float getPTotalToday(){
-        String sql = "SELECT SUM(" + SummaryContract.UsrHistory.P_History + ") FROM " + SummaryContract.UsrHistory.TABLE_NAME +  " WHERE " +
+
+    public static Float getPTotalToday() {
+        String sql = "SELECT SUM(" + SummaryContract.UsrHistory.P_History + ") FROM " + SummaryContract.UsrHistory.TABLE_NAME + " WHERE " +
                 SummaryContract.UsrHistory.CREATED_AT + " >= date('now')";
         System.out.println(sql);
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         Cursor mCursor = db.rawQuery(sql, null);
         Float pPoint = 0F;
-        if(mCursor.moveToFirst())
-        {
-            pPoint = mCursor.getFloat(0);
-        }
-        return pPoint;
-    }
-    public static Float getNtotalToday(){
-        String sql = "SELECT SUM(" + SummaryContract.UsrHistory.N_History + ") FROM " + SummaryContract.UsrHistory.TABLE_NAME +  " WHERE " +
-                SummaryContract.UsrHistory.CREATED_AT + " >= date('now')";
-        System.out.println(sql);
-        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
-        Cursor mCursor = db.rawQuery(sql, null);
-        Float pPoint = 0F;
-        if(mCursor.moveToFirst())
-        {
+        if (mCursor.moveToFirst()) {
             pPoint = mCursor.getFloat(0);
         }
         return pPoint;
     }
 
-    public static Float getNtotalMonth(){
+    public static Float getNtotalToday() {
+        String sql = "SELECT SUM(" + SummaryContract.UsrHistory.N_History + ") FROM " + SummaryContract.UsrHistory.TABLE_NAME + " WHERE " +
+                SummaryContract.UsrHistory.CREATED_AT + " >= date('now')";
+        System.out.println(sql);
+        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+        Cursor mCursor = db.rawQuery(sql, null);
+        Float pPoint = 0F;
+        if (mCursor.moveToFirst()) {
+            pPoint = mCursor.getFloat(0);
+        }
+        return pPoint;
+    }
+
+    public static Float getNtotalMonth() {
         String sql = "SELECT SUM(" + SummaryContract.UsrHistory.N_History + ") FROM " + SummaryContract.UsrHistory.TABLE_NAME +
                 " WHERE " + "strftime('%m', " + SummaryContract.UsrHistory.CREATED_AT + ") = '" + Utility.getMonth() + "'";
         System.out.println(sql);
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         Cursor mCursor = db.rawQuery(sql, null);
         Float pPoint = 0F;
-        if(mCursor.moveToFirst())
-        {
+        if (mCursor.moveToFirst()) {
             pPoint = mCursor.getFloat(0);
         }
         return pPoint;
     }
 
-    public static Float getPtotalMonth(){
+    public static Float getPtotalMonth() {
         String sql = "SELECT SUM(" + SummaryContract.UsrHistory.P_History + ") FROM " + SummaryContract.UsrHistory.TABLE_NAME +
-                " WHERE " + "strftime('%m', " + SummaryContract.UsrHistory.CREATED_AT + ") = '" +Utility.getMonth() + "'";
-                //SummaryContract.UsrHistory.CREATED_AT + " >= month('now')";
+                " WHERE " + "strftime('%m', " + SummaryContract.UsrHistory.CREATED_AT + ") = '" + Utility.getMonth() + "'";
+        //SummaryContract.UsrHistory.CREATED_AT + " >= month('now')";
         System.out.println(sql);
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         Cursor mCursor = db.rawQuery(sql, null);
         Float pPoint = 0F;
-        if(mCursor.moveToFirst())
-        {
+        if (mCursor.moveToFirst()) {
             pPoint = mCursor.getFloat(0);
         }
         return pPoint;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

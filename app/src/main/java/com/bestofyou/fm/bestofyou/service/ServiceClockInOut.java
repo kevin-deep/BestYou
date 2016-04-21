@@ -133,7 +133,7 @@ public class ServiceClockInOut extends Service {
 
             if (System.currentTimeMillis() - lastSync >= NOTIFY_INTERVAL_MINUTES) {
                 // Last sync was more than 1 day ago, let's send a notification.
-                Log.v(">>>enter notification", LOG_TAG);
+                //Log.v(">>>enter notification", LOG_TAG);
                 // Define the text of the notification.
                 String contentText = String.format(context.getString(R.string.notification_message),
                         "Today",

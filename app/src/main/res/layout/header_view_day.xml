@@ -89,7 +89,7 @@
         <TextView
             android:id="@+id/p_point_header_day"
             android:layout_width="0dp"
-            android:textColor="@color/ag_blue"
+            android:textColor="@color/colorAccent"
             android:layout_weight="1"
             android:gravity="top|center_horizontal"
             android:textSize="@dimen/header_text_size"

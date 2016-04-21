@@ -71,6 +71,7 @@ public class SummaryContract {
         public static final String WEIGHT = "weight";
 
         public static final String POPULARITY = "popularity";
+        public static final String COMMITMENT = "commitment";
 
 
         public static Uri buildRubricUri(long id) {
