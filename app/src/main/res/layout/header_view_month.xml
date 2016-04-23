@@ -21,7 +21,7 @@
             android:layout_weight="1"
             android:textSize="@dimen/header_text_size"
             android:textColor="@color/ag_blue"
-            android:text="Hey Jude"/>
+            android:text="Hello,"/>
         <ImageButton
             android:id="@+id/menu_main_month"
             android:layout_width="wrap_content"

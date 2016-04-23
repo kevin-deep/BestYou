@@ -148,7 +148,8 @@ public class AuthenticationActivity extends AppCompatActivity implements GoogleA
         // We are signed in!
         // Retrieve some profile information to personalize our app for the user.
         currentUser = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
-        mStatus.setText(String.format("Signed In to G+ as %s", currentUser.getDisplayName()));
+        String test = String.format("Signed In to G+ as %s", currentUser.getDisplayName());
+        //mStatus.setText(String.format("Signed In to G+ as %s", currentUser.getDisplayName()));
 
     }
 

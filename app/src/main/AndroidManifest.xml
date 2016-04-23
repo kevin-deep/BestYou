@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.bestofyou.fm.bestofyou" >
+    package="com.bestofyou.fm.bestofyou"
+    android:versionCode="5"
+    android:versionName="1.4">
 
     <!-- Google plus login -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -21,11 +23,11 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -44,7 +46,7 @@
             android:name=".AddNewtypeActivity"
             android:label="@string/add_new_type_test"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/Dialog" >
+            android:theme="@style/Dialog">
 
             <!-- android:theme="@style/AppTheme"> -->
             <meta-data
@@ -59,13 +61,12 @@
 
         <intent-filter>
             <action android:name="android.intent.action.VIEW" />
-
             <category android:name="android.intent.category.DEFAULT" />
             <category android:name="android.intent.category.BROWSABLE" />
 
             <data
-                android:host="Android client 1"
-                android:scheme="@string/G_Plus_ID" />
+                android:host="Web client 1"
+                android:scheme="com.googleusercontent.apps.210491937152-ga4qpgafsegr0jvh6r8ca4i146r3fn0c" />
         </intent-filter>
 
         <meta-data
@@ -75,7 +76,7 @@
         <!-- Mybest Widget -->
         <receiver
             android:name=".widget.MyBestWidgetProvider"
-            android:label="@string/title_widget_mybest" >
+            android:label="@string/title_widget_mybest">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="com.bestofyou.fm.bestofyou.ACTION_DATA_UPDATED" />
@@ -92,7 +93,7 @@
             android:name=".History"
             android:label="@string/title_activity_history"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme" >
+            android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.bestofyou.fm.bestofyou.MainActivity" />
@@ -102,7 +103,13 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <service android:name=".service.ServiceClockInOut"/>
+        <!--Google Identity-->
+        <meta-data
+            android:name="Android client 1"
+            android:value="com.googleusercontent.apps.210491937152-d4u9f5gtlvr7lksk4o4cdvs9a53r0i5i" />
+
+        <!--notification service-->
+        <service android:name=".service.ServiceClockInOut" />
 
     </application>
 
