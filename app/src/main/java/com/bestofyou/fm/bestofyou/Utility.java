@@ -25,6 +25,8 @@ import java.util.Date;
  */
 public class Utility {
 
+    final static String NOTIFICATION_KEY = "notification";
+
 
     /***
      * Checks that application runs first time and write flag at SharedPreferences
@@ -42,6 +44,19 @@ public class Utility {
         }
         return !mFirst;
     }
+
+    public static void notificationSet(Activity ac, boolean s) {
+
+        SharedPreferences preferences = ac.getPreferences(ac.MODE_PRIVATE);
+        boolean mFirst = preferences.getBoolean(NOTIFICATION_KEY, s);
+
+    }
+    public static boolean notificationGet(Activity ac){
+        SharedPreferences preferences = ac.getPreferences(ac.MODE_PRIVATE);
+        boolean mFirst = preferences.getBoolean(NOTIFICATION_KEY, false);
+        return mFirst;
+    }
+
 
     public static String getMonth() {
         java.util.Date date = new Date();

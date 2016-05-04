@@ -20,7 +20,7 @@
             android:gravity="start"
             android:layout_weight="1"
             android:textSize="@dimen/header_text_size"
-            android:textColor="@color/ag_blue"
+            android:textColor="@android:color/darker_gray"
             android:text="Hello,"/>
         <ImageButton
             android:id="@+id/menu_main_month"
@@ -51,7 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-    android:textColor="@color/ag_blue"
+            android:textColor="@android:color/darker_gray"
     android:textSize="@dimen/header_text_size"
     android:text="Month"/>
     <RelativeLayout

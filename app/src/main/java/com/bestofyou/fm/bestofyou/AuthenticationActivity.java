@@ -5,7 +5,9 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -78,6 +80,33 @@ public class AuthenticationActivity extends AppCompatActivity implements GoogleA
                 Utility.snakeDisplay(getWindow().getDecorView().getRootView(), "Habits have been added");
             }
         });
+
+
+        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+        final String displayNotificationsKey = mContext.getString(R.string.pref_enable_notifications_key);
+        final SharedPreferences.Editor editor = prefs.edit();
+
+        if (prefs.getBoolean(displayNotificationsKey,
+                Boolean.parseBoolean(this.getString(R.string.pref_enable_notifications_default)))){
+            notification.setChecked(true);
+        }
+
+        notification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (notification.isChecked()){
+                     editor.putBoolean(displayNotificationsKey,true);
+
+                }else {
+                    editor.putBoolean(displayNotificationsKey, false);
+                }
+                editor.commit();
+            }
+
+
+        });
+
+
 
         getWindow().getDecorView().getRootView().findViewById(R.id.share_achievement).setOnClickListener(new View.OnClickListener() {
             @Override

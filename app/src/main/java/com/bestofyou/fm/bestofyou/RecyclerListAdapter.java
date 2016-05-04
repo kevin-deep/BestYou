@@ -145,7 +145,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
             Float commitment = mCursor.getFloat(PositiveFragment.COL_RUBRIC_COMMITMENT);
 
             holder.name.setText(name);
-            holder.commitment.setText(Integer.toString(Math.round(commitment)));
+            holder.commitment.setText(Integer.toString(Math.round(commitment))+ " hours");
 
             // Read weight from cursor
             final float weight = mCursor.getFloat(PositiveFragment.COL_RUBRIC_WEIGHT);
@@ -189,7 +189,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
                     SummaryProvider.insertHistory(mContext, 1 * weight, habitName);
                     SummaryProvider.insertTotal(mContext, 1 * weight);
                     int rowId = SummaryProvider.getRubricId(mCursor, position);
-                    SummaryProvider.updatePopularityRubric(mContext, rowId, 1 * weight);
+                    SummaryProvider.updatePopularityRubric(mContext, rowId, 1.0f);
                     holder.tickCross.callOnClick();
                     snakeDisply(rootView, 1 * weight, pageType);
                 }
@@ -204,7 +204,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
                     SummaryProvider.insertHistory(mContext, 2 * weight, habitName);
                     SummaryProvider.insertTotal(mContext, 2 * weight);
                     int rowId = SummaryProvider.getRubricId(mCursor, position);
-                    SummaryProvider.updatePopularityRubric(mContext, rowId, 2 * weight);
+                    SummaryProvider.updatePopularityRubric(mContext, rowId, 2.0f);
                     holder.tickCross.callOnClick();
                     snakeDisply(rootView, 2 * weight, pageType);
 
@@ -219,7 +219,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
                     SummaryProvider.insertHistory(mContext, weight / 2, habitName);
                     SummaryProvider.insertTotal(mContext, weight / 2);
                     int rowId = SummaryProvider.getRubricId(mCursor, position);
-                    SummaryProvider.updatePopularityRubric(mContext, rowId, weight / 2);
+                    SummaryProvider.updatePopularityRubric(mContext, rowId, 0.5f);
                     Utility.zoomIn(mContext, v);
                     holder.tickCross.callOnClick();
                     snakeDisply(rootView, weight / 2, pageType);
@@ -235,7 +235,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
                     SummaryProvider.insertHistory(mContext, 1.5F * weight, habitName);
                     SummaryProvider.insertTotal(mContext, 1.5F * weight);
                     int rowId = SummaryProvider.getRubricId(mCursor, position);
-                    SummaryProvider.updatePopularityRubric(mContext, rowId, 1.5F * weight);
+                    SummaryProvider.updatePopularityRubric(mContext, rowId, 1.5F);
                     holder.tickCross.callOnClick();
                     snakeDisply(rootView, 1.5F * weight, pageType);
 

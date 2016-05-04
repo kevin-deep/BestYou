@@ -1,6 +1,7 @@
 package com.bestofyou.fm.bestofyou.service;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -125,6 +126,7 @@ public class ServiceClockInOut extends Service {
         boolean displayNotifications = prefs.getBoolean(displayNotificationsKey,
                 Boolean.parseBoolean(context.getString(R.string.pref_enable_notifications_default)));
 
+        //boolean displayNotifications = Utility.notificationGet((Activity)context.getApplicationContext());
         if (displayNotifications) {
 
 
