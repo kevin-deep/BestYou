@@ -142,7 +142,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/action_add_new_habit"
-        android:focusableInTouchMode="true"
         android:src="@drawable/ic_add_black_24px"
         android:stateListAnimator="@animator/fab_state_list_anim"
         android:scaleType="center"
@@ -150,7 +149,5 @@
         android:tint="@android:color/white"
         app:fabSize="normal"
         android:layout_gravity="bottom"
-
         app:elevation="@dimen/appbar_elevation" />
-
 </android.support.design.widget.CoordinatorLayout>

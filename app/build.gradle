@@ -8,8 +8,8 @@ android {
         applicationId "com.bestofyou.fm.bestofyou"
         minSdkVersion 21
         targetSdkVersion 23
-        versionCode 4
-        versionName "1.0.3"
+        versionCode 7
+        versionName "1.0.6"
     }
     signingConfigs {
         release {

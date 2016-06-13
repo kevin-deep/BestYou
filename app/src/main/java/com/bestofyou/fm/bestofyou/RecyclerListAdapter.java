@@ -247,6 +247,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
             Float pPoint = mCursor.getFloat(History.COL_HISTORY_PHISTORY);
             Float nPoint = mCursor.getFloat(History.COL_HISTORY_NHISTORY);
             String timeStamp = mCursor.getString(History.COL_HISTORY_CRATED_AT);
+            Log.v("timeFormat", timeStamp);
             holder.nameHistory.setText(name);
             if (nPoint != 0.0){
                 holder.nameWeightHistory.setText(Float.toString(Math.abs(nPoint)));
@@ -255,9 +256,8 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
                 holder.nameWeightHistory.setText(Float.toString(Math.abs(pPoint)));
                 holder.nameWeightHistory.setTextColor(ContextCompat.getColor(mContext, R.color.negative_text));
             }
+
             holder.timeHistory.setText(Utility.cutTimeFromDate(timeStamp));
-
-
         } else {
             Log.v("the pageType no get", LOG_TAG);
         }
